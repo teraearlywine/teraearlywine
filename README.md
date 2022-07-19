@@ -21,7 +21,7 @@ I am currently working on data-modeling, pipelining and fermenting on tools like
 sequenceDiagram
     participant Cool Person A
     participant Cool Person B
-    Cool Person A->>Cool Person B: Hello Cool Person B, how are you?
+    Cool Person A->>Cool Person C: Hello Cool Person C, how are you?
     loop Healthcheck
         Cool Person C->>Cool Person C: Fighting the man, one terabyte at a time.
     end
