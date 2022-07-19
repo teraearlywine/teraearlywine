@@ -19,15 +19,15 @@ I am currently working on data-modeling, pipelining and fermenting on tools like
 
 ```mermaid
 sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->>John: Hello John, how are you?
+    participant Cool Person A
+    participant Cool Person B
+    Cool Person A->>Cool Person B: Hello Cool Person B, how are you?
     loop Healthcheck
-        John->>John: Fight against hypochondria
+        Cool Person C->>Cool Person C: Fighting the man, one terabyte at a time.
     end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
+    Note right of Cool Person C: The PR <br/>worked!
+    Cool Person C-->>Cool Person A: Great!
+    Cool Person C->>Cool Person B: How about you?
+    Cool Person B-->>Cool Person C: Welp
 ```
 
