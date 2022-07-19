@@ -14,3 +14,11 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+I am currently working on data-modeling, pipelining and fermenting on tools like python.
+
+```sequence
+A->B: Hello cool person! how are you?
+Note right of B: Cool person thinks
+B-->A: I am good thanks!
+```
