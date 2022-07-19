@@ -17,8 +17,9 @@ Here are some ideas to get you started:
 
 I am currently working on data-modeling, pipelining and fermenting on tools like python.
 
-```sequence
-A->B: Hello cool person! how are you?
+```mermaid
+graph TD;
+A-->B; Hello cool person! how are you?
 Note right of B: Cool person thinks
-B-->A: I am good thanks!
+B-->A; I am good thanks!
 ```
