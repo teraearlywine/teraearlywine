@@ -19,7 +19,9 @@ I am currently working on data-modeling, pipelining and fermenting on tools like
 
 ```mermaid
 graph TD;
-A-->B; Hello cool person! how are you?
-Note right of B: Cool person thinks
-B-->A; I am good thanks!
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
 ```
+
