@@ -15,4 +15,4 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-#### "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain 
+#### "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain
