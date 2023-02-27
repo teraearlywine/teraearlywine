@@ -1,4 +1,4 @@
-### Hi there 👋
+## Hello! 
 
 <!--
 **teraearlywine/teraearlywine** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
@@ -15,19 +15,4 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-I am currently working on data-modeling, pipelining and fermenting on tools like python.
-
-```mermaid
-sequenceDiagram
-    participant Cool Person A
-    participant Cool Person B
-    Cool Person A->>Cool Person C: Hello Cool Person C, how are you?
-    loop Healthcheck
-        Cool Person C->>Cool Person C: Fighting the man, one terabyte at a time.
-    end
-    Note right of Cool Person C: The PR <br/>worked!
-    Cool Person C-->>Cool Person A: Great!
-    Cool Person C->>Cool Person B: How about you?
-    Cool Person B-->>Cool Person C: Welp
-```
-
+#### "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain 
