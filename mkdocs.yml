@@ -1,11 +1,14 @@
 site_name: Tera Earlywine
 
+nav: 
+  - Home: index.md
+  - Resume: resume.md
 
 theme:
   name: material
   palette:
     scheme: slate
-    primary: blue grey
+    primary: teal
     accent: cyan
 
   highlightjs: true
@@ -13,3 +16,5 @@ theme:
     - yaml
     - sql
     - python
+    - javascript
+    - plaintext
