@@ -3,6 +3,7 @@ site_name: Tera Earlywine
 nav: 
   - Home: index.md
   - Resume: resume.md
+  - References: references.md
 
 theme:
   name: material
@@ -10,6 +11,8 @@ theme:
     scheme: slate
     primary: teal
     accent: cyan
+  features:
+    - content.tabs.link
 
   highlightjs: true
   hljs_languages:
@@ -18,3 +21,9 @@ theme:
     - python
     - javascript
     - plaintext
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables

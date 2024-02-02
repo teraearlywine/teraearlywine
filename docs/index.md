@@ -1,3 +1,6 @@
+---
+title: Welcome
+---
 # Welcome
 
 > "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain
@@ -14,3 +17,16 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
 <!-- https://www.mkdocs.org/user-guide/writing-your-docs/ -->
 <!-- https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/ -->
+
+<!-- 
+=== "Unordered list"
+
+    * Sed sagittis eleifend rutrum
+    * Donec vitae suscipit est
+    * Nulla tempor lobortis orci
+
+=== "Ordered list"
+
+    1. Sed sagittis eleifend rutrum
+    2. Donec vitae suscipit est
+    3. Nulla tempor lobortis orci -->
