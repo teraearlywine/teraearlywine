@@ -15,23 +15,30 @@ And no, I'm not kidding with the coffee thing.
 
 ## **Experience**
 
-Below is a look into the last 5 years of my life and career. <br>
-It's had no shortage of learning experiences, mentorship, growing moments, successes and achievements. 
-My working style is mostly driven by curiosity, which is why I got my start in data. As time went on I found myself more compelled by engineering and technology. I am self directed and have been described as a inspiring director. 
+Welcome to an overview of my professional journey over the past five years. This period has been rich with learning experiences, mentorship opportunities, growth, and numerous achievements. My career path, driven largely by a deep-seated curiosity, began in the realm of data. However, as time progressed, my interests increasingly veered towards engineering and technology.
 
-Below you'll find tabs that have all the relevant information about each job I've had over the last five years. You will find a _very_ extensive overview, of course (Mostly for my own cataloguing). I enjoy story telling. My resume-resume is reserved for applying to jobs, which is a very paired down version of these stories. I enjoy classifying and categorizing information, perhaps including overkill on context. 
 
+In the sections below, you'll find detailed tabs for each position I've held in the last five years. These provide an extensive overview – a comprehensive catalogue created for both personal reflection and storytelling. I take great pleasure in organizing and presenting information, sometimes delving deeply into context to provide a full picture.
+
+
+??? note  
+    What you'll see here is much more detailed than my job-application resume, which is a more concise representation of these experiences. This detailed version is a testament to my love for storytelling and meticulous classification of information.
+
+<hr>
 
 === "Present · Data Engineer"
-    <br>
-    **Summary** <br>
-    My current role is Data Engineer. I switched teams a little under 8 months ago to work on third party vendor integrations. 
-    Day to day includes python modeling in GCP composer environments, code base maintenance and refactoring. I also refreshed the onboarding environment in GCP, which included using tools like terraform to spin up CI/CD resources. 
-    <br><br>
-    ??? note 
-        
-        The pipelines I've worked on were set up by other people, many hands in the pie. Being successful in this job meant 
-        ensuring the code was clean and well documented. Since they were inhereted, I spent time adding documentation and building out a testing suite. 
+
+    **Summary** 
+
+
+    As a Data Engineer, I transitioned into a new role approximately eight months ago, focusing on third-party vendor integrations. My specialization has been in maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments, where I am responsible for maintaining and refactoring our codebase. Additionally, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
+
+
+    ??? info "Lessons from 2023"
+    
+        Being successful to start meant just learning. Then it was ensuring the code was clean and well documented. The pipelines I've worked on were set up by other people, many hands in the pie. Since the pipelines I started working on were inhereted from CO-OPs and interns, I spent time adding documentation and building out a testing suite. Here I really learned the importance of readability, documentation and simplification. 
+
+
     <br>
 === "2022 · Data Analytics Engineer"
 
