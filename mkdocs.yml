@@ -41,5 +41,15 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
-  
   - tables
+  - attr_list
+  - md_in_html
+
+plugins:
+  - tags
+
+extra:
+  version:
+    provider: mike
+
+# https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/

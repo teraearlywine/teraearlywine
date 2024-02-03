@@ -28,13 +28,17 @@ In the sections below, you'll find detailed tabs for each position I've held in 
 
 === "Present · Data Engineer"
 
+    ??? info "Employment Info"
+        Employer: Mercari US<br>
+        Duration: 2022-Present
+
     **Summary** 
 
 
     As a Data Engineer, I transitioned into a new role approximately eight months ago, focusing on third-party vendor integrations. My specialization has been in maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments, where I am responsible for maintaining and refactoring our codebase. Additionally, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
 
 
-    ??? info "Lessons from 2023"
+    ??? note "Lessons from 2023"
     
         Being successful to start meant just learning. Then it was ensuring the code was clean and well documented. The pipelines I've worked on were set up by other people, many hands in the pie. Since the pipelines I started working on were inhereted from CO-OPs and interns, I spent time adding documentation and building out a testing suite. Here I really learned the importance of readability, documentation and simplification. 
 
@@ -42,24 +46,37 @@ In the sections below, you'll find detailed tabs for each position I've held in 
     <br>
 === "2022 · Data Analytics Engineer"
 
-    2021 - 2022, Alice
+    ??? info "Employment Info"
+        Employer: Alice <br>
+        Duration: 2021 - 2022
+
 
 
 === "2021 · Data Analyst"
 
-    2021, Curtsy
+    ??? info "Employment Info"
+        Employer: Curtsy <br>
+        Duration: 2021 
+
+
 
 
 
 === "2020 · Business Intelligence Analyst"
 
-     2020 - 2021, Mercari US
+    ??? info "Employment Info" 
+        Employer: Mercari US <br>
+        Duration: 2020 - 2021
+
 
 
 
 === "2018 · JR Business Intelligence Analyst"
 
-    2018 - 2020, Mercari US
+    ??? info "Employment Info"
+        Employer: Mercari US <br>
+        Duration: 2018 - 2020
+
 
 
 <br>
