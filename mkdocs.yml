@@ -3,7 +3,6 @@ site_name: Tera Earlywine
 nav: 
   - Home: index.md
   - Resume: resume.md
-  - References: references.md
 
 theme:
   name: material
@@ -13,6 +12,21 @@ theme:
     accent: cyan
   features:
     - content.tabs.link
+  icon:
+    admonition:
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/bullhorn
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
+
 
   highlightjs: true
   hljs_languages:
@@ -23,7 +37,9 @@ theme:
     - plaintext
 
 markdown_extensions:
+  - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  
   - tables
