@@ -1,5 +1,5 @@
 site_name: Tera Earlywine
-site_url: www.teraearlywine.com
+site_url: https://teraearlywine.github.io/teraearlywine/
 nav: 
   - Home: index.md
   - Resume: resume.md
