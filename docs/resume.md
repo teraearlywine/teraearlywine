@@ -38,7 +38,7 @@ In the sections below, you'll find detailed tabs for each position I've held in 
     As a Data Engineer, I transitioned into a new role approximately eight months ago, focusing on third-party vendor integrations. My specialization has been in maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments, where I am responsible for maintaining and refactoring our codebase. Additionally, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
 
 
-    ??? note "Lessons from 2023"
+    ??? success "Lessons from 2023"
     
         Being successful to start meant just learning. Then it was ensuring the code was clean and well documented. The pipelines I've worked on were set up by other people, many hands in the pie. Since the pipelines I started working on were inhereted from CO-OPs and interns, I spent time adding documentation and building out a testing suite. Here I really learned the importance of readability, documentation and simplification. 
 
