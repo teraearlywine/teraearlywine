@@ -35,7 +35,7 @@ In the sections below, you'll find detailed tabs for each position I've held in 
     **Summary**
 
 
-    As a Data Engineer, I transitioned into a new role approximately eight months ago, focusing on third-party vendor integrations. My specialization has been in maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments where I am responsible for maintaining and refactoring our codebase. Additionally, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
+    As a Data Engineer, I transitioned into a new role approximately eight months ago, around the middle of 2023, to a team that is focusing on third-party vendor integrations. My specialization has been in maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments where I am responsible for maintaining and refactoring our codebase. Additionally, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
 
 
     ??? success "Lessons from 2023"
