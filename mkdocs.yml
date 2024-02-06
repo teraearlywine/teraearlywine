@@ -2,9 +2,9 @@ site_name: Tera Earlywine
 site_url: https://teraearlywine.github.io/teraearlywine/
 nav:
   - Home: index.md
-  - Career: career.md
   - Data: data.md
   - Projects: projects.md
+  - Career: career.md
 
 theme:
   name: material
