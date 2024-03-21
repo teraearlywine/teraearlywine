@@ -10,13 +10,13 @@ Welcome to my GitHub repository. If you're here, that means either you just stum
 Something I've been reflecting on recently is how I present myself (or at least intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example, I say 'fuck' a lot more in Slack than I should... well. That may never change (sorry mom <3)
 
 
-So now, as I enter my 6th year, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles that I practice and uphold.
+So now, as I enter my 6th year, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles that I practice and uphold as a reminder, but also as a notice to _you_, dear visitor, for the things I hold myself accountable.  
 
 
 
 ## 7 Guiding Professional Principles
 
-1. Be 2 minutes *early* to meetings
+1. Always be 2 minutes *early* to meetings
 2. For any idea you believe in, always create a proposal
 3. Any writing shall be reviewed & edited before sending to others
 4. Feedback is a gift, however, delivery is just as important as receiving
