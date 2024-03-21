@@ -2,13 +2,17 @@
 
 > "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain
 
-Welcome to my github repository. 
-If you're here, that means either you just stumbled on my page (nice) or are a co-worker of past, present or future (hey friend!). As I'm sure you're aware, Github is a _powerful_ tool for project management, engineering and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot..)
 
 
-Something I've been reflecting on recently is how I present myself (or atleast intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example I say 'fuck' a lot more in slack than I should.... well. That may never change (sorry mom <3)
+Welcome to my GitHub repository. If you're here, that means either you just stumbled on my page (nice) or are a co-worker of past, present, or future (hey friend!). As I'm sure you're aware, GitHub is a *powerful* tool for project management, engineering, and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot...)
 
-So now as I enter my 6th year, venturing into different eschelons of engineering, I think it's important to maintain a continous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles. 
+
+Something I've been reflecting on recently is how I present myself (or at least intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example, I say 'fuck' a lot more in Slack than I should... well. That may never change (sorry mom <3)
+
+
+So now, as I enter my 6th year, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles.
+
+
 
 ## 7 Guiding Professional Principles
 
