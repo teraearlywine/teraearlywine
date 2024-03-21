@@ -14,7 +14,7 @@ So now, as I enter my 6th year, venturing into different echelons of engineering
 
 
 
-## 7 Guiding Professional Principles
+## **7 Guiding Professional Principles**
 
 1. Be 2 minutes *early* to meetings
 2. For any idea you believe in, always create a proposal
