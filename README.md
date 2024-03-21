@@ -2,9 +2,13 @@
 
 > "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain
 
-Welcome to my github repository. As I'm sure you're aware, Github is a _powerful_ tool for project management, engineering and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot..)
+Welcome to my github repository. 
+If you're here, that means either you just stumbled on my page (nice) or are a co-worker of past, present or future (hey friend!). As I'm sure you're aware, Github is a _powerful_ tool for project management, engineering and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot..)
 
 
+Something I've been reflecting on recently is how I present myself (or atleast intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example I say 'fuck' a lot more in slack than I should.... well. That may never change (sorry mom <3)
+
+So now as I enter my 6th year, venturing into different eschelons of engineering, I think it's important to maintain a continous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles. 
 
 ## 7 Guiding Professional Principles
 
@@ -17,9 +21,8 @@ Welcome to my github repository. As I'm sure you're aware, Github is a _powerful
     2. Always bake in unit tests & assertions 
     3. Always add doc-strings/code comments
     4. Always have a quality assurance analysis prepared as a deliverable
-6. AI is a tool to augment work, not do it for me
-7. Data is a gift, so as a data engineer it’s my duty to protect it.
-
+6. Always push yourself to learn more and to have a sense of humor when things go awry.
+7. Data is a gift, you are but a conduit, so honor the information given to you.
 
 
 <!-- https://squidfunk.github.io/mkdocs-material/reference/content-tabs/#grouping-other-content-unordered-list -->
