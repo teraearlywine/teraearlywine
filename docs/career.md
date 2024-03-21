@@ -15,7 +15,7 @@ And no, I'm not kidding with the coffee thing.
 
 ## **Experience**
 
-Welcome to an overview of my professional journey over the past five years. This period has been rich with learning experiences, mentorship opportunities, growth, and numerous achievements. My career path, driven largely by a deep-seated curiosity, began in the realm of data. However, as time progressed, my interests increasingly veered towards engineering and technology.
+Welcome to an overview of my professional journey over the past six years. This period has been rich with learning experiences, mentorship opportunities, growth, and numerous achievements. My career path, driven largely by a deep-seated curiosity, began in the realm of data. However, as time progressed, my interests increasingly veered towards engineering and technology.
 
 
 In the sections below, you'll find detailed tabs for each position I've held in the last five years. These provide an extensive overview – a comprehensive catalogue created for both personal reflection and storytelling. I take great pleasure in organizing and presenting information, sometimes delving deeply into context to provide a full picture.
