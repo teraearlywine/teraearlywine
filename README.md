@@ -1,4 +1,4 @@
-# Hello! 
+# Hello!
 
 > "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain
 
@@ -10,7 +10,7 @@ Welcome to my GitHub repository. If you're here, that means either you just stum
 Something I've been reflecting on recently is how I present myself (or at least intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example, I say 'fuck' a lot more in Slack than I should... well. That may never change (sorry mom <3)
 
 
-So now, as I enter my 6th year, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles that I intend to practice and uphold as a reminder, but also as a notice to _you_, dear visitor, for the things I hold myself accountable.  
+So now, as I enter my 6th year, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles that I intend to practice and uphold as a reminder, but also as a notice to _you_, dear visitor, of the principles I hold myself accountable to.
 
 
 
@@ -21,8 +21,8 @@ So now, as I enter my 6th year, venturing into different echelons of engineering
 3. Any writing shall be reviewed & edited before sending to others
 4. Feedback is a gift, however, delivery is just as important as receiving
 5. Data Engineering related work:
-    1. Automate, automate, automate! 
-    2. Always bake in unit tests & assertions 
+    1. Automate, automate, automate!
+    2. Always bake in unit tests & assertions
     3. Always add doc-strings/code comments
     4. Always have a quality assurance analysis prepared as a deliverable
 6. Always push yourself to learn more and to have a sense of humor when things go awry.
