@@ -7,7 +7,7 @@ title: Welcome
 
 Welcome to my website and mkdocs repository. If you're here, that means either you just stumbled on my page (nice) or are a co-worker of past, present, or future (hey friend!). As I'm sure you're aware, GitHub is a *powerful* tool for project management, engineering, and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot...)
 
-Something I've been reflecting on recently is how I present myself (or at least intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example, I say 'fuck' a lot more in Slack than I should... well. That may never change (sorry mom <3)
+Something I've been reflecting on recently is how I present myself (or at least intend to present myself) professionally. This matters to me because over the pandemic, some of the 'conditioning' from my earlier career has devolved into a more casual approach. For example, I say 'fuck' a lot more in Slack than I should... well. That may never change (sorry mom <3) But also because at the precopice of AI, I find myself becoming more cautious of what I write. I hope that those who discover the things I code or write to trust the humanity behind it.
 
 
 So now, as I enter the 6th year of my career, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that do matter. So, as of 2024, I curated these seven guiding professional principles that I intend to practice and uphold as a reminder, but also as a notice to _you_, dear visitor, of the principles I hold myself accountable to.
