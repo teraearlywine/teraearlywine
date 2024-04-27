@@ -9,15 +9,15 @@ status: new
 ## The SQL Data Quality Checklist 
 A useful list with different data quality checks you can perform on a table. (Assuming you can use SQL)
 
-- [ ] Completeness check 
-- [ ] Uniqueness check
-- [ ] Consistency check
-- [ ] Range check
-- [ ] Referential integrity check
-- [ ] Pattern check
-- [ ] Data type check
-- [ ] Logical consistency check
-- [ ] Sum check
+1. Completeness check 
+2. Uniqueness check
+3. Consistency check
+4. Range check
+5. Referential integrity check
+6. Pattern check
+7. Data type check
+8. Logical consistency check
+9. Sum check
 
 
 I prefer the first two (completeness and uniqueness check) because they're the most useful when working 
