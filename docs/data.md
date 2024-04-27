@@ -5,6 +5,31 @@ status: new
 
 # Data
 
+
+## The SQL Data Quality Checklist 
+A useful list with different data quality checks you can perform on a table. (Assuming you can use SQL)
+
+- [ ] Completeness check 
+- [ ] Uniqueness check
+- [ ] Consistency check
+- [ ] Range check
+- [ ] Referential integrity check
+- [ ] Pattern check
+- [ ] Data type check
+- [ ] Logical consistency check
+- [ ] Sum check
+
+
+I prefer the first two (completeness and uniqueness check) because they're the most useful when working 
+with raw data. This is because NULL values (completeness) typically signify a bug in the upstream processes and 
+data integrity issues. This either means the process of writing data to the table is screwed
+or something relating to the app or code is screwed. 
+
+Philosophically speaking, prefer to _have_ data as opposed to _no_ data. 
+
+Just the other day, 
+
+
 <details>
 
 <summary> How to Anchor Data Quality Analysis</summary>
