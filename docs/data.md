@@ -27,7 +27,7 @@ or something relating to the app or code is screwed.
 
 Philosophically speaking, prefer to _have_ data as opposed to _no_ data. 
 
-Just the other day, 
+
 
 
 <details>
