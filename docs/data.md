@@ -29,7 +29,6 @@ Philosophically speaking, prefer to _have_ data as opposed to _no_ data.
 
 
 
-
 <details>
 
 <summary> How to Anchor Data Quality Analysis</summary>
