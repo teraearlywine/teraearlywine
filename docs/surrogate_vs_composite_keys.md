@@ -34,7 +34,7 @@ The challenge with this table is the underlying data is not normalized / nor pos
 Given the SQL logic, I used the two keys most relevant to the entity (in this case a shipping label tracking number and the label scan date along the supply chain) in combination with a ROW_COUNT() window function. Sudo code to follow.
 
 <aside>
-<img src="/icons/info-alternate_gray.svg" alt="/icons/info-alternate_gray.svg" width="40px" /> Disclaimer: The following SQL is sudo code and meant for illustrative purposes only
+Disclaimer: The following SQL is sudo code and meant for illustrative purposes only
 
 </aside>
 
