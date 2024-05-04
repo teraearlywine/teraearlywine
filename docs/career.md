@@ -38,7 +38,9 @@ In the sections below, you'll find detailed tabs for each position I've held in 
     **Summary**
 
 
-    As a Data Engineer, I transitioned into a new role approximately eight months ago, around the middle of 2023, to a team that is focusing on third-party vendor integrations. My specialization has been in maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments where I am responsible for maintaining and refactoring our codebase. Since then, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
+   I transitioned into a new role approximately around the middle of 2023, to a team that is focusing on third-party vendor integrations. My current focus has been maintaining and optimizing ad vendor APIs. My daily tasks involve Python modeling within Google Cloud Platform's Composer environments where I am responsible for maintaining and refactoring our codebase. Since then, I have revamped our onboarding process in GCP. This revamp included utilizing Terraform for the efficient deployment of Continuous Integration and Continuous Deployment (CI/CD) resources.
+
+   In addition to API integration, I also work actively on SQL development, building production-grade analytics pipelines for the executive team and beyond. Mercaris shipping and logistics data is very fascinating. The Mercari micro-economies are constantly evolving.
 
 
     ??? success "Lessons from 2023"
@@ -53,7 +55,7 @@ In the sections below, you'll find detailed tabs for each position I've held in 
         Employer: Alice <br>
         Duration: 2021 - 2022
 
-
+        This was arguably one of the most challenging data analytics engineering experiences I've had - just purely because the business model is so complex. Alice's aim was to create a pre-tax benefit service for hourly employees, which required I study up on health and tax laws.
 
 === "2021 · Data Analyst"
 
