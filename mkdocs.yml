@@ -2,10 +2,9 @@ site_name: Tera Earlywine
 site_url: https://teraearlywine.github.io/teraearlywine/
 nav:
   - Home: index.md
-  - Projects: projects.md
+  - About Me: about_me.md
   - Career: career.md
   - Tech Stack: tech_stack.md
-  - About Me: about_me.md
   - Data Quality Philosophy: data_quality_philosophy.md
   - Surrogate vs. Composite Keys: surrogate_vs_composite_keys.md
 
