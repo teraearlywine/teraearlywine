@@ -1,5 +1,7 @@
 site_name: Tera Earlywine
 site_url: https://teraearlywine.github.io/teraearlywine/
+repo_url: https://github.com/teraearlywine/teraearlywine
+edit_uri: edit/main/docs/
 nav:
   - Home: index.md
   - About Me: about_me.md
