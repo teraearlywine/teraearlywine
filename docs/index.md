@@ -27,7 +27,7 @@ So now, as I enter the 6th year of my career, venturing into different echelons 
     4. Always have a quality assurance analysis prepared as a deliverable
 6. Always push yourself to learn more and to have a sense of humor when things go awry.
 7. Data is a gift, you are but a conduit, so honor the information given to you.
-
+8. Prefer to _have_ data as opposed to _no_ data. 
 <!--
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 ## Commands
