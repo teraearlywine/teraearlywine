@@ -42,13 +42,6 @@ In the sections below, you'll find detailed tabs for each position I've held in 
 
    In addition to API integration, I also work actively on SQL development, building production-grade analytics pipelines for the executive team and beyond. Mercaris shipping and logistics data is very fascinating. The Mercari micro-economies are constantly evolving.
 
-
-    ??? success "Lessons from 2023"
-
-        Being successful to start meant just learning, that stayed true as time went on. Later, success also started to mean ensuring the code I inhereted was clean and well documented. The pipelines I've worked on were set up by other people, many hands in the pie. I spent time adding documentation and building out a testing suite. This is where I really learned the importance of readability, documentation and simplification.
-
-
-    <br>
 === "2022 · Data Analytics Engineer"
 
     ??? info "Employment Info"
