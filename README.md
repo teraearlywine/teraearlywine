@@ -6,7 +6,7 @@
 
 Welcome to my GitHub repository. If you're here, that means either you just stumbled on my page (nice) or are a co-worker of past, present, or future (hey friend!). As I'm sure you're aware, GitHub is a *powerful* tool for project management, engineering, and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot...)
 
-Now, as I enter the fifth year of my career, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that matter. So, as of 2024, I have curated these guiding professional principles that I intend to practice and uphold as a reminder. These principles are also a notice to you, dear visitor, of the standards to which I hold myself accountable.
+Now, as I venture beyond the fifth year of my career, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that matter. So, as of 2024, I have curated these guiding professional principles that I intend to practice and uphold as a reminder. These principles are also a notice to you, dear visitor, of the standards to which I hold myself accountable.
 
 
 ## 8 Guiding Professional Principles
