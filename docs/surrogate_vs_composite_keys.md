@@ -9,7 +9,7 @@ status: new
 
 ### Challenges with SQL Development using Cloud Tools
 
-The problem today with cloud tools is that they’re all oriented towards data manipulation SQL. But, if you want to create a robust production SQL transformation, that becomes challenging.  Lets say you have a generic table with app data or user histories, and you’re trying to create a new table derived from it in DBT. How to ensure uniqueness with any new table or dimension you create, given that you can’t auto-increment a newer primary key?
+The problem today with cloud tools is that they’re all oriented towards data manipulation SQL. But, if you want to create a robust production SQL transformation, that becomes challenging.  Lets say you have a generic table with app data or user histories, and you’re trying to create a new table derived from it in DBT. How to ensure uniqueness with any new table or dimension you create, given that you can’t auto-increment a newer primary key? DBT actually has their own solution to the problem, but today we're going to look at how to create your own. Dataform (DBT competitor) does not have a solution for this yet.
 
 You are now required to create one.
 
