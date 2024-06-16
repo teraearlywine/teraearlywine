@@ -2,28 +2,10 @@
 
 > "Data is like garbage. You'd better know what you are going to do with it before you collect it." - Mark Twain
 
+Hi! My name is Tera Earlywine. I am a data engineer (part SQL optimization ninja) with over 5 years of tech industry experience. There may have been a bit of foreshadowing when my parents named me Tera—but as it turns out, terabytes of data weren’t as prevalent back then.
 
+Nowadays, I find myself tuning data models processing petabytes into terabytes and terabytes into gigabytes—while exploring how AI can push the boundaries of data processing, SQL interpretation, automation, and development. If I'm not working on query optimization or AI automation projects, I am teaching and mentoring others on similar concepts.
 
-Welcome to my GitHub repository. If you're here, that means either you just stumbled on my page (nice) or are a co-worker of past, present, or future (hey friend!). As I'm sure you're aware, GitHub is a *powerful* tool for project management, engineering, and development, and is genuinely the most satisfying archival tool I've ever worked with. (And I've worked with a lot...)
+I am also very passionate about data quality and integrity. Before we talk about AI and data enrichment, let’s first discuss how your business handles null values…
 
-Now, as I venture beyond the fifth year of my career, venturing into different echelons of engineering, I think it's important to maintain a continuous practice of things that matter. So, as of 2024, I have curated these guiding professional principles that I intend to practice and uphold as a reminder. These principles are also a notice to you, dear visitor, of the standards to which I hold myself accountable.
-
-
-## 8 Guiding Professional Principles
-
-1. Always be 2 minutes *early* to meetings
-2. For any idea you believe in, always create a proposal
-3. Any writing shall be reviewed & edited before sending to others
-4. Feedback is a gift, however, delivery of feedback is just as important as receiving
-5. Data Engineering related work:
-    1. Automate, automate, automate!
-    2. Always bake in unit tests & assertions
-    3. Always add doc-strings/code comments
-    4. Always have a quality assurance analysis prepared as a deliverable
-    5. When building dashboards, use rule of 3rds
-    6. Check with backend for modeling logic, check with stakeholders to confirm business understanding.
-6. Always push yourself to learn more and to have a sense of humor when things go awry.
-7. Data is a gift, you are but a conduit, so honor the information given to you.
-8. Prefer to _have_ data as opposed to _no_ data. 
-
-<!-- https://squidfunk.github.io/mkdocs-material/reference/content-tabs/#grouping-other-content-unordered-list -->
+Throughout my career, challenging the status quo has lead me to help companies ignite innovative, revenue generating, trailblazing initiatives—and of course, always armed with data.
