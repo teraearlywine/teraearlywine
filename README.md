@@ -9,3 +9,10 @@ Nowadays, I find myself tuning data models processing petabytes into terabytes a
 I am also very passionate about data quality and integrity. Before we talk about AI and data enrichment, let’s first discuss how your business handles null values…
 
 Throughout my career, challenging the status quo has lead me to help companies ignite innovative, revenue generating, trailblazing initiatives—and of course, always armed with data.
+
+
+```SQL
+
+SELECT * 
+FROM   tell_me_more.teras_experience
+```
