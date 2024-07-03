@@ -10,4 +10,4 @@ Thanks for stopping by!
 Best, 
 
 
-![Alt Text](https://github.com/teraearlywine/teraearlywine/blob/main/.branding/T%20Logo.png)
+![Alt Text](https://github.com/teraearlywine/teraearlywine/blob/main/.branding/Signature.png)
