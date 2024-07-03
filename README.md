@@ -7,7 +7,8 @@ This repo currently points (and publishes to) www.teraearlywine.com, which consi
 
 
 Thanks for stopping by! 
+
 Best, 
 
 
-![Alt Text](https://github.com/teraearlywine/teraearlywine/blob/main/.branding/Signature.png)
+![Alt Text](https://github.com/teraearlywine/teraearlywine/blob/main/.branding/Tera%20Earlywine.png)
