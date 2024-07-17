@@ -12,13 +12,6 @@ Welcome to my corner of the internet! I’m Tera Earlywine, a passionate data en
 
 From the bustling corridors of startups to the structured environments of established tech giants, I’ve had the privilege of wearing many hats. Whether optimizing intricate ETL processes, designing robust data models, or spearheading data quality initiatives, each role has enriched my expertise and fueled my passion for data engineering.
 
-**Professional Snapshot**
-
-	•	Data Engineer: Currently, I’m focused on optimizing Ad Network API integration ETL, reducing write time, and enhancing code readability. My work has led to significant improvements, including a 6000 user/day increase in web registration.
-	•	Data Warehouse Engineer: I’ve led initiatives that saved significant costs and enhanced team skills through training and instructional materials.
-	•	Data Analytics Engineer: My collaboration with executive teams to define business KPIs has been instrumental in securing investor funding and driving business growth.
-	•	Business Intelligence Analyst: From publishing peer-reviewed research to designing high-impact CRM campaigns, my analytical skills have always been at the forefront.
-
 **My Philosophy**
 
 I believe in the power of data to tell stories, solve problems, and drive innovation. My approach is rooted in a combination of technical proficiency and creative thinking. I’m constantly exploring new ways to make data more accessible, understandable, and impactful.
