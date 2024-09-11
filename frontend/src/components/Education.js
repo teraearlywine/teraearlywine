@@ -54,37 +54,4 @@ const Education = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#121212',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    color: '#ffffff',
-    marginBottom: 16,
-  },
-  item: {
-    marginBottom: 12,
-    padding: 10,
-    backgroundColor: '#1e1e1e',
-    borderRadius: 8,
-  },
-  school: {
-    fontSize: 18,
-    color: '#ffffff',
-    fontWeight: 'bold',
-  },
-  degree: {
-    fontSize: 16,
-    color: '#b0b0b0',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
-
 export default Education;

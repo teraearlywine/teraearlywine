@@ -48,34 +48,4 @@ const Experience = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#121212',
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#ffffff',
-  },
-  item: {
-    marginBottom: 12,
-    padding: 10,
-    backgroundColor: '#1e1e1e',
-    borderRadius: 8,
-  },
-  company: {
-    fontSize: 18,
-    color: '#ffffff',
-    fontWeight: 'bold',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
-
 export default Experience;

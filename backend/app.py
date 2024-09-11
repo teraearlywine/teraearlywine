@@ -8,6 +8,16 @@ CORS(app)  # This will allow cross-origin requests from any domain
 def index():
     return jsonify({"message": "Welcome to the interactive resume website"})
 
+@app.route('/api/header')
+def header():
+    # Sample data (replace this with data from a DB or any other source)
+    # Email: your.email@example.com | LinkedIn: /your-profile
+    return jsonify([{
+        "email": "info@teraearlywine.com",
+        "linkedin": "https://www.linkedin.com/in/teraearlywine/",
+        "github": "https://github.com/teraearlywine"
+    }])
+
 @app.route('/api/experience')
 def experience():
     # Sample data (replace this with data from a DB or any other source)
