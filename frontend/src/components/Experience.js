@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { experienceStyles } from './styles/styles';  // Adjusted path to .js
 
 const Experience = () => {
   const [experience, setExperience] = useState([]);
@@ -31,15 +32,15 @@ const Experience = () => {
   }
 
   if (error) {
-    return <Text style={styles.errorText}>Error: {error}</Text>;
+    return <Text style={experienceStyles.errorText}>Error: {error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Experience</Text>
+    <View style={experienceStyles.container}>
+      <Text style={experienceStyles.heading}>Experience</Text>
       {experience.map((exp, index) => (
-        <View key={index} style={styles.item}>
-          <Text style={styles.company}>{exp.company}</Text>
+        <View key={index} style={experienceStyles.item}>
+          <Text style={experienceStyles.company}>{exp.company}</Text>
           <Text>{exp.role} ({exp.years})</Text>
         </View>
       ))}

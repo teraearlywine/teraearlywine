@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { educationStyles } from './styles/styles';  // Adjusted path to .js
 
 const Education = () => {
   const [education, setEducation] = useState([]);
@@ -31,19 +32,19 @@ const Education = () => {
   }
 
   if (error) {
-    return <Text style={styles.errorText}>Error: {error}</Text>;
+    return <Text style={educationStyles.errorText}>Error: {error}</Text>;
   }
 
   const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text style={styles.school}>{item.school}</Text>
-      <Text style={styles.degree}>{item.degree} ({item.years})</Text>
+    <View style={educationStyles.item}>
+      <Text style={educationStyles.school}>{item.school}</Text>
+      <Text style={educationStyles.degree}>{item.degree} ({item.years})</Text>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Education</Text>
+    <View style={educationStyles.container}>
+      <Text style={educationStyles.title}>Education</Text>
       <FlatList
         data={education}
         renderItem={renderItem}

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { appStyles } from './src/components/styles/styles'; // Import styles
+
 import Header from './src/components/Header';
 import Experience from './src/components/Experience';
 import Education from './src/components/Education';
@@ -9,7 +11,7 @@ import Contact from './src/components/Contact';
 class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View style={appStyles.container}>
         <Header />
         <Experience />
         <Education />
@@ -19,13 +21,5 @@ class App extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#121212', // Dark mode background
-  },
-});
 
 export default App;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { skillStyles } from './styles/styles';  // Adjusted path to .js
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
@@ -36,46 +37,22 @@ const Skills = () => {
   }
 
   if (error) {
-    return <Text style={styles.errorText}>Error: {error}</Text>;
+    return <Text style={skillStyles.errorText}>Error: {error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Skills</Text>
+    <View style={skillStyles.container}>
+      <Text style={skillStyles.heading}>Skills</Text>
       <FlatList
         horizontal
         data={skills}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <Text style={styles.skillItem}>{item}</Text>
+          <Text style={skillStyles.skillItem}>{item}</Text>
         )}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 20,
-    justifyContent: 'center', // Center content while loading
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#fff', // Assuming dark mode styling
-  },
-  skillItem: {
-    padding: 10,
-    fontSize: 18,
-    color: '#b0b0b0', // Lighter text for readability in dark mode
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
 
 export default Skills;

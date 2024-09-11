@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { headerStyles } from './styles/styles';  // Adjusted path to headerStyles.js
 
 const Header = () => {
   return (
-    <View style={styles.header}>
-      <Text style={styles.title}>Your Name</Text>
-      <Text style={styles.subtitle}>Full Stack Data Engineer</Text>
+    <View style={headerStyles.header}>
+      <Text style={headerStyles.title}>Your Name</Text>
+      <Text style={headerStyles.subtitle}>Full Stack Data Engineer</Text>
       <Text>Email: your.email@example.com | LinkedIn: /your-profile</Text>
     </View>
   );
