@@ -1,8 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 
 export const appStyles = StyleSheet.create({
+
   container: {
     flex: 1,
+    flexGrow: 1,
     padding: 10,
     paddingTop: 50, // Add padding from the top
     paddingBottom: 50, // Add padding from the bottom
@@ -35,19 +37,21 @@ export const headerStyles = StyleSheet.create({
 export const experienceStyles = StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
     padding: 25,
     backgroundColor: '#1e1e1e',
     color: '#ffffff',
-    marginBottom: 20, // Add space below the experience section
+    // marginBottom: 20, // Add space below the experience section
   },
   heading: {
+    padding: 10,
     fontSize: 24,
-    marginBottom: 12,
+    // marginBottom: 12,
     color: '#ffffff',
   },
   item: {
-    marginBottom: 12,
     padding: 10,
+    // marginBottom: 12,
     backgroundColor: '#1e1e1e',
     borderRadius: 8,
   },
@@ -68,15 +72,15 @@ export const educationStyles = StyleSheet.create({
     backgroundColor: '#1e1e1e',
     color: '#ffffff', // White text for contrast
     padding: 25,
-    marginBottom: 20, // Add space below the education section
+    // marginBottom: 20, // Add space below the education section
   },
   title: {
     fontSize: 24,
-    marginBottom: 12,
+    // marginBottom: 12,
     color: '#ffffff',
   },
   item: {
-    marginBottom: 12,
+    // marginBottom: 12,
     padding: 10,
     backgroundColor: '#1e1e1e',
     borderRadius: 8,
@@ -121,7 +125,6 @@ export const skillStyles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 
 export const contactStyles = StyleSheet.create({
   container: {

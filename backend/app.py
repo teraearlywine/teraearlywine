@@ -22,8 +22,9 @@ def header():
 def experience():
     # Sample data (replace this with data from a DB or any other source)
     return jsonify([
-        {"company": "Company A", "role": "Data Engineer", "years": "2018-2021"},
-        {"company": "Company B", "role": "Full Stack Engineer", "years": "2021-2023"}
+        {"company": "Mercari", "role": "Business Intelligence Analyst", "years": "2018-2021"},
+        {"company": "This is Alice", "role": "Data Analytics Engineer", "years": "2021-2022"},
+        {"company": "Mercari", "role": "Data Engineer", "years": "2022-2024"}
     ])
 
 @app.route('/api/education')
