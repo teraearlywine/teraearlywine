@@ -41,7 +41,7 @@ const Experience = () => {
       {experience.map((exp, index) => (
         <View key={index} style={experienceStyles.item}>
           <Text style={experienceStyles.company}>{exp.company}</Text>
-          <Text>{exp.role} ({exp.years})</Text>
+          <Text style={experienceStyles.role}>{exp.role} ({exp.years})</Text>
         </View>
       ))}
     </View>

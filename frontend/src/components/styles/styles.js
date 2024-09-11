@@ -75,6 +75,11 @@ export const experienceStyles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
   },
+  role: {
+    fontSize: 12,
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
 });
 
 export const educationStyles = StyleSheet.create({
@@ -126,7 +131,7 @@ export const skillStyles = StyleSheet.create({
   skillItem: {
     padding: 10,
     fontSize: 18,
-    color: '#b0b0b0', // Lighter text for readability in dark mode
+    color: '#fff', // Lighter text for readability in dark mode
   },
   errorText: {
     color: 'red',
