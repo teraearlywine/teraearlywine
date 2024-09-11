@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library'; // Import MediaLibrary
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { captureRef } from 'react-native-view-shot'; // Import captureRef
 
 import Button from './components/Button';
 import ImageViewer from './components/ImageViewer';
@@ -20,22 +22,27 @@ export default function App() {
   const [pickedEmoji, setPickedEmoji] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  // Ref for the image container to capture
+  const imageContainerRef = useRef(null);
+
   const pickImageAsync = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,      
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
       quality: 1,
     });
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);      
+      setSelectedImage(result.assets[0].uri);
       setShowAppOptions(true);
     } else {
-      alert('You did not select any image.');
+      Alert.alert('No image selected', 'You did not select any image.');
     }
   };
 
   const onReset = () => {
     setShowAppOptions(false);
+    setSelectedImage(null);
+    setPickedEmoji(null);
   };
 
   const onAddSticker = () => {
@@ -47,15 +54,31 @@ export default function App() {
   };
 
   const onSaveImageAsync = async () => {
-    // we will implement this later
+    try {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === 'granted') {
+        const uri = await captureRef(imageContainerRef, {
+          format: 'png',
+          quality: 1,
+        });
+        await MediaLibrary.createAssetAsync(uri);
+        Alert.alert('Success', 'Image saved to your gallery!');
+      } else {
+        Alert.alert('Permission denied', 'Please allow access to save images.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Could not save the image. Please try again.');
+    }
   };
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <View style={styles.imageContainer}>
+      {/* Use the ref in the image container */}
+      <View ref={imageContainerRef} style={styles.imageContainer}>
         <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
-        {pickedEmoji !== null ? <EmojiSticker imageSize={40} stickerSource={pickedEmoji} /> : null}
-      </View>      
+        {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />}
+      </View>
       {showAppOptions ? (
         <View style={styles.optionsContainer}>
           <View style={styles.optionsRow}>
@@ -67,9 +90,7 @@ export default function App() {
       ) : (
         <View style={styles.footerContainer}>
           <Button theme="primary" label="Choose a photo" onPress={pickImageAsync} />
-          <Button
-            label="Use this photo" onPress={() => setShowAppOptions(true)}
-          />
+          <Button label="Use this photo" onPress={() => setShowAppOptions(true)} />
         </View>
       )}
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
@@ -83,12 +104,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: '#1e1e1e',
     alignItems: 'center',
   },
   imageContainer: {
-    flex:1, 
-    paddingTop: 58
+    flex: 1,
+    paddingTop: 58,
   },
   footerContainer: {
     flex: 1 / 3,
