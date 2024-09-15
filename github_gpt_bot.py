@@ -1,9 +1,11 @@
+from dotenv import load_dotenv
 from github import Github, InputGitTreeElement, GithubException
+import os
+
 import openai
 import base64
 import datetime
-from dotenv import load_dotenv
-import os
+
 
 load_dotenv()
 
@@ -36,6 +38,7 @@ default_branch = repo.default_branch
 new_branch_name = f'code-improvements-{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}'
 sb = repo.get_branch(default_branch)
 repo.create_git_ref(ref='refs/heads/' + new_branch_name, sha=sb.commit.sha)
+
 
 # List to hold updated files
 element_list = []
