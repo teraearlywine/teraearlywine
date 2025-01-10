@@ -6,7 +6,7 @@ status: new
 
 ## About Me
 
-Welcome to my corner of the internet! I’m Tera Earlywine, a passionate data engineer with over seven years of experience transforming complex data into actionable insights. Based in Burlingame, CA, my journey in the tech world has been driven by a relentless curiosity and a deep-seated love for problem-solving.
+Welcome to my corner of the internet! I’m Tera Earlywine, a passionate data engineer with over seven years of experience transforming complex data into actionable insights. Based in Petaluma, CA, my journey in the tech world has been driven by a relentless curiosity and a deep-seated love for problem-solving.
 
 **My Journey**
 
