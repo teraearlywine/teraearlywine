@@ -6,8 +6,8 @@ nav:
   - Home: index.md
   - About Me: about_me.md
   - Career: career.md
-  - Tech Stack: tech_stack.md
   - Data Quality Philosophy: data_quality_philosophy.md
+  - Data Quality Strategies: data_quality_strategies.md
   - Surrogate vs. Composite Keys: surrogate_vs_composite_keys.md
 
 theme:
