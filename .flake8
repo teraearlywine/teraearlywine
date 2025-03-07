@@ -1,0 +1,15 @@
+[flake8]
+extend-ignore = 
+    E203,  # Whitespace before ':'
+    E704,  # Multiple statements on one line (def)
+    W293,  # Blank line contains whitespace
+    W292,  # No newline at end of file
+    W291,  # Trailing whitespace
+    F401,  # Module imported but unused
+    E501,  # Line too long (82 > 79 characters)
+    F841,  # Local variable name is assigned to but never used
+    E302,  # Expected 2 blank lines, found 1
+    E222,  # Multiple spaces after operator
+    E402   # Module level import not at top of file
+exclude = .venv, tests
+max-line-length = 180
