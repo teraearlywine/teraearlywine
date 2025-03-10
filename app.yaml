@@ -1,0 +1,2 @@
+runtime: python312
+entrypoint: gunicorn --bind :$PORT core.app:app

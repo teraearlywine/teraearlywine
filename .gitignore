@@ -11,3 +11,7 @@ __pycache__
 .pytest_cache
 .env
 .branding
+
+# Personal website not ready yet! 
+.gcloudignore 
+core/
