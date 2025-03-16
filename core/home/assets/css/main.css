@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont;
+  overflow-x: hidden;
+  overscroll-behavior-y: none; 
+}
+
+/* 
+Sets the maximum website height to 1000vh. 
+
+*/
+body {
+  height: 1000vh;  
+  min-height: 100vh;
+  background: linear-gradient(-49deg, #b03dbf, #ee7752, #2367d5, #16ddd3);
+  background-size: 400% 400%;
+  background-position: 0% 70%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  z-index: -1;
+}
+
+.section {
+    padding: 20rem;
+}

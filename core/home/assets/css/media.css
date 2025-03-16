@@ -1,0 +1,26 @@
+/* Media query adjustments for mobile devices */
+@media (max-width: 768px) {
+
+  html, body {
+    background-position: center;
+  }
+  .static-text,
+  .rotating-text {
+    font-size: 35px;
+    margin: 0 2px;
+    transition: font-size 0.3s ease, margin 0.3s ease;
+  }
+  
+  }
+
+/* Mobile UI adjustments */
+@media (max-width: 600px) {
+  .static-text,
+  .rotating-text {
+    font-size: 20px;
+    margin: 0 2px;
+    margin-right: 4px;
+    padding: 4px;
+    transition: font-size 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+  }
+}

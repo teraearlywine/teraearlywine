@@ -1,0 +1,19 @@
+<button id="scroll_to_top_button" class="scroll-button" onclick="scroll_to_top()">↑</button>
+
+<script>
+    window.onscroll = function () {
+        var button = document.getElementById("scroll_to_top_button");
+
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            button.classList.add("visible");
+        } else {
+            button.classList.remove("visible");
+        }
+    };
+
+    function scroll_to_top() {
+        // Smooth scrolling to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    }
+</script>

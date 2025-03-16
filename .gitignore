@@ -14,4 +14,4 @@ __pycache__
 
 # Personal website not ready yet! 
 .gcloudignore 
-core/
+# core/
