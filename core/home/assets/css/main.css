@@ -1,26 +1,33 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont;
   overflow-x: hidden;
-  overscroll-behavior-y: none; 
+  overscroll-behavior-y: none;
 }
 
 /* 
 Sets the maximum website height to 1000vh. 
 
 */
+
+hr {
+  width: 70%;
+  margin: 0 auto;
+}
+
 body {
-  height: 1000vh;  
+  height: 1000vh;
   min-height: 100vh;
   background: linear-gradient(-49deg, #b03dbf, #ee7752, #2367d5, #16ddd3);
   background-size: 400% 400%;
@@ -32,5 +39,36 @@ body {
 }
 
 .section {
-    padding: 20rem;
+  padding: 10rem;
+}
+
+.section-paragraph {
+  width: 80%;
+  text-align: center;
+  color: #ffffff85;
+  font-size: 20px;
+  padding: 15px;
+  margin: 1px;
+  text-shadow: 0px 2px 5px #1a1a1a85;
+  transition: transform 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+.section-paragraph:hover {
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.highlighted-word {
+  width: 80%;
+  text-align: center;
+  font-size: 20px;
+  text-shadow: 0px 2px 5px #1a1a1a85;
+  transition: transform 0.5s ease-in-out, color 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0.5;
+}
+
+.highlighted-word:hover {
+  opacity: 1;
+  color: #ffffff;
+  transform: scale(1.15);
 }
