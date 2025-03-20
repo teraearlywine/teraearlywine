@@ -32,5 +32,10 @@ body {
 }
 
 .section {
-    padding: 20rem;
+    padding: 15rem;
+}
+
+.section-paragraph {
+  color: #F9F9F9;
+  font-size: 20px;
 }
