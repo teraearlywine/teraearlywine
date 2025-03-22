@@ -124,3 +124,24 @@ p {
   opacity: 1;
   transform: translateY(0);
 }
+
+.database {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem; /* Optional: Adds spacing between items */
+  padding: 25px;
+}
+
+.database p {
+  text-align: right;
+  padding: 5px;
+  margin: 50px; /* Adds space to the left side */
+
+}
+
+.database img {
+  margin: 50px; /* Adds space to the left side */
+  padding: 5px;
+}
