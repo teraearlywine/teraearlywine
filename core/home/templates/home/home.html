@@ -7,12 +7,33 @@
 <body>
     <main>
         {% include 'home/includes/buttons/scroll_to_top.html' %}
+
+    <!-- Each section will fade in as you scroll down -->
+    <section class="content fade-in">
         {% include 'home/includes/buttons/github_icon.html' %}
-        <br><br><br><br><br><br><br><br><br><br><br><br>
         {% include 'home/sections/intro_section.html' %}
-        <hr>
-        {% include 'home/sections/about_section.html' %}
-        <hr>
+
+    </section>
+
+    <section class="content fade-in">
+
+            <h2>Big Data Energy</h2><br>
+            <p>Tera is a seasoned technologist specializing in architecting big data solutions and designing cutting-edge AI systems for the finance and technology sectors.
+            </p>
+
+    
+    </section>
+
+    <section class="content fade-in">
+            <h2>Techincal Co-Founder</h2><br>
+            <p>As the technical founder of Cowgirl AI, Tera embodies entrepreneurial ingenuity,
+            pioneering advanced AI technologies that tackle complex challenges with innovation and precision.</p>
+
+    </section>
+
+    <!-- Add more sections as needed -->
+    {% include 'home/includes/scripts.html' %}
+
 
     </main>
 

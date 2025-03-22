@@ -29,7 +29,7 @@ hr {
 body {
   height: 1000vh;
   min-height: 100vh;
-  background: linear-gradient(-49deg, #b03dbf, #ee7752, #2367d5, #16ddd3);
+  background: linear-gradient(-49deg, #1e1e1e, #022240);
   background-size: 400% 400%;
   background-position: 0% 70%;
   margin: 0;
@@ -71,4 +71,53 @@ body {
   opacity: 1;
   color: #ffffff;
   transform: scale(1.15);
+}
+
+/* Header styling */
+.header {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f2f2f2;
+  text-align: center;
+  padding: 2rem;
+}
+
+.header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 1.2rem;
+  /* max-width: 600px; */
+  color: #f2f2f2;
+}
+
+/* Content sections */
+.content {
+  min-height: 100vh; /* Let each section fill the viewport */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background: linear-gradient(-49deg, #19191968, #2c2c2c);
+  border-bottom: 1px solid #ddd;
+  color: #f2f2f2;
+}
+
+/* Basic fade-in class (initially hidden) */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+/* Class added by JS once it's in view */
+.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
 }
