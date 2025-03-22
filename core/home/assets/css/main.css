@@ -85,15 +85,18 @@ body {
   padding: 2rem;
 }
 
-.header h1 {
-  font-size: 3rem;
+h2 {
+  font-size: 2.5rem;
   margin-bottom: 1rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 p {
-  font-size: 1.2rem;
-  /* max-width: 600px; */
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   color: #f2f2f2;
+  text-align: center;
+  line-height: 1.6;
 }
 
 /* Content sections */
@@ -113,7 +116,7 @@ p {
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 1.75s ease, transform 1.5s ease;
 }
 
 /* Class added by JS once it's in view */

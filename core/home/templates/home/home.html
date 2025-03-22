@@ -8,37 +8,56 @@
     <main>
         {% include 'home/includes/buttons/scroll_to_top.html' %}
 
-    <!-- Each section will fade in as you scroll down -->
-    <section class="content fade-in">
-        {% include 'home/includes/buttons/github_icon.html' %}
-        {% include 'home/sections/intro_section.html' %}
+        <!-- Each section will fade in as you scroll down -->
+        <section>
+            {% include 'home/includes/buttons/github_icon.html' %}
+            {% include 'home/sections/intro_section.html' %}
+            
+            <br>
+        </section>
 
-    </section>
+        <section class="content fade-in">
+            <span class="fade-in"><h2>Big Data Energy</h2></span><br>
+            <span class="fade-in">
+                <p>
+                    Tera is a seasoned technologist who is endlessly passionate about data, optimizing pipelines and
+                    designing cutting-edge systems for the finance and technology sectors.
+                </p>
+            </span>
+        </section>
 
-    <section class="content fade-in">
+        <section class="content fade-in">
+            <span class="fade-in">
+                <h2>An innovative and entreprenuerial Spirit</h2>
+            </span><br>
+            <span class="fade-in">
+                <p>
+                    As the technical founder of Cowgirl AI, Tera embodies entrepreneurial ingenuity,
+                    pioneering advanced AI technologies that tackle complex challenges with innovation and precision.
+                </p>
+            </span>
 
-            <h2><span class="fade-in">Big Data Energy</span></h2><br>
-            <p><span class="fade-in">Tera is a seasoned technologist specializing in architecting big data solutions and designing cutting-edge AI systems for the finance and technology sectors.</span>
-            </p>
+        </section>
 
-    
-    </section>
-
-    <section class="content fade-in">
-            <h2>Techincal Co-Founder</h2><br>
-            <p>As the technical founder of Cowgirl AI, Tera embodies entrepreneurial ingenuity,
-            pioneering advanced AI technologies that tackle complex challenges with innovation and precision.</p>
-
-    </section>
-
-    <!-- Add more sections as needed -->
-    {% include 'home/includes/scripts.html' %}
-
-
+        <!-- Add more sections as needed -->
+        <br><br><br><br><br><br><br><br>
+        <section>
+            <p>
+                <span class="email-hover">
+                  <a href="mailto:info@teraearlywine.com?subject=Schedule%20a%20Free%2030%20Minute%201:1" 
+                     style="text-decoration: none; color: inherit;">
+                    Reach out today to schedule a free 30 minute 1:1.
+                  </a>
+                </span>
+              </p>
+            
+        </section>
+       
     </main>
 
 </body>
 
-
+{% include 'home/includes/scripts.html' %}
 {% include 'home/includes/footer.html' %}
+
 </html>
