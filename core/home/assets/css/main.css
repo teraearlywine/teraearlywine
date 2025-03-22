@@ -104,7 +104,8 @@ p {
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  background: linear-gradient(-49deg, #19191968, #2c2c2c);
+  background: linear-gradient(-49deg, #272727, #0960b2);
+  /* background: transparent; */
   border-bottom: 1px solid #ddd;
   color: #f2f2f2;
 }
