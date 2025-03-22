@@ -2,33 +2,45 @@
 .button {
     background-color: transparent;
     opacity: 0.9;
+    border: transparent;
+
     /* nearly transparent */
 }
+.social-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the buttons horizontally */
+    flex-direction: row;
+    gap: 10px; /* Adjust spacing between buttons as needed */
+}
 
-.github-img {
+.linkedin-img {
     background-color: transparent;
     border: transparent;
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.282);
-    position: fixed;
-    top: 30px;
-    right: 50px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    opacity: 0.9;
+    transition: filter 2.5s ease-in-out, drop-shadow 2.5s ease-in-out
 }
 
-/* Pressed state: gives a slight downward "dip" and reduces the shadow */
-.github-img:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    opacity: 0.85;
+.linkedin-img:hover svg {
+    filter: drop-shadow(0 0 10px #081461f3); /* Blue glow */
 }
+.github-img {
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: filter 2.5s ease-in-out, drop-shadow 2.5s ease-in-out
+}
+
+.github-img:hover svg {
+    filter: drop-shadow(0 0 10px #081461f3); /* Blue glow */
+}
+
 
 .scroll-button {
     font-size: 1.5rem;

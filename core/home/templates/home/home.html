@@ -10,7 +10,6 @@
 
         <!-- Each section will fade in as you scroll down -->
         <section>
-            {% include 'home/includes/buttons/github_icon.html' %}
             {% include 'home/sections/intro_section.html' %}
             
             <br>
@@ -18,6 +17,7 @@
 
         <section class="content fade-in">
             <span class="fade-in"><h2>Big Data Energy</h2></span><br>
+
             <span class="fade-in">
                 <p>
                     Tera is a seasoned technologist who is endlessly passionate about data, optimizing pipelines and
@@ -63,19 +63,20 @@
             </span>
             
         </section>
-        <!-- Add more sections as needed -->
-        <br><br><br><br><br><br><br><br>
-        <section>
-            <!-- <p>
-                <span class="email-hover">
-                  <a href="mailto:info@teraearlywine.com?subject=Schedule%20a%20Free%2030%20Minute%201:1" 
-                     style="text-decoration: none; color: inherit;">
-                    Reach out today to schedule a free 30 minute 1:1.
-                  </a>
-                </span>
-              </p> -->
-            
+
+        <section class="content fade-in">
+
+            <span class="social-buttons">
+                
+                {% include 'home/includes/buttons/linkedin_icon.html' %}
+                {% include 'home/includes/buttons/github_icon.html' %}
+    
+            </span>
+
         </section>
+        <!-- Add more sections as needed -->
+
+
         
     </main>
 
