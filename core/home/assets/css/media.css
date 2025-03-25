@@ -10,7 +10,29 @@
     margin: 0 2px;
     transition: font-size 0.3s ease, margin 0.3s ease;
   }
-  
+  .fade-in,
+  .content {
+    font-size: 15px;
+    margin: 0 2px;
+    margin-right: 4px;
+  }
+
+  .database {
+    gap: 1rem; /* Optional: Adds spacing between items */
+    padding: 5px;  
+  }
+
+  .database p {
+    text-align: right;
+    padding: 1px;
+    margin: 5px; /* Adds space to the left side */
+
+  }
+
+  .database img {
+    margin: 40px; /* Adds space to the left side */
+    padding: 5px;
+  }
   }
 
 /* Mobile UI adjustments */
