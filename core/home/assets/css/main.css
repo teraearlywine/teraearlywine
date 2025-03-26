@@ -11,7 +11,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont;
+  font-family: 'Helvetica Neue';
   overflow-x: hidden;
   overscroll-behavior-y: none;
 }
@@ -86,17 +86,22 @@ body {
 }
 
 h2 {
-  font-size: 2.5rem;
+  font-size: 2.0rem;
   margin-bottom: 1rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  /* text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); */
 }
 
 p {
-  font-size: 1.3rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  font-size: 1.2rem;
   color: #f2f2f2;
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.4;
+  width: 80%;
+  margin: auto; /* Centers the paragraph horizontally */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centers the paragraph vertically */
+  height: 100%; /* Ensures it takes up the full height of the section */
 }
 
 /* Content sections */
@@ -107,7 +112,7 @@ p {
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  background: linear-gradient(-49deg, #272727, #0960b2);
+  background: linear-gradient(-49deg, #272727, #0f2c5e);
   border-bottom: 1px solid #ddd;
   color: #f2f2f2;
 }
