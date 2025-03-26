@@ -35,6 +35,11 @@
     margin: 10px auto;      /* Center image with auto margins */
     padding: 5px;
   }
+  .database-title {
+    padding: 0 15px;
+    font-size: 1.15rem;
+  }
+
 }
 
 /* Mobile UI adjustments for even smaller screens */
