@@ -1,6 +1,5 @@
 /* Media query adjustments for mobile devices */
 @media (max-width: 768px) {
-
   html, body {
     background-position: center;
   }
@@ -17,25 +16,28 @@
     margin-right: 4px;
   }
 
+  /* Improved mobile styling for .database section */
   .database {
-    gap: 1rem; /* Optional: Adds spacing between items */
-    padding: 5px;  
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;    /* Center them */
+    gap: 1rem;              /* Reduced gap for mobile */
+    padding: 10px;          /* Less padding for a tighter layout */
   }
-
   .database p {
-    text-align: right;
-    padding: 1px;
-    margin: 5px; /* Adds space to the left side */
-
+    text-align: center;     /* Center the text instead of right-aligning */
+    font-size: 1.2rem;      /* Slightly larger for readability */
+    padding: 5px;
+    margin: 10px 0;         /* Consistent spacing */
   }
-
   .database img {
-    margin: 40px; /* Adds space to the left side */
+    width: 80%;
+    max-width: 300px;       /* Constrain image size for mobile */
+    margin: 10px auto;      /* Center image with auto margins */
     padding: 5px;
   }
-  }
+}
 
-/* Mobile UI adjustments */
+/* Mobile UI adjustments for even smaller screens */
 @media (max-width: 600px) {
   .static-text,
   .rotating-text {
