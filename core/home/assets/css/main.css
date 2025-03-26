@@ -112,7 +112,7 @@ p {
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  background: linear-gradient(-49deg, #272727, #0f2c5e);
+  background: linear-gradient(-49deg, #1e1e1e, rgb(19, 53, 113));
   border-bottom: 1px solid #ddd;
   color: #f2f2f2;
 }
