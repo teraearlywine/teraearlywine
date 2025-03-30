@@ -21,8 +21,7 @@
     font-weight: bold;
     line-height: 1.2;
     white-space: nowrap;
-    color: #f9f9f9;
-    text-shadow: 0px 1px 4px #1a1a1a57;
+    color: #1A1A1A;
 }
 
 /* Parent container for rotating text */
@@ -36,7 +35,7 @@
     font-weight: bold;
     line-height: 1.2;
     white-space: nowrap;
-    text-shadow: 0px 1px 4px #1a1a1a57;
+    /* text-shadow: 0px 1px 4px #1a1a1a57; */
 }
 
 /* Each rotating word occupies the exact same spot */
@@ -67,7 +66,7 @@
 }
 
 .sun-flower {
-    color: #f1c40f;
+    color: #e4b600;
 }
 
 /* Evenly space the delays for three words */
