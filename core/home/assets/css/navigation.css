@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: #a9a9a96b;
+    background-color: #1a1a1a9a;
     box-shadow: 0 2px 4px rgba(87, 87, 87, 0.1);
     z-index: 1000;
     /* ensures it's on top of other elements */
@@ -19,7 +19,9 @@
     color: #1a1a1a;
     font-size: 1.5rem;
     font-weight: bold;
-} */
+} 
+    
+*/
 
 
 .navbar .nav-links {
@@ -35,13 +37,16 @@
 }
 
 .navbar .nav-links li a {
-    color: #1a1a1a;
+    color: #f9f9f9;
+    font-size: 13px;
     text-decoration: none;
     padding: 0.5rem;
     transition: background 0.3s;
 }
 
 .navbar .nav-links li a:hover {
-    background-color: #989898;
+    background-color: #1515152f;
+    color: #fff;
     border-radius: 4px;
+    padding: 0.5rem;
 }
