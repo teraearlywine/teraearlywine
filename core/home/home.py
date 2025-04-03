@@ -23,20 +23,10 @@ def index():
     return render_template('home/home.html')
 
 
-@index_bp.route("/about")
-def about():
+@index_bp.route("/projects")
+def projects():
     """
 
     Browser about page for www.teraearlywine.com
     """
-    return render_template('home/about.html')
-
-
-
-@index_bp.route("/team")
-def team():
-    """
-
-    Browser about page for www.teraearlywine.com
-    """
-    return render_template('home/team.html')
+    return render_template('home/projects.html')
