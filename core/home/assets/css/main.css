@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none;
+  user-select: none; 
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -11,32 +11,10 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  font-family: 'Helvetica Neue';
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
   overscroll-behavior-y: none;
-}
-
-/* 
-Sets the maximum website height to 1000vh. 
-
-*/
-
-hr {
-  width: 70%;
-  margin: 0 auto;
-}
-
-body {
-  height: 1000vh;
-  min-height: 100vh;
-  background: #ffff;
-  background-size: 400% 400%;
-  background-position: 0% 70%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  z-index: -1;
-  color: #1A1A1A;
 }
 
 .section {
@@ -59,53 +37,6 @@ body {
   transform: scale(1.05);
 }
 
-.highlighted-word {
-  width: 80%;
-  text-align: center;
-  font-size: 20px;
-  text-shadow: 0px 2px 5px #1a1a1a85;
-  transition: transform 0.5s ease-in-out, color 0.5s ease-in-out, opacity 0.5s ease-in-out;
-  opacity: 0.5;
-}
-
-.highlighted-word:hover {
-  opacity: 1;
-  color: #1A1A1A;
-  transform: scale(1.15);
-}
-
-/* Header styling */
-.header {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #f2f2f2;
-  text-align: center;
-  padding: 2rem;
-}
-
-h2 {
-  font-size: 2.0rem;
-  margin-bottom: 1rem;
-  color: #1A1A1A;
-
-  /* text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); */
-}
-
-p {
-  font-size: 1.2rem;
-  color: #1A1A1A;
-  text-align: center;
-  line-height: 1.4;
-  width: 80%;
-  margin: auto; /* Centers the paragraph horizontally */
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Centers the paragraph vertically */
-  height: 100%; /* Ensures it takes up the full height of the section */
-}
 
 /* Content sections */
 .content {
@@ -131,33 +62,4 @@ p {
 .fade-in.show {
   opacity: 1;
   transform: translateY(0);
-}
-
-.database {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 10rem; /* Optional: Adds spacing between items */
-  padding: 25px;
-}
-
-.database p {
-  text-align: right;
-  padding: 5px;
-  margin: 50px; /* Adds space to the left side */
-
-}
-
-.database img {
-  margin: 50px; /* Adds space to the left side */
-  padding: 5px;
-}
-
-.database-title {
-  text-align: left;
-  font-size: 1.15rem;
-  padding: 0 20px;
-  margin: 0 auto;
-  max-width: 100%;
 }

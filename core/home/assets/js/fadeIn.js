@@ -1,11 +1,6 @@
 // Select all the elements you want to animate
 const faders = document.querySelectorAll('.fade-in');
 
-/* 
-  Intersection Observer Options:
-  - root: null (uses browser viewport)
-  - threshold: 0.1 means the callback fires when 10% of the element is in view
-*/
 const options = {
   threshold: 0.1
 };
