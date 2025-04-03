@@ -3,7 +3,7 @@
   html, body {
     background-position: center;
   }
-  
+
   .section {
     padding: 5rem;
   }
@@ -13,6 +13,12 @@
     width: 90%;
     height: auto;
     padding: 1rem;
+  }
+  
+  /* Shrink the logo text on mobile */
+  .logo {
+    font-size: 2rem;
+    margin: 1.5rem auto;
   }
 
 }
