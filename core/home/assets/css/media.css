@@ -3,53 +3,18 @@
   html, body {
     background-position: center;
   }
-  .static-text,
-  .rotating-text {
-    font-size: 35px;
-    margin: 0 2px;
-    transition: font-size 0.3s ease, margin 0.3s ease;
-  }
-  .fade-in,
-  .content {
-    font-size: 15px;
-    margin: 0 2px;
-    margin-right: 4px;
-  }
-
-  /* Improved mobile styling for .database section */
-  .database {
-    flex-direction: column; /* Stack items vertically */
-    align-items: center;    /* Center them */
-    gap: 1rem;              /* Reduced gap for mobile */
-    padding: 10px;          /* Less padding for a tighter layout */
-  }
-  .database p {
-    text-align: center;     /* Center the text instead of right-aligning */
-    font-size: 1.2rem;      /* Slightly larger for readability */
-    padding: 5px;
-    margin: 10px 0;         /* Consistent spacing */
-  }
-  .database img {
-    width: 80%;
-    max-width: 300px;       /* Constrain image size for mobile */
-    margin: 10px auto;      /* Center image with auto margins */
-    padding: 5px;
-  }
-  .database-title {
-    padding: 0 15px;
-    font-size: 1.15rem;
+    
+  /* Adjust intro paragraph for a more fluid layout */
+  .intro-paragraph {
+    width: 90%;
+    height: auto;
+    padding: 1rem;
   }
 
 }
 
 /* Mobile UI adjustments for even smaller screens */
 @media (max-width: 600px) {
-  .static-text,
-  .rotating-text {
-    font-size: 20px;
-    margin: 0 2px;
-    margin-right: 4px;
-    padding: 4px;
-    transition: font-size 0.3s ease, margin 0.3s ease, padding 0.3s ease;
-  }
+
+
 }
