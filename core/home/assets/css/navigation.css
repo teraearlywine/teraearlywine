@@ -6,24 +6,12 @@
     background-color: #1a1a1a9a;
     box-shadow: 0 2px 4px rgba(87, 87, 87, 0.1);
     z-index: 1000;
-    /* ensures it's on top of other elements */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
     font-family: inherit;
 }
-
-/* 
-
-.navbar .logo {
-    color: #1a1a1a;
-    font-size: 1.5rem;
-    font-weight: bold;
-} 
-    
-*/
-
 
 .navbar .nav-links {
     list-style: none;
