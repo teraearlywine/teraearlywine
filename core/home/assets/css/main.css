@@ -76,3 +76,13 @@ article {
     transform: scale(1.35);
   }
 }
+.intro-paragraph {
+  text-align: left;
+  width: 70%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  /* position: absolute; */
+}
