@@ -3,6 +3,10 @@
   html, body {
     background-position: center;
   }
+  
+  .section {
+    padding: 5rem;
+  }
     
   /* Adjust intro paragraph for a more fluid layout */
   .intro-paragraph {
