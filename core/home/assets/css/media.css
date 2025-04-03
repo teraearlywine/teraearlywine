@@ -3,6 +3,11 @@
   html, body {
     background-position: center;
   }
+  .fade-in,
+  .content {
+    font-size: 15px;
+    margin: 0 2px;
+  }
 
   .section {
     padding: 5rem;
@@ -14,17 +19,23 @@
     height: auto;
     padding: 1rem;
   }
-  
-  /* Shrink the logo text on mobile */
   .logo {
     font-size: 2rem;
     margin: 1.5rem auto;
   }
-
 }
 
-/* Mobile UI adjustments for even smaller screens */
+    
 @media (max-width: 600px) {
 
-
+  .content {
+    font-size: 14px;
+    padding: 1rem;
+  }
+  
+  /* Further shrink the logo text on very small screens */
+  .logo {
+    font-size: 1.5rem;
+    margin: 1rem auto;
+  }
 }
