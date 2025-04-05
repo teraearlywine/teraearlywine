@@ -1,0 +1,25 @@
+table {
+    border-collapse: collapse;
+    /* Collapses borders to show single lines */
+    width: 100%;
+    /* Table width adjusts automatically */
+    table-layout: auto;
+}
+
+/* Styling for table header and cells */
+th,
+td {
+    border: 0.5px solid #f9f9f9c8;
+    /* Light grey border for grid lines */
+    padding: 8px;
+    /* Space inside cells */
+    text-align: left;
+    font-size: 12px;
+    /* Left-align text */
+}
+
+th {
+    background-color: transparent;
+    color: #f9f9f9;
+    font-size: 12px;
+}
