@@ -23,6 +23,21 @@
     font-size: 2rem;
     margin: 1.5rem auto;
   }
+  table {
+    font-size: 11px;
+  }
+
+  th, td {
+      padding: 6px;
+  }
+  .popup {
+    width: 95vw;
+    height: auto;
+    max-height: 90vh;
+    padding: 15px;
+    font-size: 14px;
+  }
+
 }
 
     

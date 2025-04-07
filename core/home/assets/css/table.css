@@ -1,21 +1,22 @@
 table {
     border-collapse: collapse;
-    /* Collapses borders to show single lines */
     width: 100%;
-    /* Table width adjusts automatically */
     table-layout: auto;
+    overflow-x: auto;
+    display: block;
+    max-width: 100vw;
+    box-sizing: border-box;
 }
 
 /* Styling for table header and cells */
 th,
 td {
     border: 0.5px solid #f9f9f9c8;
-    /* Light grey border for grid lines */
     padding: 8px;
-    /* Space inside cells */
     text-align: left;
     font-size: 12px;
-    /* Left-align text */
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 th {
