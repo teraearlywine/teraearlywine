@@ -1,56 +1,124 @@
-/* Media query adjustments for mobile devices */
-@media (max-width: 768px) {
-  html, body {
-    background-position: center;
-  }
-  .fade-in,
-  .content {
-    font-size: 15px;
-    margin: 0 2px;
+/* ============================================
+   Responsive — Mobile-first breakpoints
+   ============================================ */
+
+/* Tablet landscape */
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .section {
-    padding: 5rem;
-  }
-    
-  /* Adjust intro paragraph for a more fluid layout */
-  .intro-paragraph {
-    width: 90%;
-    height: auto;
-    padding: 1rem;
-  }
-  .logo {
-    font-size: 2rem;
-    margin: 1.5rem auto;
-  }
-  table {
-    font-size: 11px;
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
 
-  th, td {
-      padding: 6px;
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .popup {
-    width: 95vw;
-    height: auto;
-    max-height: 90vh;
-    padding: 15px;
-    font-size: 14px;
-  }
-
 }
 
-    
-@media (max-width: 600px) {
-
-  .content {
-    font-size: 14px;
-    padding: 1rem;
+/* Tablet portrait */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-  
-  /* Further shrink the logo text on very small screens */
-  .logo {
-    font-size: 1.5rem;
-    margin: 1rem auto;
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Nav: hide links, show hamburger */
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(250, 250, 250, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    z-index: 999;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links li a {
+    font-size: 1.25rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .nav-toggle {
+    display: block;
+    z-index: 1001;
+  }
+
+  .nav-brand {
+    z-index: 1001;
+  }
+
+  /* Timeline */
+  .timeline {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item {
+    padding-left: 1.5rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 5rem 1.5rem 3rem;
+  }
+
+  /* Sections */
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .hero {
+    padding: 4rem 1rem 2rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .project-card {
+    padding: 1.5rem;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+
+  .timeline-item {
+    padding-left: 1.25rem;
+  }
+
+  .scroll-button {
+    bottom: 1rem;
+    right: 1rem;
   }
 }

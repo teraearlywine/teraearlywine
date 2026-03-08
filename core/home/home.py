@@ -1,7 +1,5 @@
 # Set up home blueprint
-from flask import Blueprint, render_template, request, url_for, jsonify, current_app
-from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash
+from flask import Blueprint, render_template, redirect, url_for
 
 
 index_bp = Blueprint(
@@ -26,7 +24,6 @@ def index():
 @index_bp.route("/about-me")
 def about_me():
     """
-
-    Browser about page for www.teraearlywine.com
+    Redirect to experience section on homepage.
     """
-    return render_template('home/about_me.html')
+    return redirect(url_for('index.index') + '#experience')
