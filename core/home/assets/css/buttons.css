@@ -1,75 +1,38 @@
-/* BUTTON STYLES GO HERE */
-.button {
-    background-color: transparent;
-    opacity: 0.9;
-    border: transparent;
+/* ============================================
+   Buttons — Light theme
+   ============================================ */
 
-    /* nearly transparent */
-}
-.social-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center the buttons horizontally */
-    flex-direction: row;
-    gap: 10px; /* Adjust spacing between buttons as needed */
-}
-
-.linkedin-img {
-    background-color: transparent;
-    border: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: filter 2.5s ease-in-out, drop-shadow 2.5s ease-in-out
-}
-
-.linkedin-img:hover svg {
-    filter: drop-shadow(0 0 10px #081461f3); /* Blue glow */
-}
-.github-img {
-    background-color: transparent;
-    border: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: filter 2.5s ease-in-out, drop-shadow 2.5s ease-in-out
-}
-
-.github-img:hover svg {
-    filter: drop-shadow(0 0 10px #081461f3); /* Blue glow */
-}
-
-
+/* Scroll to top button */
 .scroll-button {
-    font-size: 1.5rem;
-    position: fixed;
-    bottom: 50px;
-    left: 50px;
-    background-color: transparent;
-    color: #F9F9F9;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 100;
-
-    /* Initial state: hidden */
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-10px);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  font-size: 1.125rem;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity var(--transition-medium),
+              transform var(--transition-medium),
+              box-shadow var(--transition-fast);
 }
 
-/* When visible, fade in and slide to natural position */
 .scroll-button.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
-.email-hover a:hover {
-    color: blue; /* or whatever color you prefer */
-    text-decoration: underline;
-  }
+.scroll-button:hover {
+  box-shadow: 0 4px 12px var(--color-card-shadow-hover);
+}

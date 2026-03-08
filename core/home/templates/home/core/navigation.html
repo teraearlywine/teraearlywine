@@ -1,13 +1,15 @@
-<nav class="navbar">
-
-    <ul class="nav-links">
-      <li><a href="{{ url_for('index.index') }}">Home</a></li>
-      <li><a href="{{ url_for('index.about_me') }}">About Me</a></li>
-
-  
+<nav class="navbar" id="navbar">
+    <a href="{{ url_for('index.index') }}" class="nav-brand">TE</a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
     </ul>
-  </nav>
-
-  <div class="content">
-    {% block content %}{% endblock %}
-  </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</nav>
