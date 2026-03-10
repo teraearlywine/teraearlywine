@@ -12,6 +12,6 @@ __pycache__
 .env
 .branding
 
-# Personal website not ready yet! 
-.gcloudignore 
-# core/
+
+
+.claude
