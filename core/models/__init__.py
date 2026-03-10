@@ -6,8 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# Import data models & mixins
-# from .mixins import TimestampMixin
+# Import data models
 from .user import User
 
 

@@ -1,15 +1,17 @@
 import logging
-from flask import Flask
-from flask_login import LoginManager
-from core.models import db, User
+import os
 
-login_manager = LoginManager()
+from dotenv import load_dotenv
+from flask import Flask
+
+load_dotenv()
 
 logging.basicConfig(
     level=logging.DEBUG,
     datefmt="%Y-%m-%d",
     format="%(levelname)s - %(message)s"
 )
+
 
 def register_blueprints(app):
     """
@@ -29,17 +31,11 @@ def create_app(env=''):
 
     app = Flask(__name__)
 
-    app.secret_key = 'dev_test'  # Can be anything; 
-    register_blueprints(app)
-    
-    login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    secret_key = os.environ.get('SECRET_KEY')
+    if not secret_key:
+        raise RuntimeError("SECRET_KEY environment variable is not set")
+    app.secret_key = secret_key
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        try:
-            return User.query.get(int(user_id))
-        except Exception as err:
-            logging.debug(f"Issue getting user_id: {err}")
-            return None
+    register_blueprints(app)
+
     return app
