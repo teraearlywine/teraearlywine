@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'home/includes/header.html' %}
+{% include 'home/includes/themes.html' %}
+
+<body>
+    {% include 'home/core/navigation.html' %}
+
+    <main style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; text-align:center; padding:2rem;">
+        <h1 style="font-size:6rem; font-weight:700; margin:0; opacity:0.15;">404</h1>
+        <h2 style="font-size:1.5rem; font-weight:500; margin:1rem 0 0.5rem;">Page not found</h2>
+        <p style="opacity:0.6; margin-bottom:2rem;">The page you're looking for doesn't exist.</p>
+        <a href="{{ url_for('index.index') }}" class="btn-primary">Go home</a>
+    </main>
+
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+</body>
+</html>
