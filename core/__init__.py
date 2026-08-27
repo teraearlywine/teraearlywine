@@ -40,6 +40,10 @@ def create_app(env=''):
 
     env = env or os.environ.get('FLASK_ENV', 'production')
     app.config.from_object(app_config.get(env, app_config['default']))
+    app.config['GOOGLE_ANALYTICS_MEASUREMENT_ID'] = os.environ.get(
+        'GOOGLE_ANALYTICS_MEASUREMENT_ID',
+        '',
+    ).strip()
 
     logging.basicConfig(
         level=app.config['LOG_LEVEL'],

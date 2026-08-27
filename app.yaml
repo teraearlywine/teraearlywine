@@ -1,2 +1,5 @@
 runtime: python312
 entrypoint: gunicorn --bind :$PORT core.app:app
+
+env_variables:
+  GOOGLE_ANALYTICS_MEASUREMENT_ID: "G-NF6SVCGZDF"
