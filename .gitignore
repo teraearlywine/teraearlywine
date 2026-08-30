@@ -16,3 +16,6 @@ __pycache__
 
 .claude
 .superpowers/
+.cursor/
+.agents/
+.playwright-cli/

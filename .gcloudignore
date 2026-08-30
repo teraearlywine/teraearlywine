@@ -28,3 +28,10 @@ __pycache__/
 
 scripts/
 .dev/
+
+
+.claude
+.superpowers/
+.cursor/
+.agents/
+.playwright-cli/
