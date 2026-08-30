@@ -3,3 +3,5 @@ entrypoint: gunicorn --bind :$PORT core.app:app
 
 env_variables:
   GOOGLE_ANALYTICS_MEASUREMENT_ID: "G-NF6SVCGZDF"
+  BOOKING_URL: "https://calendar.app.google/iPH6W8fgvcCws9VA8"
+  SITE_URL: "https://www.teraearlywine.com"

@@ -93,6 +93,16 @@
   .section-header {
     margin-bottom: 2.5rem;
   }
+
+  .consent-banner__content {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .consent-banner__actions {
+    justify-content: flex-end;
+  }
 }
 
 /* Mobile */
@@ -120,5 +130,16 @@
   .scroll-button {
     bottom: 1rem;
     right: 1rem;
+  }
+
+  .contact-actions,
+  .consent-banner__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .contact-cta,
+  .consent-button {
+    width: 100%;
   }
 }

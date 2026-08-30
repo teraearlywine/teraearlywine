@@ -1,6 +1,7 @@
 import logging
 import os
 import secrets
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -8,6 +9,59 @@ from flask import Flask, render_template
 from core.config import config as app_config
 
 load_dotenv()
+
+
+def _validated_https_url(value, setting_name, logger):
+    """Return an absolute HTTPS URL or hide the unsafe configuration."""
+    configured_url = str(value or '').strip()
+    if not configured_url:
+        return ''
+
+    try:
+        parsed_url = urlsplit(configured_url)
+        is_valid = (
+            parsed_url.scheme.lower() == 'https'
+            and bool(parsed_url.netloc)
+            and bool(parsed_url.hostname)
+            and not parsed_url.username
+            and not parsed_url.password
+            and not any(character.isspace() for character in configured_url)
+        )
+        parsed_url.port
+    except ValueError:
+        is_valid = False
+
+    if not is_valid:
+        logger.warning(
+            '%s must be an absolute HTTPS URL; the related public link '
+            'will be hidden',
+            setting_name,
+        )
+        return ''
+
+    return configured_url
+
+
+def _warn_about_production_config(app, env):
+    """Report missing production essentials without blocking startup."""
+    if env != 'production':
+        return
+
+    if not app.config['SITE_URL']:
+        app.logger.warning(
+            'SITE_URL is not configured; canonical metadata and sitemap '
+            'entries will be omitted'
+        )
+    if not app.config['BOOKING_URL']:
+        app.logger.warning(
+            'BOOKING_URL is not configured; the production conversion CTA '
+            'will be hidden'
+        )
+    if not app.config['GOOGLE_ANALYTICS_MEASUREMENT_ID']:
+        app.logger.warning(
+            'GOOGLE_ANALYTICS_MEASUREMENT_ID is not configured; analytics '
+            'and privacy controls will be disabled'
+        )
 
 
 def register_blueprints(app):
@@ -44,12 +98,34 @@ def create_app(env=''):
         'GOOGLE_ANALYTICS_MEASUREMENT_ID',
         '',
     ).strip()
+    app.config['GOOGLE_ANALYTICS_DEBUG'] = os.environ.get(
+        'GOOGLE_ANALYTICS_DEBUG',
+        '',
+    ).strip().lower() in {'1', 'true', 'yes', 'on'}
+    app.config['CONTACT_EMAIL'] = os.environ.get('CONTACT_EMAIL', '').strip()
+    booking_url = os.environ.get('BOOKING_URL', '').strip()
+    app.config['SEARCH_CONSOLE_VERIFICATION'] = os.environ.get(
+        'SEARCH_CONSOLE_VERIFICATION',
+        '',
+    ).strip()
+    site_url = os.environ.get('SITE_URL', '').strip()
 
     logging.basicConfig(
         level=app.config['LOG_LEVEL'],
         datefmt="%Y-%m-%d",
         format="%(levelname)s - %(message)s"
     )
+    app.config['BOOKING_URL'] = _validated_https_url(
+        booking_url,
+        'BOOKING_URL',
+        app.logger,
+    )
+    app.config['SITE_URL'] = _validated_https_url(
+        site_url,
+        'SITE_URL',
+        app.logger,
+    )
+    _warn_about_production_config(app, env)
 
     secret_key = os.environ.get('SECRET_KEY')
     if not secret_key:

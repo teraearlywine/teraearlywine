@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+{% set page_title = 'Server error | Tera Earlywine' %}
+{% set page_description = "An unexpected error occurred. Please try again shortly." %}
+{% set robots_meta = 'noindex, nofollow' %}
 {% include 'home/includes/header.html' %}
 {% include 'home/includes/themes.html' %}
 
@@ -10,7 +13,13 @@
         <h1 style="font-size:6rem; font-weight:700; margin:0; opacity:0.15;">500</h1>
         <h2 style="font-size:1.5rem; font-weight:500; margin:1rem 0 0.5rem;">Something went wrong</h2>
         <p style="opacity:0.6; margin-bottom:2rem;">An unexpected error occurred. Please try again shortly.</p>
-        <a href="{{ url_for('index.index') }}" class="btn-primary">Go home</a>
+        <a
+            href="{{ url_for('index.index') }}"
+            class="btn-primary"
+            data-analytics-event="navigation_click"
+            data-placement="error"
+            data-destination-type="home"
+        >Go home</a>
     </main>
 
     {% include 'home/includes/footer.html' %}
