@@ -235,6 +235,7 @@ function initializeConsentControls() {
 
   const choiceButtons = banner.querySelectorAll('[data-consent-choice]');
   const reopenButton = document.querySelector('[data-consent-reopen]');
+  let returnFocusToReopenButton = false;
   const showBanner = () => {
     banner.hidden = false;
   };
@@ -262,11 +263,15 @@ function initializeConsentControls() {
         disableGoogleAnalytics();
       }
       hideBanner();
-      reopenButton?.focus();
+      if (returnFocusToReopenButton) {
+        reopenButton?.focus();
+        returnFocusToReopenButton = false;
+      }
     });
   });
 
   reopenButton?.addEventListener('click', () => {
+    returnFocusToReopenButton = true;
     clearConsentChoice();
     disableGoogleAnalytics();
     showBanner();

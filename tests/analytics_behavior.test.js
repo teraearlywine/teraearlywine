@@ -213,7 +213,7 @@ harness.rejectButton.click();
 assert.equal(harness.storage.get('analytics_consent'), 'rejected');
 assert.equal(harness.loadedScripts.length, 0);
 assert.equal(harness.window.gtag, undefined);
-assert.equal(harness.document.activeElement, harness.reopenButton);
+assert.equal(harness.document.activeElement, null);
 
 harness.reopenButton.click();
 assert.equal(harness.storage.has('analytics_consent'), false);
@@ -336,6 +336,7 @@ assert.equal(
 );
 harness.rejectButton.click();
 assert.equal(commands(harness).filter(([name]) => name === 'event').length, eventCount);
+assert.equal(harness.document.activeElement, harness.reopenButton);
 
 const returningVisitor = createHarness('accepted');
 assert.equal(returningVisitor.loadedScripts.length, 1);
@@ -347,6 +348,7 @@ assert.equal(returningRejector.window.gtag, undefined);
 
 const privateContext = createHarness(null, false);
 privateContext.acceptButton.click();
+assert.equal(privateContext.document.activeElement, null);
 dispatchTrackedClick(privateContext, {
   analyticsEvent: 'outbound_click',
   destinationType: 'github',
