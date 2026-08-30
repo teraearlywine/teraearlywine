@@ -35,3 +35,5 @@ scripts/
 .cursor/
 .agents/
 .playwright-cli/
+
+docs/analytics

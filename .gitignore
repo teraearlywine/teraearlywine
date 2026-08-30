@@ -19,3 +19,4 @@ __pycache__
 .cursor/
 .agents/
 .playwright-cli/
+docs/analytics
