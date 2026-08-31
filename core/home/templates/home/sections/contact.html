@@ -1,4 +1,3 @@
-{% set contact_email = config.get('CONTACT_EMAIL') %}
 {% set booking_url = config.get('BOOKING_URL') %}
 <section id="contact" class="section contact" data-analytics-contact-view>
     <div class="container">
@@ -8,19 +7,89 @@
         <p class="contact-text fade-up fade-up-delay-1">
             Whether it's a data challenge, a collaboration idea, or just a conversation — I'd love to hear from you.
         </p>
-        {% if contact_email or booking_url %}
-        <div class="contact-actions fade-up fade-up-delay-2">
-            {% if contact_email %}
-            <a
-                class="contact-cta contact-cta--primary"
-                href="mailto:{{ contact_email }}"
-                data-analytics-event="contact_click"
-                data-contact-method="email"
-                data-placement="contact"
-                data-destination-type="email"
-            >Email me</a>
-            {% endif %}
-            {% if booking_url %}
+        <form
+            class="contact-form fade-up fade-up-delay-2"
+            method="post"
+            action="{{ url_for('index.contact') }}"
+            data-contact-form
+        >
+            {{ contact_form.hidden_tag() }}
+            <div class="contact-form__honeypot" aria-hidden="true">
+                {{ contact_form.website(
+                    autocomplete='off',
+                    tabindex='-1',
+                ) }}
+            </div>
+            <div class="contact-form__field">
+                {{ contact_form.name.label }}
+                {{ contact_form.name(
+                    autocomplete='name',
+                    maxlength='100',
+                    aria_describedby='contact-name-error',
+                    aria_invalid='true' if contact_form.name.errors else 'false',
+                ) }}
+                <p
+                    id="contact-name-error"
+                    class="contact-form__error"
+                    data-contact-error="name"
+                    {% if not contact_form.name.errors %}hidden{% endif %}
+                >{{ contact_form.name.errors[0] if contact_form.name.errors else '' }}</p>
+            </div>
+            <div class="contact-form__field">
+                {{ contact_form.email.label }}
+                {{ contact_form.email(
+                    type='email',
+                    autocomplete='email',
+                    maxlength='254',
+                    aria_describedby='contact-email-error',
+                    aria_invalid='true' if contact_form.email.errors else 'false',
+                ) }}
+                <p
+                    id="contact-email-error"
+                    class="contact-form__error"
+                    data-contact-error="email"
+                    {% if not contact_form.email.errors %}hidden{% endif %}
+                >{{ contact_form.email.errors[0] if contact_form.email.errors else '' }}</p>
+            </div>
+            <div class="contact-form__field contact-form__field--full">
+                {{ contact_form.message.label }}
+                {{ contact_form.message(
+                    rows='6',
+                    minlength='10',
+                    maxlength='5000',
+                    aria_describedby='contact-message-help contact-message-error',
+                    aria_invalid='true' if contact_form.message.errors else 'false',
+                ) }}
+                <p id="contact-message-help" class="contact-form__help">
+                    Please do not include passwords or other sensitive information.
+                </p>
+                <p
+                    id="contact-message-error"
+                    class="contact-form__error"
+                    data-contact-error="message"
+                    {% if not contact_form.message.errors %}hidden{% endif %}
+                >{{ contact_form.message.errors[0] if contact_form.message.errors else '' }}</p>
+            </div>
+            <p class="contact-form__privacy contact-form__field--full">
+                Your submission is delivered by email and stored in Linear so I can respond.
+            </p>
+            <div class="contact-form__actions contact-form__field--full">
+                <button
+                    class="contact-cta contact-cta--primary"
+                    type="submit"
+                    data-contact-submit
+                >Send message</button>
+            </div>
+            {% set success_messages = get_flashed_messages(category_filter=['contact-success']) %}
+            <p
+                class="contact-form__status contact-form__field--full{% if contact_error %} contact-form__status--error{% endif %}"
+                role="status"
+                aria-live="polite"
+                data-contact-status
+            >{% if contact_error %}{{ contact_error }}{% elif success_messages %}{{ success_messages[0] }}{% endif %}</p>
+        </form>
+        {% if booking_url %}
+        <div class="contact-actions fade-up fade-up-delay-3">
             <a
                 class="contact-cta contact-cta--secondary"
                 href="{{ booking_url }}"
@@ -31,10 +100,9 @@
                 data-placement="contact"
                 data-destination-type="booking"
             >Book a conversation</a>
-            {% endif %}
         </div>
         {% endif %}
-        <div class="contact-social fade-up fade-up-delay-3">
+        <div class="contact-social fade-up fade-up-delay-4">
             <a href="https://github.com/teraearlywine" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-analytics-event="outbound_click" data-placement="contact" data-destination-type="github">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>

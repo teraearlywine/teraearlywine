@@ -94,6 +94,10 @@
     margin-bottom: 2.5rem;
   }
 
+  .contact-form {
+    grid-template-columns: 1fr;
+  }
+
   .consent-banner__content {
     align-items: stretch;
     flex-direction: column;
@@ -127,6 +131,10 @@
     padding-left: 1.25rem;
   }
 
+  .contact-form {
+    padding: 1.25rem;
+  }
+
   .scroll-button {
     bottom: 1rem;
     right: 1rem;
@@ -141,5 +149,10 @@
   .contact-cta,
   .consent-button {
     width: 100%;
+  }
+
+  .contact-form__actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

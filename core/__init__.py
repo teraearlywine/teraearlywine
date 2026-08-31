@@ -1,12 +1,12 @@
 import logging
 import os
-import secrets
 from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template, request
 
 from core.config import config as app_config
+from core.secrets import load_secret
 
 load_dotenv()
 
@@ -62,6 +62,14 @@ def _warn_about_production_config(app, env):
             'GOOGLE_ANALYTICS_MEASUREMENT_ID is not configured; analytics '
             'and privacy controls will be disabled'
         )
+    if not app.config['CONTACT_BROKER_URL']:
+        app.logger.warning(
+            'CONTACT_BROKER_URL is not configured; contact delivery is disabled'
+        )
+    if not app.config['CONTACT_BROKER_SECRET']:
+        app.logger.warning(
+            'CONTACT_BROKER_SECRET is not configured; contact delivery is disabled'
+        )
 
 
 def register_blueprints(app):
@@ -76,6 +84,19 @@ def register_blueprints(app):
 
 
 def register_error_handlers(app):
+    @app.errorhandler(413)
+    def request_too_large(e):
+        message = 'The submitted message is too large.'
+        if request.accept_mimetypes.best == 'application/json':
+            return jsonify(
+                {
+                    'ok': False,
+                    'message': message,
+                    'errors': {},
+                }
+            ), 413
+        return message, 413
+
     @app.errorhandler(404)
     def not_found(e):
         return render_template('home/404.html'), 404
@@ -103,6 +124,13 @@ def create_app(env=''):
         '',
     ).strip().lower() in {'1', 'true', 'yes', 'on'}
     app.config['CONTACT_EMAIL'] = os.environ.get('CONTACT_EMAIL', '').strip()
+    app.config['CONTACT_EMAIL'] = (
+        app.config['CONTACT_EMAIL'] or 'tera@idea-factory.io'
+    )
+    contact_broker_url = os.environ.get('CONTACT_BROKER_URL', '').strip()
+    app.config['CONTACT_DELIVERY_TIMEOUT_SECONDS'] = 15.0
+    app.config['MAX_CONTENT_LENGTH'] = 32 * 1024
+    app.config['WTF_CSRF_TIME_LIMIT'] = 3600
     booking_url = os.environ.get('BOOKING_URL', '').strip()
     app.config['SEARCH_CONSOLE_VERIFICATION'] = os.environ.get(
         'SEARCH_CONSOLE_VERIFICATION',
@@ -114,6 +142,15 @@ def create_app(env=''):
         level=app.config['LOG_LEVEL'],
         datefmt="%Y-%m-%d",
         format="%(levelname)s - %(message)s"
+    )
+    app.config['CONTACT_BROKER_SECRET'] = load_secret(
+        'CONTACT_BROKER_SECRET',
+        app.logger,
+    )
+    app.config['CONTACT_BROKER_URL'] = _validated_https_url(
+        contact_broker_url,
+        'CONTACT_BROKER_URL',
+        app.logger,
     )
     app.config['BOOKING_URL'] = _validated_https_url(
         booking_url,
@@ -127,12 +164,12 @@ def create_app(env=''):
     )
     _warn_about_production_config(app, env)
 
-    secret_key = os.environ.get('SECRET_KEY')
+    secret_key = load_secret('SECRET_KEY', app.logger)
     if not secret_key:
         if env == 'production':
-            secret_key = secrets.token_hex(32)
-            app.logger.warning(
-                "SECRET_KEY environment variable is not set; using an ephemeral key for this process"
+            raise RuntimeError(
+                'SECRET_KEY must be configured for production through the '
+                'environment or Google Secret Manager'
             )
         else:
             secret_key = 'development-secret-key'
