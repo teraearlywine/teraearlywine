@@ -18,6 +18,7 @@ MEASUREMENT_PLAN = PROJECT_ROOT / 'docs/analytics/ga4-measurement-plan.md'
 EVENT_PARAMETERS = {
     'navigation_click': ('placement', 'destination_type'),
     'outbound_click': ('placement', 'destination_type'),
+    'contact_submit': (),
     'contact_click': ('contact_method', 'placement', 'destination_type'),
 }
 ALLOWED_VALUES = {
@@ -125,24 +126,24 @@ def test_public_configuration_is_escaped_in_html_and_inline_json(app_factory):
 
 
 @pytest.mark.parametrize(
-    ('configuration', 'expected_methods'),
+    ('configuration', 'has_booking_fallback'),
     [
-        ({}, set()),
-        ({'CONTACT_EMAIL': 'hello@example.test'}, {'email'}),
-        ({'BOOKING_URL': 'https://calendar.example/book'}, {'booking'}),
+        ({}, False),
+        ({'CONTACT_EMAIL': 'hello@example.test'}, False),
+        ({'BOOKING_URL': 'https://calendar.example/book'}, True),
         (
             {
                 'CONTACT_EMAIL': 'hello@example.test',
                 'BOOKING_URL': 'https://calendar.example/book',
             },
-            {'email', 'booking'},
+            True,
         ),
     ],
 )
-def test_contact_ctas_render_only_when_configured(
+def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
     app_factory,
     configuration,
-    expected_methods,
+    has_booking_fallback,
 ):
     document = render_home(app_factory(**configuration))
     links = collect_elements(document, 'a')
@@ -152,18 +153,16 @@ def test_contact_ctas_render_only_when_configured(
         if 'contact-cta' in link.get('class', '').split()
     ]
 
-    assert {link['data-contact-method'] for link in contact_ctas} == expected_methods
+    assert 'data-contact-form' in document
+    assert 'mailto:' not in document
+    assert {link['data-contact-method'] for link in contact_ctas} == (
+        {'booking'} if has_booking_fallback else set()
+    )
     for link in contact_ctas:
-        method = link['data-contact-method']
-        expected_href = (
-            'mailto:hello@example.test'
-            if method == 'email'
-            else 'https://calendar.example/book'
-        )
-        assert link['href'] == expected_href
+        assert link['href'] == 'https://calendar.example/book'
         assert link['data-analytics-event'] == 'contact_click'
         assert link['data-placement'] == 'contact'
-        assert link['data-destination-type'] == method
+        assert link['data-destination-type'] == 'booking'
 
 
 def test_contact_urls_remain_single_escaped_attributes(app_factory):
@@ -377,7 +376,6 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
         ('outbound_click', 'projects', 'idea_factory'),
         ('outbound_click', 'contact', 'github'),
         ('outbound_click', 'contact', 'linkedin'),
-        ('contact_click', 'contact', 'email'),
         ('contact_click', 'contact', 'booking'),
     } <= observed_contracts
 
@@ -428,7 +426,7 @@ def test_production_configuration_preserves_known_urls_and_optional_fields(
 
     assert app.config['BOOKING_URL'] == booking_url
     assert app.config['SITE_URL'] == 'https://www.teraearlywine.com'
-    assert app.config['CONTACT_EMAIL'] == ''
+    assert app.config['CONTACT_EMAIL'] == 'tera@idea-factory.io'
     assert app.config['SEARCH_CONSOLE_VERIFICATION'] == ''
     assert 'CONTACT_EMAIL' not in caplog.text
     assert 'SEARCH_CONSOLE_VERIFICATION' not in caplog.text
@@ -436,7 +434,7 @@ def test_production_configuration_preserves_known_urls_and_optional_fields(
     deployment_config = (PROJECT_ROOT / 'app.yaml').read_text()
     assert f'BOOKING_URL: "{booking_url}"' in deployment_config
     assert 'SITE_URL: "https://www.teraearlywine.com"' in deployment_config
-    assert 'CONTACT_EMAIL:' not in deployment_config
+    assert 'CONTACT_EMAIL: "tera@idea-factory.io"' in deployment_config
     assert 'SEARCH_CONSOLE_VERIFICATION:' not in deployment_config
 
 

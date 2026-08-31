@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 # Import data models
-from .user import User
+from .user import User  # noqa: E402
 
 
 __all__ = [

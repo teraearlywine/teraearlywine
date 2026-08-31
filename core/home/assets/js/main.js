@@ -77,4 +77,97 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Contact form ---
+  const contactForm = document.querySelector('[data-contact-form]');
+  if (contactForm) {
+    const submitButton = contactForm.querySelector('[data-contact-submit]');
+    const status = contactForm.querySelector('[data-contact-status]');
+    const defaultButtonText = submitButton.textContent;
+
+    const setStatus = (message, isError = false) => {
+      status.textContent = message;
+      status.classList.toggle('contact-form__status--error', isError);
+    };
+
+    const clearFieldErrors = () => {
+      contactForm.querySelectorAll('[data-contact-error]').forEach(error => {
+        error.hidden = true;
+        error.textContent = '';
+      });
+      contactForm.querySelectorAll('[aria-invalid]').forEach(field => {
+        field.setAttribute('aria-invalid', 'false');
+      });
+    };
+
+    const showFieldErrors = errors => {
+      let firstInvalidField = null;
+      Object.entries(errors || {}).forEach(([fieldName, messages]) => {
+        const field = contactForm.elements.namedItem(fieldName);
+        const error = contactForm.querySelector(
+          `[data-contact-error="${fieldName}"]`,
+        );
+        if (!field || !error || !Array.isArray(messages) || !messages[0]) {
+          return;
+        }
+        field.setAttribute('aria-invalid', 'true');
+        error.textContent = messages[0];
+        error.hidden = false;
+        firstInvalidField ||= field;
+      });
+      firstInvalidField?.focus();
+    };
+
+    contactForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!contactForm.reportValidity() || submitButton.disabled) {
+        return;
+      }
+
+      clearFieldErrors();
+      setStatus('Sending your message…');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending…';
+
+      try {
+        const response = await fetch(contactForm.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(contactForm),
+          credentials: 'same-origin',
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (
+          !response.ok
+          || payload.ok !== true
+          || typeof payload.submission_id !== 'string'
+        ) {
+          showFieldErrors(payload.errors);
+          setStatus(
+            response.status === 400
+              ? 'Please check the highlighted fields and try again.'
+              : 'We could not send your message right now. Please try again.',
+            true,
+          );
+          return;
+        }
+
+        contactForm.reset();
+        contactForm.elements.namedItem('submission_id').value = (
+          payload.submission_id
+        );
+        setStatus('Thanks — your message has been sent.');
+        document.dispatchEvent(new Event('contact:submitted'));
+      } catch (error) {
+        setStatus(
+          'We could not send your message right now. Please try again.',
+          true,
+        );
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = defaultButtonText;
+      }
+    });
+  }
+
 });

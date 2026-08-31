@@ -29,6 +29,7 @@ const EVENT_PARAMETERS = Object.freeze({
   outbound_click: ['placement', 'destination_type'],
   contact_view: ['placement'],
   contact_click: ['contact_method', 'placement', 'destination_type'],
+  contact_submit: [],
 });
 
 function readAnalyticsConfig() {
@@ -335,6 +336,13 @@ function initializeContactViewTracking() {
   observer.observe(contactSection);
 }
 
+function initializeContactSubmitTracking() {
+  document.addEventListener('contact:submitted', () => {
+    trackEvent('contact_submit');
+  });
+}
+
 initializeConsentControls();
 initializeTaggedClickTracking();
 initializeContactViewTracking();
+initializeContactSubmitTracking();

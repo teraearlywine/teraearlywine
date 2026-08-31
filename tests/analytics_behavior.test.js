@@ -197,6 +197,10 @@ function dispatchTrackedClick(harness, dataset) {
   harness.documentListeners.get('click')({ target });
 }
 
+function dispatchContactSubmitted(harness, detail = undefined) {
+  harness.documentListeners.get('contact:submitted')?.({ detail });
+}
+
 const harness = createHarness();
 assert.equal(harness.banner.hidden, false);
 assert.equal(harness.loadedScripts.length, 0);
@@ -206,6 +210,11 @@ dispatchTrackedClick(harness, {
   analyticsEvent: 'outbound_click',
   placement: 'hero',
   destinationType: 'github',
+});
+assert.deepEqual(commands(harness), []);
+dispatchContactSubmitted(harness, {
+  email: 'private-before-consent@example.com',
+  message: 'do not retain this message',
 });
 assert.deepEqual(commands(harness), []);
 
@@ -264,6 +273,31 @@ assert.deepEqual(
   }],
 );
 assert.equal(harness.observer.disconnected, true);
+
+const beforeSubmitCount = eventCommands.length;
+dispatchContactSubmitted(harness, {
+  email: 'private-after-consent@example.com',
+  validationError: 'private validation details',
+  url: 'https://example.com/private?email=private-after-consent@example.com',
+});
+eventCommands = commands(harness).filter(([name]) => name === 'event');
+assert.equal(eventCommands.length, beforeSubmitCount + 1);
+assert.deepEqual(
+  JSON.parse(JSON.stringify(eventCommands.at(-1))),
+  [
+    'event',
+    'contact_submit',
+    { page_referrer: '' },
+  ],
+);
+assert.equal(
+  JSON.stringify(eventCommands.at(-1)).includes('private-after-consent'),
+  false,
+);
+assert.equal(
+  JSON.stringify(eventCommands.at(-1)).includes('validation'),
+  false,
+);
 
 dispatchTrackedClick(harness, {
   analyticsEvent: 'contact_click',
