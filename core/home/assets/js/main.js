@@ -83,6 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = contactForm.querySelector('[data-contact-submit]');
     const status = contactForm.querySelector('[data-contact-status]');
     const defaultButtonText = submitButton.textContent;
+    const progressDelayMilliseconds = 8000;
+    const requestTimeoutMilliseconds = 20000;
 
     const setStatus = (message, isError = false) => {
       status.textContent = message;
@@ -128,12 +130,23 @@ document.addEventListener('DOMContentLoaded', () => {
       submitButton.disabled = true;
       submitButton.textContent = 'Sending…';
 
+      let progressTimer;
+      let timeoutTimer;
       try {
+        const controller = new AbortController();
+        progressTimer = window.setTimeout(() => {
+          setStatus('Still sending — this may take a few more seconds…');
+        }, progressDelayMilliseconds);
+        timeoutTimer = window.setTimeout(() => {
+          controller.abort();
+        }, requestTimeoutMilliseconds);
+
         const response = await fetch(contactForm.action, {
           method: 'POST',
           headers: { Accept: 'application/json' },
           body: new FormData(contactForm),
           credentials: 'same-origin',
+          signal: controller.signal,
         });
         const payload = await response.json().catch(() => ({}));
 
@@ -160,10 +173,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new Event('contact:submitted'));
       } catch (error) {
         setStatus(
-          'We could not send your message right now. Please try again.',
+          error?.name === 'AbortError'
+            ? 'Delivery is taking longer than expected. Please wait a moment before trying again.'
+            : 'We could not send your message right now. Please try again.',
           true,
         );
       } finally {
+        window.clearTimeout(progressTimer);
+        window.clearTimeout(timeoutTimer);
         submitButton.disabled = false;
         submitButton.textContent = defaultButtonText;
       }
