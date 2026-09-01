@@ -2,6 +2,8 @@ import hashlib
 import hmac
 import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import httpx
@@ -11,6 +13,7 @@ from core import create_app
 
 
 PROJECT_ROOT = Path(__file__).parents[1]
+MAIN_BEHAVIOR_TEST = PROJECT_ROOT / 'tests/main_behavior.test.js'
 BROKER_URL = 'https://if-api.example/api/contact-deliveries'
 BROKER_SECRET = 'contact-broker-test-secret'
 TEST_NAME = 'Ada Lovelace'
@@ -105,6 +108,20 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert re.fullmatch(
         r'[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
         form_data['submission_id'],
+    )
+
+
+def test_javascript_contact_form_behavior():
+    node = shutil.which('node')
+    if node is None:
+        pytest.skip('Node.js runtime is unavailable')
+
+    subprocess.run(
+        [node, str(MAIN_BEHAVIOR_TEST)],
+        cwd=PROJECT_ROOT,
+        check=True,
+        text=True,
+        capture_output=True,
     )
 
 
