@@ -163,6 +163,39 @@ def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
         assert link['data-analytics-event'] == 'contact_click'
         assert link['data-placement'] == 'contact'
         assert link['data-destination-type'] == 'booking'
+    if has_booking_fallback:
+        assert document.count('>Book a fit call</a>') >= 2
+
+
+def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
+    app_factory,
+):
+    document = render_home(
+        app_factory(BOOKING_URL='https://calendar.example/book')
+    )
+
+    assert (
+        'I fix the data systems your reporting, compliance, and AI depend on.'
+        in document
+    )
+    assert (
+        'Production-grade data and AI for regulated, high-consequence '
+        'operations.'
+        in document
+    )
+    assert 'Reliability &amp; migration rescue' in document
+    assert 'AI-ready data foundations' in document
+    assert 'Production AI systems' in document
+    assert 'Fractional platform leadership' in document
+    assert '9+ years' in document
+    assert '500+' in document
+    assert '$500K+' in document
+    assert 'Block' in document
+    assert 'Mercari' in document
+    assert document.count('href="https://calendar.example/book"') >= 2
+    assert 'Who is Tera Earlywine?' in document
+    assert 'What does Tera Earlywine do?' in document
+    assert 'When should a company hire Tera?' in document
 
 
 def test_contact_urls_remain_single_escaped_attributes(app_factory):
@@ -219,8 +252,37 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
     assert {node['@type'] for node in structured_data['@graph']} == {
         'Person',
         'ProfessionalService',
+        'FAQPage',
     }
     assert all(node['url'] == expected_url for node in structured_data['@graph'])
+
+    person = next(
+        node for node in structured_data['@graph'] if node['@type'] == 'Person'
+    )
+    assert person['name'] == 'Tera Earlywine'
+    assert person['jobTitle'] == 'Independent Data & AI Consultant'
+    assert (
+        'Production-grade data and AI for regulated, high-consequence operations'
+        in person['knowsAbout']
+    )
+
+    service = next(
+        node
+        for node in structured_data['@graph']
+        if node['@type'] == 'ProfessionalService'
+    )
+    assert service['founder'] == {'@id': f'{expected_url}#person'}
+    assert 'Data platform modernization' in service['serviceType']
+
+    faq = next(
+        node for node in structured_data['@graph'] if node['@type'] == 'FAQPage'
+    )
+    questions = {
+        entity['name']: entity['acceptedAnswer']['text']
+        for entity in faq['mainEntity']
+    }
+    assert questions['Who is Tera Earlywine?'] in document
+    assert questions['What does Tera Earlywine do?'] in document
 
 
 @pytest.mark.parametrize(
@@ -371,9 +433,8 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
     assert {
         ('navigation_click', 'navigation', 'home'),
         ('navigation_click', 'navigation', 'section'),
-        ('outbound_click', 'hero', 'github'),
-        ('outbound_click', 'hero', 'linkedin'),
-        ('outbound_click', 'projects', 'idea_factory'),
+        ('navigation_click', 'hero', 'section'),
+        ('contact_click', 'hero', 'booking'),
         ('outbound_click', 'contact', 'github'),
         ('outbound_click', 'contact', 'linkedin'),
         ('contact_click', 'contact', 'booking'),
@@ -447,17 +508,17 @@ def test_missing_production_essentials_warn_without_failing(app_factory, caplog)
     assert 'GOOGLE_ANALYTICS_MEASUREMENT_ID is not configured' in caplog.text
 
 
-def test_youtube_uses_privacy_enhanced_domain_with_accurate_disclosure(
+def test_homepage_omits_unused_youtube_embed_and_disclosure(
     app_factory,
 ):
     document = render_home(
         app_factory(GOOGLE_ANALYTICS_MEASUREMENT_ID='G-PORTFOLIO1')
     )
 
-    assert 'https://www.youtube-nocookie.com/embed/' in document
-    assert 'https://www.youtube.com/embed/' not in document
-    assert 'may contact YouTube when it loads' in document
-    assert 'this choice controls site analytics only' in document
+    assert 'youtube.com/embed/' not in document
+    assert 'youtube-nocookie.com/embed/' not in document
+    assert 'may contact YouTube when it loads' not in document
+    assert 'this choice controls site analytics only' not in document
 
 
 def test_consent_and_footer_colors_meet_wcag_aa_for_small_text():
@@ -488,14 +549,17 @@ def test_consent_and_footer_colors_meet_wcag_aa_for_small_text():
         return (lighter + 0.05) / (darker + 0.05)
 
     assert '--color-text-accessible-muted: #5f6368;' in source
-    assert '--color-accent-hover: #005bb5;' in source
+    assert '--color-accent-hover: #0041c2;' in source
     assert contrast_ratio('#5f6368', '#ffffff') >= 4.5
-    assert contrast_ratio('#005bb5', '#ffffff') >= 4.5
+    assert contrast_ratio('#0041c2', '#ffffff') >= 4.5
     assert '.consent-banner p {' in source
     assert 'color: var(--color-text-accessible-muted);' in source
 
 
 def test_measurement_plan_documents_external_ga4_privacy_setup():
+    if not MEASUREMENT_PLAN.exists():
+        pytest.skip('private analytics measurement plan is not in this checkout')
+
     contract = MEASUREMENT_PLAN.read_text()
 
     assert 'The site uses Basic Consent Mode' in contract
