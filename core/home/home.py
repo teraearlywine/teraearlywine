@@ -38,6 +38,48 @@ index_bp = Blueprint(
 CONTACT_SUBMISSIONS_SESSION_KEY = 'contact_submissions'
 CONTACT_SUBMISSION_TTL_SECONDS = 3600
 MAX_PENDING_CONTACT_SUBMISSIONS = 5
+FAQ_ITEMS = (
+    {
+        'question': 'Who is Tera Earlywine?',
+        'answer': (
+            'Tera Earlywine is an independent data and AI consultant with '
+            '9+ years of experience building and modernizing enterprise data '
+            'platforms across fintech, marketplaces, and regulated operations.'
+        ),
+    },
+    {
+        'question': 'What does Tera Earlywine do?',
+        'answer': (
+            'She helps enterprise teams stabilize data platforms, rescue '
+            'migrations, build AI-ready data foundations, and move agentic AI '
+            'workflows into reliable production services.'
+        ),
+    },
+    {
+        'question': 'Who does Tera work with?',
+        'answer': (
+            'Tera works with data, engineering, compliance, risk, and '
+            'operations leaders—especially in fintech, B2B software, '
+            'marketplaces, and other high-consequence environments.'
+        ),
+    },
+    {
+        'question': 'When should a company hire Tera?',
+        'answer': (
+            'Bring Tera in when a critical data platform is fragile, a '
+            'migration is stalled, ownership is unclear, or an AI pilot needs '
+            'the controls and infrastructure required for production.'
+        ),
+    },
+    {
+        'question': 'How does an engagement start?',
+        'answer': (
+            'It starts with a 20–30 minute fit call. If the problem is a match, '
+            'the first engagement usually diagnoses the risk, defines the '
+            'smallest useful path, and produces a concrete next decision.'
+        ),
+    },
+)
 
 
 def _contact_submission_states():
@@ -182,6 +224,7 @@ def seo_metadata():
     structured_data = None
     if is_homepage and homepage_url:
         person_id = f'{homepage_url}#person'
+        service_id = f'{homepage_url}#professional-service'
         structured_data = {
             '@context': 'https://schema.org',
             '@graph': [
@@ -190,7 +233,20 @@ def seo_metadata():
                     '@id': person_id,
                     'name': 'Tera Earlywine',
                     'url': homepage_url,
-                    'jobTitle': 'Staff Data Engineer, Advisor, and Consultant',
+                    'jobTitle': 'Independent Data & AI Consultant',
+                    'description': (
+                        'Enterprise data and AI consultant focused on '
+                        'production-grade systems for regulated, '
+                        'high-consequence operations.'
+                    ),
+                    'knowsAbout': [
+                        'Production-grade data and AI for regulated, high-consequence operations',
+                        'Data platform modernization',
+                        'Data reliability',
+                        'AI-ready data foundations',
+                        'Agentic AI productionization',
+                        'Data governance',
+                    ],
                     'sameAs': [
                         'https://github.com/teraearlywine',
                         'https://www.linkedin.com/in/teraearlywine/',
@@ -198,14 +254,38 @@ def seo_metadata():
                 },
                 {
                     '@type': 'ProfessionalService',
-                    '@id': f'{homepage_url}#professional-service',
-                    'name': 'Tera Earlywine Data Consulting',
+                    '@id': service_id,
+                    'name': 'Tera Earlywine Consulting',
                     'url': homepage_url,
                     'description': (
-                        'Data engineering advisory and consulting for '
-                        'trusted, scalable data products.'
+                        'Production-grade data and AI consulting for regulated, '
+                        'high-consequence operations.'
                     ),
                     'founder': {'@id': person_id},
+                    'serviceType': [
+                        'Data platform modernization',
+                        'Reliability and migration rescue',
+                        'AI-ready data foundations',
+                        'Production AI systems',
+                        'Fractional platform leadership',
+                    ],
+                    'areaServed': 'United States',
+                },
+                {
+                    '@type': 'FAQPage',
+                    '@id': f'{homepage_url}#faq',
+                    'url': homepage_url,
+                    'mainEntity': [
+                        {
+                            '@type': 'Question',
+                            'name': item['question'],
+                            'acceptedAnswer': {
+                                '@type': 'Answer',
+                                'text': item['answer'],
+                            },
+                        }
+                        for item in FAQ_ITEMS
+                    ],
                 },
             ],
         }
@@ -217,6 +297,7 @@ def seo_metadata():
             current_app.config.get('SEARCH_CONSOLE_VERIFICATION') or ''
         ).strip(),
         'seo_structured_data': structured_data,
+        'faq_items': FAQ_ITEMS,
     }
 
 

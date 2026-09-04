@@ -8,6 +8,7 @@ site
 .env
 __pycache__
 .DS_Store
+.worktrees/
 .pytest_cache
 .env
 .branding

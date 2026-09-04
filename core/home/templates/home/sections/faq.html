@@ -1,0 +1,16 @@
+<section id="faq" class="section section--soft">
+    <div class="container faq-layout">
+        <div class="section-header section-header--left fade-up">
+            <p class="section-kicker">Straight answers</p>
+            <h2 class="section-title">A few things you may be wondering.</h2>
+        </div>
+        <div class="faq-list fade-up fade-up-delay-1">
+            {% for item in faq_items %}
+            <details class="faq-item"{% if loop.first %} open{% endif %}>
+                <summary>{{ item.question }}</summary>
+                <p>{{ item.answer }}</p>
+            </details>
+            {% endfor %}
+        </div>
+    </div>
+</section>
