@@ -15,7 +15,7 @@
                     <span class="engagement-overview"><span class="engagement-name">{{ name }}</span><span>{{ description }}</span></span>
                     <img class="engagement-arrow" src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="30" height="30">
                 </summary>
-                <div class="engagement-detail"><p>{{ detail }}</p><a href="#contact">Discuss this engagement <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="18" height="18"></a></div>
+                <div class="engagement-detail"><p>{{ detail }}</p><a href="#contact" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">Discuss this engagement <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="18" height="18"></a></div>
             </details>
             {% endfor %}
         </div>

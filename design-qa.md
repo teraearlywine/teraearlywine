@@ -18,8 +18,8 @@ Implemented the confirmed warm graphite and glass concept in the existing Flask/
 - Service details expand through native accessible disclosure controls.
 - Empty contact submission produces required-field validation for name, email, and message without delivery.
 - Existing tests cover contact success/failure, idempotency, CSRF, analytics consent, configuration escaping, and SEO rendering.
-- Final suite: 52 passed, 1 skipped (private analytics reference document absent). `git diff --check` passed.
-- Live message delivery was not exercised; local preview does not contain production broker credentials.
+- Final suite: 53 Python tests and 2 JavaScript tests passed. `git diff --check` passed.
+- A production contact-form smoke test returned HTTP 200 and confirmed delivery; local preview does not contain production broker credentials.
 
 ## Run and deploy
 

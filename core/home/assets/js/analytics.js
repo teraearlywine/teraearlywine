@@ -7,6 +7,7 @@ const ALLOWED_VALUES = Object.freeze({
   placement: new Set([
     'navigation',
     'hero',
+    'services',
     'projects',
     'contact',
     'footer',

@@ -618,7 +618,17 @@ li[id] {
   transform: none;
 }
 .btn-primary {
+  display: inline-flex;
+  padding: 12px 20px;
+  background: var(--graphite);
   color: var(--ivory);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+.error-page .navbar {
+  background: var(--graphite);
 }
 @media (min-width: 1600px) {
   .hero {
