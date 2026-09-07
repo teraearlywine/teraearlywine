@@ -115,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const showFieldErrors = errors => {
       let firstInvalidField = null;
       Object.entries(errors || {}).forEach(([fieldName, messages]) => {
-        const field = contactForm.elements.namedItem(fieldName);
+        const control = contactForm.elements.namedItem(fieldName);
+        const field = control?.length && !control.tagName ? control[0] : control;
         const error = contactForm.querySelector(
           `[data-contact-error="${fieldName}"]`,
         );

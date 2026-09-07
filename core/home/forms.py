@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, SelectField, StringField, TextAreaField
+from wtforms import HiddenField, RadioField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
 ENGAGEMENT_TYPES = (
@@ -35,10 +35,9 @@ class ContactForm(FlaskForm):
             ),
         ],
     )
-    engagement_type = SelectField(
+    engagement_type = RadioField(
         'Potential engagement',
         choices=[
-            ('', 'Select an engagement type'),
             *((engagement_type, engagement_type) for engagement_type in ENGAGEMENT_TYPES),
         ],
         validators=[

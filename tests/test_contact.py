@@ -99,9 +99,11 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert '<label for="name">Name</label>' in document
     assert '<label for="email">Email</label>' in document
     assert (
-        '<label for="engagement_type">Potential engagement</label>'
+        '<legend>Potential engagement</legend>'
         in document
     )
+    assert document.count('type="radio"') == 3
+    assert '<select' not in document
     assert '<label for="message">Message</label>' in document
     assert 'autocomplete="name"' in document
     assert 'autocomplete="email"' in document

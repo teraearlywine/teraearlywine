@@ -52,19 +52,29 @@
                     {% if not contact_form.email.errors %}hidden{% endif %}
                 >{{ contact_form.email.errors[0] if contact_form.email.errors else '' }}</p>
             </div>
-            <div class="contact-form__field contact-form__field--full">
-                {{ contact_form.engagement_type.label }}
-                {{ contact_form.engagement_type(
-                    aria_describedby='contact-engagement-type-error',
-                    aria_invalid='true' if contact_form.engagement_type.errors else 'false',
-                ) }}
+            <fieldset class="contact-form__field contact-form__field--full contact-engagement">
+                <legend>Potential engagement</legend>
+                {% set engagement_notes = ['Find the right starting point.', 'Map the path forward.', 'Prove a workflow in production.'] %}
+                <div class="contact-engagement__choices">
+                    {% for option in contact_form.engagement_type %}
+                    <label class="contact-engagement__choice" for="{{ option.id }}">
+                        {{ option(
+                            aria_describedby='contact-engagement-type-error',
+                            aria_invalid='true' if contact_form.engagement_type.errors else 'false',
+                        ) }}
+                        <span class="contact-engagement__number" aria-hidden="true">0{{ loop.index }}</span>
+                        <span class="contact-engagement__title">{{ option.label.text }}</span>
+                        <span class="contact-engagement__note">{{ engagement_notes[loop.index0] }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
                 <p
                     id="contact-engagement-type-error"
                     class="contact-form__error"
                     data-contact-error="engagement_type"
                     {% if not contact_form.engagement_type.errors %}hidden{% endif %}
                 >{{ contact_form.engagement_type.errors[0] if contact_form.engagement_type.errors else '' }}</p>
-            </div>
+            </fieldset>
             <div class="contact-form__field contact-form__field--full">
                 {{ contact_form.message.label }}
                 {{ contact_form.message(
