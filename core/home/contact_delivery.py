@@ -16,12 +16,14 @@ class ContactSubmission:
     submission_id: str
     name: str
     email: str
+    engagement_type: str
     message: str
 
 
 def _canonical_payload(submission):
     payload = {
         'email': submission.email,
+        'engagementType': submission.engagement_type,
         'message': submission.message,
         'name': submission.name,
         'submissionId': submission.submission_id,

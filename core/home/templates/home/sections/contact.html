@@ -53,6 +53,19 @@
                 >{{ contact_form.email.errors[0] if contact_form.email.errors else '' }}</p>
             </div>
             <div class="contact-form__field contact-form__field--full">
+                {{ contact_form.engagement_type.label }}
+                {{ contact_form.engagement_type(
+                    aria_describedby='contact-engagement-type-error',
+                    aria_invalid='true' if contact_form.engagement_type.errors else 'false',
+                ) }}
+                <p
+                    id="contact-engagement-type-error"
+                    class="contact-form__error"
+                    data-contact-error="engagement_type"
+                    {% if not contact_form.engagement_type.errors %}hidden{% endif %}
+                >{{ contact_form.engagement_type.errors[0] if contact_form.engagement_type.errors else '' }}</p>
+            </div>
+            <div class="contact-form__field contact-form__field--full">
                 {{ contact_form.message.label }}
                 {{ contact_form.message(
                     rows='6',
