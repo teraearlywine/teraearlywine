@@ -23,7 +23,15 @@ EVENT_PARAMETERS = {
 }
 ALLOWED_VALUES = {
     'contact_method': {'email', 'booking'},
-    'placement': {'navigation', 'hero', 'projects', 'contact', 'footer', 'error'},
+    'placement': {
+        'navigation',
+        'hero',
+        'services',
+        'projects',
+        'contact',
+        'footer',
+        'error',
+    },
     'destination_type': {
         'section',
         'github',
@@ -164,7 +172,16 @@ def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
         assert link['data-placement'] == 'contact'
         assert link['data-destination-type'] == 'booking'
     if has_booking_fallback:
-        assert document.count('>Book a fit call</a>') >= 2
+        booking_links = [
+            link
+            for link in links
+            if link.get('data-contact-method') == 'booking'
+        ]
+        assert len(booking_links) >= 2
+        hero_booking = next(
+            link for link in booking_links if link['data-placement'] == 'hero'
+        )
+        assert 'button--primary' in hero_booking.get('class', '').split()
 
 
 def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
@@ -179,14 +196,13 @@ def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
         in document
     )
     assert (
-        'Production-grade data and AI for regulated, high-consequence '
-        'operations.'
+        'I work with leaders in regulated and critical operations'
         in document
     )
-    assert 'Reliability &amp; migration rescue' in document
-    assert 'AI-ready data foundations' in document
-    assert 'Production AI systems' in document
-    assert 'Fractional platform leadership' in document
+    assert 'Value / Risk Diagnostic' in document
+    assert 'Data Foundation Blueprint' in document
+    assert 'Production AI Lighthouse' in document
+    assert 'Modernize<br>your data.' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document
@@ -362,6 +378,8 @@ def test_404_and_500_pages_are_noindex_and_track_the_home_link(app_factory):
     ):
         assert response.status_code == expected_status
         document = response.get_data(as_text=True)
+        body = collect_elements(document, 'body')[0]
+        assert 'error-page' in body.get('class', '').split()
         robots_meta = next(
             meta
             for meta in collect_elements(document, 'meta')
@@ -434,6 +452,7 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
         ('navigation_click', 'navigation', 'home'),
         ('navigation_click', 'navigation', 'section'),
         ('navigation_click', 'hero', 'section'),
+        ('navigation_click', 'services', 'section'),
         ('contact_click', 'hero', 'booking'),
         ('outbound_click', 'contact', 'github'),
         ('outbound_click', 'contact', 'linkedin'),
