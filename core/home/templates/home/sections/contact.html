@@ -90,7 +90,13 @@
             >{% if contact_error %}{{ contact_error }}{% elif success_messages %}{{ success_messages[0] }}{% endif %}</p>
         </form>
         {% if booking_url %}
-        <div class="contact-actions fade-up fade-up-delay-3">
+        <div
+            class="contact-actions fade-up fade-up-delay-3"
+            aria-labelledby="direct-booking-title"
+        >
+            <h3 id="direct-booking-title" class="contact-actions__title">
+                Or book a call directly
+            </h3>
             <a
                 class="contact-cta contact-cta--secondary"
                 href="{{ booking_url }}"
