@@ -287,7 +287,7 @@ li[id] {
 .section-kicker {
   font: 12px/1.5 monospace;
   letter-spacing: 0.2em;
-  color: #72624f;
+  color: var(--color-text-accessible-muted);
   text-transform: uppercase;
   margin-bottom: 20px;
 }
@@ -477,7 +477,7 @@ li[id] {
 .project-card .project-label {
   font: 11px monospace;
   letter-spacing: 0.17em;
-  color: #73634f;
+  color: var(--color-text-accessible-muted);
 }
 .project-tags {
   gap: 10px;
@@ -486,7 +486,7 @@ li[id] {
   border-radius: 0;
   padding: 0;
   background: none;
-  color: #706354;
+  color: var(--color-text-accessible-muted);
   font-size: 11px;
   letter-spacing: 0.04em;
 }
@@ -512,14 +512,14 @@ li[id] {
 }
 .timeline-date {
   font: 12px monospace;
-  color: #73634f;
+  color: var(--color-text-accessible-muted);
 }
 .timeline-role {
   font-size: 22px;
   line-height: 1.3;
 }
 .timeline-company {
-  color: #6f614f;
+  color: var(--color-text-accessible-muted);
 }
 .timeline-desc {
   font-size: 16px;

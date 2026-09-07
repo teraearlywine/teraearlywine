@@ -13,6 +13,7 @@ PROJECT_ROOT = Path(__file__).parents[1]
 ANALYTICS_JS = PROJECT_ROOT / 'core/home/assets/js/analytics.js'
 ANALYTICS_BEHAVIOR_TEST = PROJECT_ROOT / 'tests/analytics_behavior.test.js'
 MAIN_CSS = PROJECT_ROOT / 'core/home/assets/css/main.css'
+CONSULTANCY_CSS = PROJECT_ROOT / 'core/home/assets/css/consultancy.css'
 MEASUREMENT_PLAN = PROJECT_ROOT / 'docs/analytics/ga4-measurement-plan.md'
 
 EVENT_PARAMETERS = {
@@ -540,8 +541,32 @@ def test_homepage_omits_unused_youtube_embed_and_disclosure(
     assert 'this choice controls site analytics only' not in document
 
 
-def test_consent_and_footer_colors_meet_wcag_aa_for_small_text():
-    source = MAIN_CSS.read_text()
+def test_small_text_colors_meet_wcag_aa():
+    main_source = MAIN_CSS.read_text()
+    consultancy_source = CONSULTANCY_CSS.read_text()
+
+    def declaration(source, selector, property_name):
+        block_match = re.search(
+            rf'(?m)^{re.escape(selector)}\s*\{{([^}}]*)\}}',
+            source,
+        )
+        assert block_match, f'Missing CSS selector: {selector}'
+        value_match = re.search(
+            rf'{re.escape(property_name)}:\s*([^;]+);',
+            block_match.group(1),
+        )
+        assert value_match, f'Missing {property_name} in {selector}'
+        return value_match.group(1).strip()
+
+    def resolve_color(value):
+        variable_match = re.fullmatch(r'var\((--[^)]+)\)', value)
+        if variable_match:
+            return declaration(
+                consultancy_source,
+                ':root',
+                variable_match.group(1),
+            )
+        return value
 
     def contrast_ratio(foreground, background):
         def luminance(color):
@@ -567,12 +592,47 @@ def test_consent_and_footer_colors_meet_wcag_aa_for_small_text():
         )
         return (lighter + 0.05) / (darker + 0.05)
 
-    assert '--color-text-accessible-muted: #5f6368;' in source
-    assert '--color-accent-hover: #0041c2;' in source
+    assert '--color-text-accessible-muted: #5f6368;' in main_source
+    assert '--color-accent-hover: #0041c2;' in main_source
     assert contrast_ratio('#5f6368', '#ffffff') >= 4.5
     assert contrast_ratio('#0041c2', '#ffffff') >= 4.5
-    assert '.consent-banner p {' in source
-    assert 'color: var(--color-text-accessible-muted);' in source
+    assert '.consent-banner p {' in main_source
+    assert 'color: var(--color-text-accessible-muted);' in main_source
+
+    muted = resolve_color('var(--color-text-accessible-muted)')
+    section_background = resolve_color(
+        declaration(consultancy_source, '.section', 'background')
+    )
+    project_background = resolve_color(
+        declaration(consultancy_source, '#projects', 'background')
+    )
+    method_background = resolve_color(
+        declaration(consultancy_source, '#method', 'background')
+    )
+    assert contrast_ratio(muted, section_background) >= 4.5
+    assert contrast_ratio(muted, project_background) >= 4.5
+
+    selector_backgrounds = {
+        '.section-kicker': section_background,
+        '.project-card .project-label': project_background,
+        '.project-tag': project_background,
+        '.timeline-date': section_background,
+        '.timeline-company': section_background,
+    }
+    for selector, background in selector_backgrounds.items():
+        foreground = resolve_color(
+            declaration(consultancy_source, selector, 'color')
+        )
+        assert contrast_ratio(foreground, background) >= 4.5
+
+    method_kicker = resolve_color(
+        declaration(
+            consultancy_source,
+            '#method .section-kicker,\n#method .method-list span',
+            'color',
+        )
+    )
+    assert contrast_ratio(method_kicker, method_background) >= 4.5
 
 
 def test_measurement_plan_documents_external_ga4_privacy_setup():
