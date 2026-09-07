@@ -10,7 +10,7 @@ The first 90-day outcome target is:
 - 2 paid-diagnostic or project proposals
 - 1 consulting engagement worth at least $25,000
 
-A qualified lead has a specific costly problem, a plausible budget owner, a decision window, and a credible path to at least $25,000 in opportunity value.
+A qualified lead has a specific costly problem, a plausible budget owner, a decision window, and a credible path to an email with a real project.
 
 ## Message hierarchy
 
