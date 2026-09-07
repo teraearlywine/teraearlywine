@@ -572,6 +572,7 @@ li[id] {
   gap: 25px;
 }
 .contact-form input,
+.contact-form select,
 .contact-form textarea {
   border-radius: 0;
   background: transparent;

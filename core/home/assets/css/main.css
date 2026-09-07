@@ -685,6 +685,7 @@ body {
 }
 
 .contact-form input,
+.contact-form select,
 .contact-form textarea {
   display: block;
   width: 100%;
@@ -706,6 +707,7 @@ body {
 }
 
 .contact-form input[aria-invalid="true"],
+.contact-form select[aria-invalid="true"],
 .contact-form textarea[aria-invalid="true"] {
   border-color: var(--color-error);
 }

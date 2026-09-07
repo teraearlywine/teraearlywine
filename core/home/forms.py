@@ -1,6 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, StringField, TextAreaField
+from wtforms import HiddenField, SelectField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, Optional
+
+ENGAGEMENT_TYPES = (
+    'Value / Risk Diagnostic',
+    'Data Foundation Blueprint',
+    'Production AI Lighthouse',
+)
 
 
 def _strip(value):
@@ -27,6 +33,16 @@ class ContactForm(FlaskForm):
                 check_deliverability=False,
                 message='Enter a valid email address.',
             ),
+        ],
+    )
+    engagement_type = SelectField(
+        'Potential engagement',
+        choices=[
+            ('', 'Select an engagement type'),
+            *((engagement_type, engagement_type) for engagement_type in ENGAGEMENT_TYPES),
+        ],
+        validators=[
+            DataRequired(message='Select an engagement type.'),
         ],
     )
     message = TextAreaField(

@@ -142,7 +142,12 @@ def _contact_form_response(form, message, status_code):
         field_errors = {
             field_name: errors
             for field_name, errors in form.errors.items()
-            if field_name in {'name', 'email', 'message'}
+            if field_name in {
+                'name',
+                'email',
+                'engagement_type',
+                'message',
+            }
         }
         return jsonify(
             {
@@ -156,7 +161,7 @@ def _contact_form_response(form, message, status_code):
         formdata=None,
         submission_id=_new_contact_submission(),
     )
-    for field_name in ('name', 'email', 'message'):
+    for field_name in ('name', 'email', 'engagement_type', 'message'):
         safe_form[field_name].errors = list(form.errors.get(field_name, ()))
 
     return render_template(
@@ -177,7 +182,12 @@ def _is_valid_submission_id(value):
 def _contact_submission_fingerprint(submission):
     """Bind one opaque ID to one normalized payload without storing PII."""
     private_payload = '\0'.join(
-        (submission.name, submission.email, submission.message)
+        (
+            submission.name,
+            submission.email,
+            submission.engagement_type,
+            submission.message,
+        )
     )
     return hashlib.sha256(private_payload.encode('utf-8')).hexdigest()
 
@@ -352,6 +362,7 @@ def contact():
         submission_id=submission_id,
         name=form.name.data,
         email=form.email.data,
+        engagement_type=form.engagement_type.data,
         message=form.message.data,
     )
     fingerprint = _contact_submission_fingerprint(submission)

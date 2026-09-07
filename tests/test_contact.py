@@ -18,6 +18,7 @@ BROKER_URL = 'https://if-api.example/api/contact-deliveries'
 BROKER_SECRET = 'contact-broker-test-secret'
 TEST_NAME = 'Ada Lovelace'
 TEST_EMAIL = 'ada@example.com'
+TEST_ENGAGEMENT = 'Data Foundation Blueprint'
 TEST_MESSAGE = 'I would like to discuss a trustworthy data platform.'
 
 
@@ -61,6 +62,7 @@ def _contact_form(client):
         'submission_id': _hidden_value(document, 'submission_id'),
         'name': TEST_NAME,
         'email': TEST_EMAIL,
+        'engagement_type': TEST_ENGAGEMENT,
         'message': TEST_MESSAGE,
         'website': '',
     }, document
@@ -96,6 +98,10 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert 'data-contact-form' in document
     assert '<label for="name">Name</label>' in document
     assert '<label for="email">Email</label>' in document
+    assert (
+        '<label for="engagement_type">Potential engagement</label>'
+        in document
+    )
     assert '<label for="message">Message</label>' in document
     assert 'autocomplete="name"' in document
     assert 'autocomplete="email"' in document
@@ -103,6 +109,12 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert 'maxlength="100"' in document
     assert 'maxlength="254"' in document
     assert 'maxlength="5000"' in document
+    for engagement_type in (
+        'Value / Risk Diagnostic',
+        'Data Foundation Blueprint',
+        'Production AI Lighthouse',
+    ):
+        assert engagement_type in document
     assert 'href="https://calendar.example/book"' in document
     assert form_data['csrf_token']
     assert re.fullmatch(
@@ -133,6 +145,8 @@ def test_javascript_contact_form_behavior():
         ('email', ''),
         ('email', 'not-an-email'),
         ('email', f"{'e' * 243}@example.test"),
+        ('engagement_type', ''),
+        ('engagement_type', 'Unlisted engagement'),
         ('message', ''),
         ('message', 'short'),
         ('message', 'm' * 5001),
@@ -241,6 +255,7 @@ def test_success_sends_exact_signed_broker_payload(
     assert broker_url == BROKER_URL
     assert broker_request['json'] == {
         'email': TEST_EMAIL,
+        'engagementType': TEST_ENGAGEMENT,
         'message': TEST_MESSAGE,
         'name': TEST_NAME,
         'submissionId': submission_id,
