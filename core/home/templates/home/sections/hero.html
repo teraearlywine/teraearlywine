@@ -1,17 +1,22 @@
-<section id="hero" class="hero">
+<section id="hero" class="hero" aria-labelledby="hero-heading">
+    <img class="hero-art" src="{{ url_for('index.static', filename='images/hero-glass.jpg') }}" alt="" fetchpriority="high" width="1379" height="1141">
     <div class="hero-content">
-        <p class="hero-eyebrow fade-up">Tera Earlywine · Independent Data &amp; AI Consultant</p>
-        <h1 class="hero-name fade-up fade-up-delay-1">I fix the data systems your reporting, compliance, and AI depend on.</h1>
-        <p class="hero-title fade-up fade-up-delay-2">Production-grade data and AI for regulated, high-consequence operations.</p>
-        <p class="hero-tagline fade-up fade-up-delay-3">
-            Usually that means untangling a migration, making a fragile platform reliable, or turning a promising AI pilot into something your team can safely operate. I get practical quickly and stay through the part where it has to work.
-        </p>
-        <div class="hero-actions fade-up fade-up-delay-4">
+        <p class="hero-eyebrow">For enterprise data leaders</p>
+        <h1 class="hero-name" id="hero-heading">Modernize<br>your data.<em>Put AI into<br>production.</em></h1>
+        <p class="hero-tagline">I work with leaders in regulated and critical operations to assess production risk, design reliable data foundations, and deliver AI workflows with clear controls and ownership.</p>
+        <div class="hero-actions">
+            <a class="button button--primary" href="#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your priorities <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
             {% if config.get('BOOKING_URL') %}
-            <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call</a>
+            <a class="hero-booking" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call</a>
             {% endif %}
-            <a class="button button--secondary" href="#projects" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">See the work</a>
         </div>
-        <p class="hero-proof fade-up fade-up-delay-4">9+ years in data · Block &amp; Mercari · 500+ workflows · $500K+ in infrastructure savings</p>
+    </div>
+    <div class="hero-journey">
+        <p>A structured delivery path</p>
+        <ol>
+        {% for stage in ['Diagnose', 'Blueprint', 'Prove', 'Scale', 'Operate'] %}
+            <li><a href="#stage-{{ loop.index }}">{{ stage }}</a>{% if not loop.last %}<img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" width="28" height="28" alt="">{% endif %}</li>
+        {% endfor %}
+        </ol>
     </div>
 </section>

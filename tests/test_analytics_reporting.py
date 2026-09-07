@@ -179,14 +179,13 @@ def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
         in document
     )
     assert (
-        'Production-grade data and AI for regulated, high-consequence '
-        'operations.'
+        'I work with leaders in regulated and critical operations'
         in document
     )
-    assert 'Reliability &amp; migration rescue' in document
-    assert 'AI-ready data foundations' in document
-    assert 'Production AI systems' in document
-    assert 'Fractional platform leadership' in document
+    assert 'Value / Risk Diagnostic' in document
+    assert 'Data Foundation Blueprint' in document
+    assert 'Production AI Lighthouse' in document
+    assert 'Modernize<br>your data.' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document

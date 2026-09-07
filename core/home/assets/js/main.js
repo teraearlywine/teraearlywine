@@ -18,11 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target) {
         const offset = navbar.offsetHeight;
         const top = target.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top, behavior: 'smooth' });
+        window.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
       }
       // Close mobile menu if open
       document.getElementById('navLinks').classList.remove('open');
       document.getElementById('navToggle').classList.remove('open');
+      document.getElementById('navToggle').setAttribute('aria-expanded', 'false');
     });
   });
 
@@ -50,6 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
   navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('open');
     navLinksEl.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(navLinksEl.classList.contains('open')));
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && navLinksEl.classList.contains('open')) {
+      navLinksEl.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.focus();
+    }
   });
 
   // --- Fade-up scroll animations ---

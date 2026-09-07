@@ -32,4 +32,6 @@
     <script type="application/ld+json">{{ seo_structured_data|tojson }}</script>
     {% endif %}
     {% include 'home/includes/google_analytics.html' %}
+    <link rel="preload" href="{{ url_for('index.static', filename='fonts/inter-regular.ttf') }}" as="font" type="font/ttf" crossorigin>
+    {% include 'home/includes/themes.html' %}
 </head>
