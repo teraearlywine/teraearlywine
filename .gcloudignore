@@ -37,3 +37,7 @@ scripts/
 .playwright-cli/
 
 docs/analytics
+
+# Local browser review evidence and uncompressed artwork masters.
+output/
+core/home/assets/images/hero-glass-retina.png
