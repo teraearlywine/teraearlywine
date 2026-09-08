@@ -16,7 +16,7 @@ The uncompressed master is retained in Git and excluded from App Engine uploads.
 
 ## Validation
 
-- All 55 Python tests and both JavaScript checks passed.
+- All 56 Python tests and both JavaScript checks passed, including a regression check for WebP delivery when the runtime's system MIME registry does not support it.
 - At 1440px viewport width and 2× pixel density, Chromium selected the 3072px image.
 - At 390px viewport width and 3× pixel density, Chromium selected the 1536px image.
 - Both browser checks confirmed successful image decoding, no horizontal overflow and no page errors. Desktop and mobile screenshots were visually reviewed.

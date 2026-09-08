@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 import os
 from urllib.parse import urlsplit
 
@@ -78,6 +79,9 @@ def register_blueprints(app):
 
     Flask blueprints enable more modular HTML / code development
     """
+
+    # Some App Engine Python runtimes lack WebP in the system MIME registry.
+    mimetypes.add_type('image/webp', '.webp')
 
     from core.home.home import index_bp  # noqa: E402
     app.register_blueprint(index_bp)
