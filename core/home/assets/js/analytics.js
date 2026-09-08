@@ -15,6 +15,7 @@ const ALLOWED_VALUES = Object.freeze({
   ]),
   destination_type: new Set([
     'section',
+    'service',
     'github',
     'linkedin',
     'youtube',

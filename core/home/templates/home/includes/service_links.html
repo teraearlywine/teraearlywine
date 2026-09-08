@@ -1,0 +1,7 @@
+<ul class="service-links">
+    {% for slug, item in services.items() %}
+    {% if slug != service_slug|default('') %}
+    <li><a href="{{ url_for('index.service', slug=slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">{{ item.name }} <span aria-hidden="true">↗</span></a></li>
+    {% endif %}
+    {% endfor %}
+</ul>

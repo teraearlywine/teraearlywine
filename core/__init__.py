@@ -1,13 +1,14 @@
 import logging
 import mimetypes
 import os
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit, urlunsplit
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, redirect, render_template, request
 
 from core.config import config as app_config
 from core.secrets import load_secret
+from core.static_assets import register_static_assets
 
 load_dotenv()
 
@@ -110,6 +111,39 @@ def register_error_handlers(app):
         return render_template('home/500.html'), 500
 
 
+def register_canonical_redirect(app, env):
+    """Consolidate public domain variants without redirecting local previews."""
+    site = urlsplit(app.config['SITE_URL'])
+    if env != 'production' or not site.hostname:
+        return
+
+    public_hosts = {site.hostname, site.hostname.removeprefix('www.')}
+    on_app_engine = os.environ.get('GAE_ENV') == 'standard'
+
+    @app.before_request
+    def canonical_redirect():
+        if urlsplit(request.host_url).hostname not in public_hosts:
+            return None
+
+        # App Engine sets this header at its TLS-terminating frontend.
+        # Never trust forwarded scheme headers on a standalone/local server.
+        scheme = request.scheme
+        if on_app_engine:
+            scheme = request.headers.get('X-Forwarded-Proto', scheme)
+        if scheme == site.scheme and request.host.lower() == site.netloc.lower():
+            return None
+
+        target = urlunsplit((
+            site.scheme,
+            site.netloc,
+            quote(request.path, safe='/'),
+            request.query_string.decode('latin-1'),
+            '',
+        ))
+        # Preserve method/body for contact submissions as well as GET requests.
+        return redirect(target, code=308)
+
+
 def create_app(env=''):
     """
     Create APP!
@@ -183,7 +217,9 @@ def create_app(env=''):
     app.config['SECRET_KEY'] = secret_key
     app.secret_key = secret_key
 
+    register_canonical_redirect(app, env)
     register_blueprints(app)
+    register_static_assets(app)
     register_error_handlers(app)
 
     return app

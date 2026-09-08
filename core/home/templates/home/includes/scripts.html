@@ -1,4 +1,4 @@
-<script type="module" src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+<script type="module" src="{{ url_for('index.static', filename='js/main.js') }}"></script>
 {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
-<script type="module" src="{{ url_for('static', filename='assets/js/analytics.js') }}"></script>
+<script type="module" src="{{ url_for('index.static', filename='js/analytics.js') }}"></script>
 {% endif %}

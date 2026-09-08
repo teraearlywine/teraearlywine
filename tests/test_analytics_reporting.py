@@ -35,6 +35,7 @@ ALLOWED_VALUES = {
     },
     'destination_type': {
         'section',
+        'service',
         'github',
         'linkedin',
         'youtube',
