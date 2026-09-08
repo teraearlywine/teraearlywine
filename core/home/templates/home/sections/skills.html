@@ -1,11 +1,11 @@
 <section id="services" class="section engagements" aria-labelledby="services-heading">
     <div class="container">
-        <h2 class="section-title" id="services-heading">Choose the next decision to resolve.</h2>
+        <h2 class="section-title" id="services-heading">Data &amp; AI consulting engagements.</h2>
         <div class="engagement-list">
             {% set offers = [
-                ('Where should we invest first?', 'Value / Risk Diagnostic', 'Readiness scorecard, prioritized use cases, risk register, and 90-day roadmap.', 'Start by assessing business priorities, existing systems, production risks, and ownership. The output is a decision memo and an actionable roadmap with clear dependencies.'),
-                ('What foundation do we need?', 'Data Foundation Blueprint', 'Target architecture, ownership model, controls, and migration plan.', 'Define the data contracts, quality controls, access model, and operating responsibilities required for trusted analytics and AI. Map migration steps, validation, cutover, and rollback.'),
-                ('Can this workflow run reliably?', 'Production AI Lighthouse', 'Integrated workflow, evaluation report, runbook, and operational handoff.', 'Build one scoped workflow with evaluation for accuracy, latency, and cost. Establish access controls, human escalation, monitoring, and the evidence needed for a production-readiness decision.')
+                ('Data platform assessment', 'Value / Risk Diagnostic', 'Readiness scorecard, prioritized use cases, risk register, and 90-day roadmap.', 'Where should we invest first? I assess business priorities, existing systems, production risks, and ownership. The output is a decision memo and an actionable roadmap with clear dependencies.'),
+                ('AI-ready data foundations', 'Data Foundation Blueprint', 'Target architecture, ownership model, controls, and migration plan.', 'What foundation do we need? I define the data contracts, quality controls, access model, and operating responsibilities required for trusted analytics and AI. Together, we map migration steps, validation, cutover, and rollback.'),
+                ('Production AI delivery', 'Production AI Lighthouse', 'Integrated workflow, evaluation report, runbook, and operational handoff.', 'Can this workflow run reliably? I build one scoped workflow with evaluation for accuracy, latency, and cost. The work establishes access controls, human escalation, monitoring, and the evidence needed for a production-readiness decision.')
             ] %}
             {% for question, name, description, detail in offers %}
             <details class="engagement">
@@ -18,6 +18,10 @@
                 <div class="engagement-detail"><p>{{ detail }}</p><a href="#contact" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">Discuss this engagement <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="18" height="18"></a></div>
             </details>
             {% endfor %}
+        </div>
+        <div class="service-directory" aria-labelledby="expertise-heading">
+            <h3 id="expertise-heading">Explore my consulting expertise</h3>
+            {% include 'home/includes/service_links.html' %}
         </div>
     </div>
 </section>

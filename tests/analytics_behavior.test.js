@@ -393,3 +393,15 @@ assert.equal(
   commands(privateContext).filter(([name]) => name === 'event').length,
   1,
 );
+
+const serviceVisitor = createHarness('accepted');
+dispatchTrackedClick(serviceVisitor, {
+  analyticsEvent: 'navigation_click',
+  destinationType: 'service',
+  placement: 'services',
+});
+const serviceEvents = commands(serviceVisitor).filter(([name]) => name === 'event');
+assert.equal(serviceEvents.length, 1);
+assert.equal(serviceEvents[0][1], 'navigation_click');
+assert.equal(serviceEvents[0][2].destination_type, 'service');
+assert.equal(serviceEvents[0][2].placement, 'services');

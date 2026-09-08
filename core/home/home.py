@@ -8,6 +8,7 @@ from xml.etree import ElementTree
 from flask import (
     Blueprint,
     Response,
+    abort,
     current_app,
     flash,
     jsonify,
@@ -24,6 +25,7 @@ from core.home.contact_delivery import (
     deliver_contact_submission,
 )
 from core.home.forms import ContactForm
+from core.home.services import SERVICES
 
 
 index_bp = Blueprint(
@@ -230,6 +232,9 @@ def seo_metadata():
     site_url = _site_url()
     homepage_url = f'{site_url}/' if site_url else ''
     is_homepage = request.endpoint == 'index.index'
+    service_slug = (request.view_args or {}).get('slug')
+    service = SERVICES.get(service_slug) if request.endpoint == 'index.service' else None
+    canonical_url = homepage_url if is_homepage else ''
 
     structured_data = None
     if is_homepage and homepage_url:
@@ -300,9 +305,46 @@ def seo_metadata():
             ],
         }
 
+    if service and homepage_url:
+        canonical_url = f'{site_url}/services/{service_slug}'
+        structured_data = {
+            '@context': 'https://schema.org',
+            '@graph': [
+                {
+                    '@type': 'Service',
+                    '@id': f'{canonical_url}#service',
+                    'url': canonical_url,
+                    'name': service['name'],
+                    'description': service['description'],
+                    'serviceType': service['name'],
+                    'provider': {
+                        '@type': 'Person',
+                        '@id': f'{homepage_url}#person',
+                        'name': 'Tera Earlywine',
+                        'url': homepage_url,
+                    },
+                    'areaServed': 'United States',
+                },
+                {
+                    '@type': 'BreadcrumbList',
+                    'itemListElement': [
+                        {'@type': 'ListItem', 'position': 1,
+                         'name': 'Home', 'item': homepage_url},
+                        {'@type': 'ListItem', 'position': 2,
+                         'name': service['name'], 'item': canonical_url},
+                    ],
+                },
+            ],
+        }
+
     return {
-        'canonical_url': homepage_url if is_homepage else '',
+        'canonical_url': canonical_url,
         'is_homepage': is_homepage,
+        'services': SERVICES,
+        'social_image_url': (
+            f"{site_url}{url_for('index.static', filename='images/hero-glass-retina-1536.webp')}"
+            if site_url else ''
+        ),
         'search_console_verification': str(
             current_app.config.get('SEARCH_CONSOLE_VERIFICATION') or ''
         ).strip(),
@@ -430,16 +472,18 @@ def robots():
 
 @index_bp.route('/sitemap.xml')
 def sitemap():
-    """Publish a minimal, safely escaped sitemap for the canonical homepage."""
+    """Publish the homepage and every public service page."""
     namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9'
     ElementTree.register_namespace('', namespace)
     urlset = ElementTree.Element(f'{{{namespace}}}urlset')
 
     site_url = _site_url()
     if site_url:
-        url_element = ElementTree.SubElement(urlset, f'{{{namespace}}}url')
-        location = ElementTree.SubElement(url_element, f'{{{namespace}}}loc')
-        location.text = f'{site_url}/'
+        paths = ['/'] + [f'/services/{slug}' for slug in SERVICES]
+        for path in paths:
+            url_element = ElementTree.SubElement(urlset, f'{{{namespace}}}url')
+            location = ElementTree.SubElement(url_element, f'{{{namespace}}}loc')
+            location.text = f'{site_url}{path}'
 
     document = ElementTree.tostring(
         urlset,
@@ -449,9 +493,23 @@ def sitemap():
     return Response(document, mimetype='application/xml')
 
 
+@index_bp.route('/services/<slug>')
+def service(slug):
+    service = SERVICES.get(slug)
+    if not service:
+        abort(404)
+    return render_template(
+        'home/service.html',
+        service=service,
+        service_slug=slug,
+        page_title=service['title'],
+        page_description=service['description'],
+    )
+
+
 @index_bp.route("/about-me")
 def about_me():
     """
     Redirect to experience section on homepage.
     """
-    return redirect(url_for('index.index') + '#experience')
+    return redirect(url_for('index.index') + '#experience', code=301)

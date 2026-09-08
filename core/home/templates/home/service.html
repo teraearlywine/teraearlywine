@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'home/includes/header.html' %}
+<body class="service-page">
+    {% include 'home/core/navigation.html' %}
+    <main id="main">
+        <section class="service-hero" aria-labelledby="service-heading">
+            <div class="container">
+                <nav class="service-breadcrumb" aria-label="Breadcrumb">
+                    <a href="{{ url_for('index.index') }}">Home</a><span aria-hidden="true"> / </span><span aria-current="page">{{ service.name }}</span>
+                </nav>
+                <p class="service-eyebrow">Independent data &amp; AI consulting</p>
+                <h1 id="service-heading">{{ service.name }}</h1>
+                <p class="service-promise">{{ service.headline }}</p>
+                <p class="service-intro">{{ service.intro }}</p>
+                <div class="hero-actions">
+                    {% if config.get('BOOKING_URL') %}
+                    <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
+                    {% endif %}
+                    <a class="service-contact-link" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your priorities</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-context" aria-labelledby="problem-heading">
+            <div class="container service-columns">
+                <div>
+                    <p class="section-kicker">When to bring me in</p>
+                    <h2 class="section-title" id="problem-heading">{{ service.problem_title }}</h2>
+                </div>
+                <div class="service-prose">
+                    <p>{{ service.problem }}</p>
+                    <ul class="service-signals">
+                        {% for signal in service.signals %}<li>{{ signal }}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-deliverables" aria-labelledby="deliverables-heading">
+            <div class="container">
+                <p class="section-kicker">Scope with a purpose</p>
+                <h2 class="section-title" id="deliverables-heading">What we work toward.</h2>
+                <div class="service-deliverable-grid">
+                    {% for title, description in service.deliverables %}
+                    <article>
+                        <span class="service-index" aria-hidden="true">0{{ loop.index }}</span>
+                        <h3>{{ title }}</h3>
+                        <p>{{ description }}</p>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="approach-heading">
+            <div class="container service-columns">
+                <div>
+                    <p class="section-kicker">Approach &amp; experience</p>
+                    <h2 class="section-title" id="approach-heading">A practical way forward.</h2>
+                </div>
+                <div class="service-prose">
+                    <p>{{ service.approach }}</p>
+                    <h3>Experience I bring</h3>
+                    <p>{{ service.experience }}</p>
+                    <a class="service-text-link" href="{{ url_for('index.index') }}#experience">Explore my background <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-next" aria-labelledby="next-heading">
+            <div class="container service-columns">
+                <div>
+                    <p class="section-kicker">Start with a conversation</p>
+                    <h2 class="section-title" id="next-heading">Find the right starting point.</h2>
+                </div>
+                <div class="service-prose">
+                    <p>{{ service.starting_point }}</p>
+                    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">Discuss this work <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-related" aria-labelledby="related-heading">
+            <div class="container">
+                <p class="section-kicker">Related expertise</p>
+                <h2 class="section-title" id="related-heading">Explore another priority.</h2>
+                {% include 'home/includes/service_links.html' %}
+            </div>
+        </section>
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+</body>
+</html>
