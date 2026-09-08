@@ -1,5 +1,12 @@
 <section id="hero" class="hero" aria-labelledby="hero-heading">
-    <img class="hero-art" src="{{ url_for('index.static', filename='images/hero-glass.jpg') }}" alt="" fetchpriority="high" width="1379" height="1141">
+    <img class="hero-art"
+         src="{{ url_for('index.static', filename='images/hero-glass-retina-1536.webp') }}"
+         srcset="{{ url_for('index.static', filename='images/hero-glass-retina-768.webp') }} 768w,
+                 {{ url_for('index.static', filename='images/hero-glass-retina-1536.webp') }} 1536w,
+                 {{ url_for('index.static', filename='images/hero-glass-retina-2304.webp') }} 2304w,
+                 {{ url_for('index.static', filename='images/hero-glass-retina-3072.webp') }} 3072w"
+         sizes="(max-width: 423px) 423px, 100vw"
+         alt="" fetchpriority="high" width="3072" height="2544">
     <div class="hero-content">
         <p class="hero-eyebrow">For enterprise data leaders</p>
         <h1 class="hero-name" id="hero-heading">Modernize<br>your data.<em>Put AI into<br>production.</em></h1>

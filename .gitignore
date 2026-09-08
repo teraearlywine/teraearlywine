@@ -21,3 +21,4 @@ __pycache__
 .agents/
 .playwright-cli/
 docs/analytics
+/output/playwright/
