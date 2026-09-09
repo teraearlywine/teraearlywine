@@ -19,6 +19,7 @@ from flask import (
     url_for,
 )
 
+from core.home.blog_content import ARTICLES, ARTICLES_BY_SLUG
 from core.home.contact_delivery import (
     ContactDeliveryError,
     ContactSubmission,
@@ -234,6 +235,12 @@ def seo_metadata():
     is_homepage = request.endpoint == 'index.index'
     service_slug = (request.view_args or {}).get('slug')
     service = SERVICES.get(service_slug) if request.endpoint == 'index.service' else None
+    is_blog_index = request.endpoint == 'index.blog'
+    article = (
+        ARTICLES_BY_SLUG.get(service_slug)
+        if request.endpoint == 'index.blog_article' else None
+    )
+    is_blog = request.endpoint in {'index.blog', 'index.blog_article'}
     canonical_url = homepage_url if is_homepage else ''
 
     structured_data = None
@@ -337,9 +344,71 @@ def seo_metadata():
             ],
         }
 
+    if (is_blog_index or article) and homepage_url:
+        blog_url = f'{site_url}/blog/'
+        canonical_url = f"{blog_url}{article['slug']}/" if article else blog_url
+        author = {
+            '@type': 'Person',
+            '@id': f'{homepage_url}#person',
+            'name': 'Tera Earlywine',
+            'url': homepage_url,
+        }
+        breadcrumbs = [
+            {'@type': 'ListItem', 'position': 1,
+             'name': 'Home', 'item': homepage_url},
+            {'@type': 'ListItem', 'position': 2,
+             'name': 'Blog', 'item': blog_url},
+        ]
+        if article:
+            entity = {
+                '@type': 'BlogPosting',
+                '@id': f'{canonical_url}#article',
+                'url': canonical_url,
+                'mainEntityOfPage': canonical_url,
+                'headline': article['title'],
+                'description': article['dek'],
+                'articleSection': article['category'],
+                'wordCount': sum(
+                    len(paragraph.split())
+                    for section in article['sections']
+                    for paragraph in section['paragraphs']
+                ),
+                'author': author,
+                'isPartOf': {'@type': 'Blog', '@id': f'{blog_url}#blog'},
+            }
+            breadcrumbs.append({
+                '@type': 'ListItem', 'position': 3,
+                'name': article['title'], 'item': canonical_url,
+            })
+        else:
+            entity = {
+                '@type': 'Blog',
+                '@id': f'{blog_url}#blog',
+                'url': blog_url,
+                'name': 'Blog | Tera Earlywine',
+                'description': (
+                    'Notes on data, AI, and the human side of building systems.'
+                ),
+                'author': author,
+                'blogPost': [
+                    {'@type': 'BlogPosting', 'headline': item['title'],
+                     'url': f"{blog_url}{item['slug']}/"}
+                    for item in ARTICLES
+                ],
+            }
+        structured_data = {
+            '@context': 'https://schema.org',
+            '@graph': [
+                entity,
+                {'@type': 'BreadcrumbList', 'itemListElement': breadcrumbs},
+            ],
+        }
+
     return {
         'canonical_url': canonical_url,
         'is_homepage': is_homepage,
+        'page_og_type': 'article' if article else 'website',
+        'is_blog': is_blog,
         'services': SERVICES,
         'social_image_url': (
             f"{site_url}{url_for('index.static', filename='images/hero-glass-retina-1536.webp')}"
@@ -472,14 +541,18 @@ def robots():
 
 @index_bp.route('/sitemap.xml')
 def sitemap():
-    """Publish the homepage and every public service page."""
+    """Publish the homepage, services, blog, and every article."""
     namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9'
     ElementTree.register_namespace('', namespace)
     urlset = ElementTree.Element(f'{{{namespace}}}urlset')
 
     site_url = _site_url()
     if site_url:
-        paths = ['/'] + [f'/services/{slug}' for slug in SERVICES]
+        paths = (
+            ['/'] + [f'/services/{slug}' for slug in SERVICES]
+            + ['/blog/']
+            + [f"/blog/{article['slug']}/" for article in ARTICLES]
+        )
         for path in paths:
             url_element = ElementTree.SubElement(urlset, f'{{{namespace}}}url')
             location = ElementTree.SubElement(url_element, f'{{{namespace}}}loc')
@@ -491,6 +564,48 @@ def sitemap():
         xml_declaration=True,
     )
     return Response(document, mimetype='application/xml')
+
+
+@index_bp.route('/blog/')
+def blog():
+    """Explore the growing collection of essays and notes."""
+    cube_articles = [
+        {
+            **{key: article[key] for key in (
+                'id', 'slug', 'title', 'category', 'dek', 'read_minutes',
+            )},
+            'url': url_for('index.blog_article', slug=article['slug']),
+        }
+        for article in ARTICLES
+    ]
+    return render_template(
+        'home/blog_index.html',
+        articles=ARTICLES,
+        cube_articles=cube_articles,
+        is_blog=True,
+        page_title='Blog | Tera Earlywine',
+        page_description=(
+            'Notes on data, AI, and the human side of building systems.'
+        ),
+    )
+
+
+@index_bp.route('/blog/<slug>/')
+def blog_article(slug):
+    """Read one article, with a path to the next note."""
+    article = ARTICLES_BY_SLUG.get(slug)
+    if article is None:
+        abort(404)
+    next_article = ARTICLES[(ARTICLES.index(article) + 1) % len(ARTICLES)]
+    return render_template(
+        'home/blog_article.html',
+        article=article,
+        next_article=next_article,
+        articles=ARTICLES,
+        is_blog=True,
+        page_title=f"{article['title']} | Tera Earlywine",
+        page_description=article['dek'],
+    )
 
 
 @index_bp.route('/services/<slug>')

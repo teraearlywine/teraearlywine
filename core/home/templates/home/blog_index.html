@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'home/includes/header.html' %}
+<body class="blog-page">
+    {% include 'home/core/navigation.html' %}
+    <main id="main">
+        <section class="blog-hero" aria-labelledby="blog-heading">
+            <header class="blog-intro">
+                <h1 id="blog-heading">A growing body of thought.</h1>
+                <p>Data, AI, and the ideas taking shape between them.</p>
+            </header>
+            <div class="cube-explorer" id="cubeExplorer">
+                <div class="cube-stage" id="cubeStage">
+                    <canvas id="blogCube" aria-hidden="true" data-environment="{{ url_for('index.static', filename='images/blog-studio-environment.png') }}"></canvas>
+                    <div class="cube-points" id="cubePoints" role="group" aria-label="Explore articles in the cube"></div>
+                    <p class="cube-loading" id="cubeStatus" role="status">Bringing ideas into focus…</p>
+                </div>
+                <span class="cube-connector" id="cubeConnector" aria-hidden="true" hidden></span>
+                <aside class="article-preview" id="articlePreview" aria-labelledby="previewTitle">
+                    <p class="blog-kicker" id="previewMeta">{{ articles[0].category }} / {{ articles[0].read_minutes }} min read</p>
+                    <h2 id="previewTitle">{{ articles[0].title }}</h2>
+                    <p class="preview-dek" id="previewDek">{{ articles[0].dek }}</p>
+                    <a id="previewLink" class="blog-text-link" href="{{ url_for('index.blog_article', slug=articles[0].slug) }}">Read article <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
+                </aside>
+                <span class="sr-only" id="selectionStatus" aria-live="polite"></span>
+            </div>
+            <p class="cube-caption">Every article adds a point. Explore to see what takes shape.</p>
+            <div class="cube-tools" id="cubeTools" hidden>
+                <button type="button" class="blog-quiet-button" id="resetCube">Reset view</button>
+                <span aria-hidden="true">/</span>
+                <button type="button" class="blog-quiet-button" id="growthToggle" aria-expanded="false" aria-controls="growthControls">Watch it grow</button>
+            </div>
+            <div class="growth-controls" id="growthControls" hidden>
+                <label for="growthRange">Articles in the cube <output id="growthCount" for="growthRange">{{ articles|length }}</output></label>
+                <input type="range" id="growthRange" min="1" max="{{ articles|length }}" value="{{ articles|length }}" aria-describedby="growthExplanation">
+                <div class="growth-milestones">
+                    <button type="button" data-count="9">9 · A square</button>
+                    <button type="button" data-count="10">10 · A new layer</button>
+                    <button type="button" data-count="27">27 · A cube</button>
+                </div>
+                <p id="growthExplanation">One point per article. Earlier points keep their place.</p>
+            </div>
+            <noscript><p class="cube-fallback">Explore the articles in the list below.</p></noscript>
+        </section>
+        <section class="blog-writing" aria-labelledby="writing-heading">
+            <h2 class="blog-kicker" id="writing-heading">Latest writing</h2>
+            <div class="writing-list">
+                {% for article in articles[1:3] %}
+                <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}">
+                    <span>{{ article.title }}</span>
+                    <img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="30" height="30">
+                </a>
+                {% endfor %}
+                <details class="writing-archive">
+                    <summary>Explore all {{ articles|length }} articles</summary>
+                    {% for article in articles if article not in articles[1:3] %}
+                    <a class="writing-row writing-row--archive" href="{{ url_for('index.blog_article', slug=article.slug) }}">
+                        <span><small>{{ article.category }}</small>{{ article.title }}</span>
+                        <img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="24" height="24">
+                    </a>
+                    {% endfor %}
+                </details>
+            </div>
+        </section>
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+    <script type="application/json" id="cubeArticles">{{ cube_articles|tojson }}</script>
+    <script type="module" src="{{ url_for('index.static', filename='js/blog.js') }}"></script>
+</body>
+</html>

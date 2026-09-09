@@ -4,6 +4,7 @@ from xml.etree import ElementTree
 
 import pytest
 
+from core.home.blog_content import ARTICLES
 from core.home.services import SERVICES
 from test_analytics_reporting import ALLOWED_VALUES, EVENT_PARAMETERS, collect_elements
 
@@ -134,8 +135,9 @@ def test_sitemap_and_internal_links_cover_all_service_pages(app_factory):
     client = app_factory(SITE_URL='https://www.teraearlywine.com').test_client()
     paths = {f'/services/{slug}' for slug in SERVICES}
     root = ElementTree.fromstring(client.get('/sitemap.xml').data)
+    blog_paths = {'/blog/'} | {f"/blog/{article['slug']}/" for article in ARTICLES}
     assert {loc.text for loc in root.findall('.//{*}loc')} == {
-        f'https://www.teraearlywine.com{path}' for path in paths | {'/'}
+        f'https://www.teraearlywine.com{path}' for path in paths | {'/'} | blog_paths
     }
     for path in paths | {'/'}:
         document = client.get(path).get_data(as_text=True)

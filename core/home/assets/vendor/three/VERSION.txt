@@ -1,0 +1,2 @@
+Three.js 0.186.0
+Source: https://registry.npmjs.org/three/-/three-0.186.0.tgz
