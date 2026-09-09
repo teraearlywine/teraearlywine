@@ -7,6 +7,8 @@ const preview = document.getElementById('articlePreview');
 const connector = document.getElementById('cubeConnector');
 const status = document.getElementById('cubeStatus');
 const range = document.getElementById('growthRange');
+const growthToggle = document.getElementById('growthToggle');
+const growthControls = document.getElementById('growthControls');
 let cube;
 let currentIndex = 0;
 let lastPoint;
@@ -54,6 +56,7 @@ function clearSelection() {
 function resetView() {
   cube?.reset();
   showArticle(0);
+  document.getElementById('selectionStatus').textContent = '';
   updateConnector(null);
 }
 
@@ -72,10 +75,10 @@ function setCount(count) {
 }
 
 document.getElementById('resetCube').addEventListener('click', resetView);
-document.getElementById('growthToggle').addEventListener('click', event => {
+growthToggle.addEventListener('click', event => {
   const opening = event.currentTarget.getAttribute('aria-expanded') !== 'true';
   event.currentTarget.setAttribute('aria-expanded', String(opening));
-  document.getElementById('growthControls').hidden = !opening;
+  growthControls.hidden = !opening;
 });
 range.addEventListener('input', () => setCount(range.value));
 document.querySelectorAll('[data-count]').forEach(button => {
@@ -91,7 +94,16 @@ explorer.addEventListener('focusout', event => {
   if (!explorer.contains(event.relatedTarget)) clearSelection();
 });
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') resetView();
+  if (event.key !== 'Escape') return;
+  if (!growthControls.hidden && (growthControls.contains(event.target) || event.target === growthToggle)) {
+    event.preventDefault();
+    growthControls.hidden = true;
+    growthToggle.setAttribute('aria-expanded', 'false');
+    growthToggle.focus();
+  } else if (explorer.contains(event.target)) {
+    event.preventDefault();
+    resetView();
+  }
 });
 points.addEventListener('keydown', event => {
   if (event.key === 'Enter' && event.target.matches('.cube-pin')) {
