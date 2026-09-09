@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three/three.module.js';
 import { getCubePositions, getCubeConnections } from './blog-layout.js';
+import { getCubeCameraBounds, getCubeCameraSpan } from './blog-framing.js';
 
 const REST_ROTATION = { x: -0.04, y: -0.12 };
 const SPACING = 0.96;
@@ -37,6 +38,7 @@ export async function createBlogCube({
 
   const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
   const surface = canvas.parentElement;
+  const explorer = surface.closest('.cube-explorer') || surface;
   const disposables = new Set();
   const cleanups = [];
   const keep = (resource) => { disposables.add(resource); return resource; };
@@ -78,6 +80,11 @@ export async function createBlogCube({
   const coordinates = getCubePositions(articles.length);
   const side = Math.max(3, Math.ceil(Math.cbrt(articles.length)));
   const center = (side - 1) / 2;
+  camera.updateMatrixWorld(true);
+  const cameraBounds = getCubeCameraBounds({
+    side, spacing: SPACING, rotation: REST_ROTATION,
+    viewMatrix: camera.matrixWorldInverse.elements,
+  });
   const sphereGeometry = keep(new THREE.SphereGeometry(0.145, 36, 24));
   const sphereMaterial = keep(new THREE.MeshPhysicalMaterial({
     envMap: environmentTarget.texture,
@@ -191,6 +198,14 @@ export async function createBlogCube({
 
   function activate(index, source) {
     if (disposed || index >= count) return;
+    if (source === 'pointer') {
+      const focused = document.activeElement;
+      const keyboardPin = pointLayer.contains(focused) && focused.matches(':focus-visible');
+      const readingLink = explorer.contains(focused) && focused.matches('.article-preview a');
+      // Incidental hover must not change the destination a keyboard reader
+      // is about to open. An explicit click still selects another article.
+      if (keyboardPin || readingLink) return;
+    }
     setSelected(index);
     onSelect(index, source);
   }
@@ -292,10 +307,7 @@ export async function createBlogCube({
     width = Math.max(1, rect.width || surface.clientWidth);
     height = Math.max(1, rect.height || surface.clientHeight);
     const aspect = width / height;
-    // Keep the sculpture generous on wide screens, with a width guard on phones.
-    const span = aspect > 1.3
-      ? Math.max(side * 1.18, side * 1.55 / aspect)
-      : Math.max(side * 1.48, side * 1.5 / aspect);
+    const span = getCubeCameraSpan(side, aspect, cameraBounds);
     camera.left = -span * aspect / 2;
     camera.right = span * aspect / 2;
     camera.top = span / 2;
