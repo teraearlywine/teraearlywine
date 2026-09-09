@@ -14,7 +14,7 @@
     <meta name="google-site-verification" content="{{ search_console_verification }}">
     {% endif %}
 
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ page_og_type|default('website') }}">
     <meta property="og:site_name" content="Tera Earlywine">
     <meta property="og:title" content="{{ page_title }}">
     <meta property="og:description" content="{{ page_description }}">

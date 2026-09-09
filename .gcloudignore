@@ -36,7 +36,10 @@ scripts/
 .agents/
 .playwright-cli/
 
-docs/analytics
+# Documentation, tests, and visual review evidence are not runtime assets.
+docs/
+tests/
+design-qa.md
 
 # Local browser review evidence and uncompressed artwork masters.
 output/

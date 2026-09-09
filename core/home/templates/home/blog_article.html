@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'home/includes/header.html' %}
+<body class="blog-page blog-article-page">
+    {% include 'home/core/navigation.html' %}
+    <main id="main">
+        <article class="blog-essay">
+            <a class="blog-back" href="{{ url_for('index.blog') }}">Back to the cube</a>
+            <header class="essay-header">
+                <p class="blog-kicker">{{ article.category }} / {{ article.read_minutes }} min read</p>
+                <h1>{{ article.title }}</h1>
+                <p class="essay-dek">{{ article.dek }}</p>
+                <p class="essay-byline">Tera Earlywine</p>
+            </header>
+            <div class="essay-prose">
+                {% for section in article.sections %}
+                <section>
+                    <h2>{{ section.title }}</h2>
+                    {% for paragraph in section.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+                </section>
+                {% endfor %}
+            </div>
+            <nav class="essay-next" aria-label="Next article">
+                <span class="blog-kicker">Keep exploring</span>
+                <a class="writing-row" href="{{ url_for('index.blog_article', slug=next_article.slug) }}">{{ next_article.title }}<img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="26" height="26"></a>
+                <a class="blog-text-link" href="{{ url_for('index.blog') }}">Return to all articles</a>
+            </nav>
+        </article>
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+</body>
+</html>

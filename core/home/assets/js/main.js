@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.isIntersecting) {
         const id = entry.target.getAttribute('id');
         navLinks.forEach(link => {
-          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+          link.classList.toggle('active', link.getAttribute('aria-current') === 'page' || link.getAttribute('href') === '#' + id);
         });
       }
     });
