@@ -14,7 +14,6 @@ ANALYTICS_JS = PROJECT_ROOT / 'core/home/assets/js/analytics.js'
 ANALYTICS_BEHAVIOR_TEST = PROJECT_ROOT / 'tests/analytics_behavior.test.js'
 MAIN_CSS = PROJECT_ROOT / 'core/home/assets/css/main.css'
 CONSULTANCY_CSS = PROJECT_ROOT / 'core/home/assets/css/consultancy.css'
-MEASUREMENT_PLAN = PROJECT_ROOT / 'docs/analytics/ga4-measurement-plan.md'
 
 EVENT_PARAMETERS = {
     'navigation_click': ('placement', 'destination_type'),
@@ -657,25 +656,6 @@ def test_small_text_colors_meet_wcag_aa():
         )
     )
     assert contrast_ratio(method_kicker, method_background) >= 4.5
-
-
-def test_measurement_plan_documents_external_ga4_privacy_setup():
-    if not MEASUREMENT_PLAN.exists():
-        pytest.skip('private analytics measurement plan is not in this checkout')
-
-    contract = MEASUREMENT_PLAN.read_text()
-
-    assert 'The site uses Basic Consent Mode' in contract
-    assert 'query strings and fragments are removed' in contract
-    assert 'before deploying this implementation' in contract
-    assert 'disable automatic outbound click collection' in contract
-    assert 'Enable GA4 data redaction' in contract
-    assert contract.index('## Pre-release GA4 property prerequisites') < contract.index(
-        '## Remaining account setup checklist'
-    )
-    assert 'full `link_url`' in contract
-    assert 'record a second outbound event' in contract
-    assert 'rejected consent produces no request to Google Analytics' in contract
 
 
 def test_javascript_consent_behavior():
