@@ -1,0 +1,204 @@
+{
+  "observed_date": "2026-09-10",
+  "scope": "Live HTTP/canonical/indexability only; not proof of Google indexing",
+  "pages": [
+    {
+      "url": "https://www.teraearlywine.com/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/services/data-platform-modernization",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/services/data-platform-modernization",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/services/data-migration-rescue",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/services/data-migration-rescue",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/services/production-ai-systems",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/services/production-ai-systems",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/services/fractional-data-leadership",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/services/fractional-data-leadership",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/small-systems-clear-ownership/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/small-systems-clear-ownership/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/the-work-after-the-demo/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/the-work-after-the-demo/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/designing-for-the-long-run/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/designing-for-the-long-run/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/a-dashboard-needs-a-decision/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/a-dashboard-needs-a-decision/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/the-shape-of-a-handoff/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/the-shape-of-a-handoff/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/an-agent-needs-an-edge/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/an-agent-needs-an-edge/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/make-the-exception-visible/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/make-the-exception-visible/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/a-smaller-first-release/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/a-smaller-first-release/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/data-with-a-definition/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/data-with-a-definition/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/show-the-work-that-matters/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/show-the-work-that-matters/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/the-cost-of-a-hidden-rule/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/the-cost-of-a-hidden-rule/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/a-note-to-my-future-self/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/a-note-to-my-future-self/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/a-retry-is-a-design-choice/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/a-retry-is-a-design-choice/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/freshness-is-part-of-quality/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/freshness-is-part-of-quality/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/designing-a-calm-workflow/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/designing-a-calm-workflow/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/the-human-review-step/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/the-human-review-step/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/migration-as-a-sequence/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/migration-as-a-sequence/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/leave-room-for-a-question/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/leave-room-for-a-question/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/a-source-is-a-relationship/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/a-source-is-a-relationship/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/useful-automation-has-a-receipt/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/useful-automation-has-a-receipt/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/the-value-of-a-quiet-default/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/the-value-of-a-quiet-default/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/testing-the-uncomfortable-path/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/testing-the-uncomfortable-path/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/context-is-a-working-material/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/context-is-a-working-material/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/build-a-place-to-return/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/build-a-place-to-return/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/measure-the-whole-path/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/measure-the-whole-path/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/a-useful-stopping-point/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/a-useful-stopping-point/",
+      "noindex": false
+    },
+    {
+      "url": "https://www.teraearlywine.com/blog/one-more-point-of-view/",
+      "status": 200,
+      "canonical": "https://www.teraearlywine.com/blog/one-more-point-of-view/",
+      "noindex": false
+    }
+  ]
+}

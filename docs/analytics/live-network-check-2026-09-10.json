@@ -1,0 +1,213 @@
+{
+  "startedAt": "2026-09-10T17:04:14.192Z",
+  "baseUrl": "https://www.teraearlywine.com",
+  "collectionPolicy": "All Google collection intercepted and aborted; no ingestion or successful contact submission",
+  "results": [
+    {
+      "name": "approved_linkedin",
+      "checks": {
+        "noConsent": true,
+        "rejection": true,
+        "acceptance": true,
+        "cta": true,
+        "noPrivatePayload": true,
+        "revocation": true
+      },
+      "httpStatus": 200,
+      "config": {
+        "debugMode": false,
+        "measurementId": "G-NF6SVCGZDF",
+        "pagePath": "/"
+      },
+      "pageView": {
+        "tid": "G-NF6SVCGZDF",
+        "en": "page_view",
+        "dl": "https://www.teraearlywine.com/",
+        "dp": "/",
+        "dr": "https://www.google.com/",
+        "cs": "linkedin",
+        "cm": "social",
+        "cn": "website_baseline_2026_09",
+        "cc": "profile",
+        "ci": "",
+        "ck": "",
+        "_dbg": null
+      },
+      "cta": {
+        "en": "contact_click",
+        "ep.placement": "hero",
+        "ep.contact_method": "booking",
+        "ep.destination_type": "booking"
+      },
+      "collectionRequestsAborted": 6,
+      "eventNames": [
+        "page_view",
+        "scroll",
+        "contact_click"
+      ],
+      "assets": [
+        {
+          "url": "https://www.teraearlywine.com/static/assets/js/analytics.js?v=502a1f7e7454",
+          "status": 200,
+          "sha256": "502a1f7e745497f4c1ac3a413e1f86b2391bfc62ad168a597a695b697afd8812"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "approved_newsletter",
+      "checks": {
+        "noConsent": true,
+        "rejection": true,
+        "acceptance": true,
+        "cta": true,
+        "noPrivatePayload": true,
+        "revocation": true
+      },
+      "httpStatus": 200,
+      "config": {
+        "debugMode": false,
+        "measurementId": "G-NF6SVCGZDF",
+        "pagePath": "/"
+      },
+      "pageView": {
+        "tid": "G-NF6SVCGZDF",
+        "en": "page_view",
+        "dl": "https://www.teraearlywine.com/",
+        "dp": "/",
+        "dr": "https://www.linkedin.com/",
+        "cs": "newsletter",
+        "cm": "email",
+        "cn": "website_baseline_2026_09",
+        "cc": "footer",
+        "ci": "",
+        "ck": "",
+        "_dbg": null
+      },
+      "cta": {
+        "en": "contact_click",
+        "ep.placement": "hero",
+        "ep.contact_method": "booking",
+        "ep.destination_type": "booking"
+      },
+      "collectionRequestsAborted": 6,
+      "eventNames": [
+        "page_view",
+        "scroll",
+        "contact_click"
+      ],
+      "assets": [
+        {
+          "url": "https://www.teraearlywine.com/static/assets/js/analytics.js?v=502a1f7e7454",
+          "status": 200,
+          "sha256": "502a1f7e745497f4c1ac3a413e1f86b2391bfc62ad168a597a695b697afd8812"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "unknown_campaign",
+      "checks": {
+        "noConsent": true,
+        "rejection": true,
+        "acceptance": true,
+        "cta": true,
+        "noPrivatePayload": true,
+        "revocation": true
+      },
+      "httpStatus": 200,
+      "config": {
+        "debugMode": false,
+        "measurementId": "G-NF6SVCGZDF",
+        "pagePath": "/"
+      },
+      "pageView": {
+        "tid": "G-NF6SVCGZDF",
+        "en": "page_view",
+        "dl": "https://www.teraearlywine.com/",
+        "dp": "/",
+        "dr": "",
+        "cs": "",
+        "cm": "",
+        "cn": "",
+        "cc": "",
+        "ci": "",
+        "ck": "",
+        "_dbg": null
+      },
+      "cta": {
+        "en": "contact_click",
+        "ep.placement": "hero",
+        "ep.contact_method": "booking",
+        "ep.destination_type": "booking"
+      },
+      "collectionRequestsAborted": 6,
+      "eventNames": [
+        "page_view",
+        "scroll",
+        "contact_click"
+      ],
+      "assets": [
+        {
+          "url": "https://www.teraearlywine.com/static/assets/js/analytics.js?v=502a1f7e7454",
+          "status": 200,
+          "sha256": "502a1f7e745497f4c1ac3a413e1f86b2391bfc62ad168a597a695b697afd8812"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "unknown_path",
+      "checks": {
+        "noConsent": true,
+        "rejection": true,
+        "acceptance": true,
+        "cta": true,
+        "noPrivatePayload": true,
+        "revocation": true
+      },
+      "httpStatus": 404,
+      "config": {
+        "debugMode": false,
+        "measurementId": "G-NF6SVCGZDF",
+        "pagePath": "/404"
+      },
+      "pageView": {
+        "tid": "G-NF6SVCGZDF",
+        "en": "page_view",
+        "dl": "https://www.teraearlywine.com/404",
+        "dp": "/404",
+        "dr": "",
+        "cs": "",
+        "cm": "",
+        "cn": "",
+        "cc": "",
+        "ci": "",
+        "ck": "",
+        "_dbg": null
+      },
+      "cta": {
+        "en": "navigation_click",
+        "ep.placement": "error",
+        "ep.contact_method": null,
+        "ep.destination_type": "home"
+      },
+      "collectionRequestsAborted": 6,
+      "eventNames": [
+        "page_view",
+        "scroll",
+        "navigation_click"
+      ],
+      "assets": [
+        {
+          "url": "https://www.teraearlywine.com/static/assets/js/analytics.js?v=502a1f7e7454",
+          "status": 200,
+          "sha256": "502a1f7e745497f4c1ac3a413e1f86b2391bfc62ad168a597a695b697afd8812"
+        }
+      ],
+      "status": "passed"
+    }
+  ],
+  "status": "passed",
+  "finishedAt": "2026-09-10T17:05:10.730Z"
+}
