@@ -3,7 +3,8 @@
 <script id="analyticsConfig" type="application/json">
     {{ {
         'measurementId': measurement_id,
-        'debugMode': config.get('GOOGLE_ANALYTICS_DEBUG', false)
+        'debugMode': config.get('GOOGLE_ANALYTICS_DEBUG', false),
+        'pagePath': analytics_page_path | default('/404')
     } | tojson }}
 </script>
 {% endif %}

@@ -244,6 +244,17 @@ def seo_metadata():
     )
     is_blog = request.endpoint in {'index.blog', 'index.blog_article'}
     canonical_url = homepage_url if is_homepage else ''
+    # Derive analytics paths from registered routes and known content, never
+    # request.path: even a 404 URL may contain an email or private identifier.
+    analytics_page_path = '/404'
+    if is_homepage or request.endpoint == 'index.contact':
+        analytics_page_path = '/'
+    elif service:
+        analytics_page_path = url_for('index.service', slug=service_slug)
+    elif is_blog_index:
+        analytics_page_path = url_for('index.blog')
+    elif article:
+        analytics_page_path = url_for('index.blog_article', slug=article['slug'])
 
     structured_data = None
     if is_homepage and homepage_url:
@@ -406,6 +417,7 @@ def seo_metadata():
 
     return {
         'canonical_url': canonical_url,
+        'analytics_page_path': analytics_page_path,
         'is_homepage': is_homepage,
         'page_og_type': 'article' if article else 'website',
         'is_blog': is_blog,
