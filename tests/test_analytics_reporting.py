@@ -103,6 +103,23 @@ def test_ga_enabled_renders_basic_consent_controls_without_loading_google(
     assert 'assets/js/analytics.js' in document
 
 
+def test_production_ga_configuration_disables_debug_and_defers_google(app_factory):
+    document = render_home(app_factory(
+        GOOGLE_ANALYTICS_MEASUREMENT_ID='G-NF6SVCGZDF',
+        SITE_URL='https://www.teraearlywine.com',
+    ))
+    match = re.search(
+        r'<script id="analyticsConfig" type="application/json">\s*(.*?)\s*</script>',
+        document,
+        re.DOTALL,
+    )
+    assert json.loads(match.group(1)) == {
+        'measurementId': 'G-NF6SVCGZDF', 'debugMode': False,
+    }
+    assert 'googletagmanager.com' not in document
+    assert 'assets/js/analytics.js' in document
+
+
 def test_public_configuration_is_escaped_in_html_and_inline_json(app_factory):
     measurement_id = 'G-TEST"</script><script>alert(1)</script>'
     verification = 'token"><script>alert(2)</script>'

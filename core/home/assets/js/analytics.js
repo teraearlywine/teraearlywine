@@ -34,6 +34,55 @@ const EVENT_PARAMETERS = Object.freeze({
   contact_submit: [],
 });
 
+const PRODUCTION_MEASUREMENT_ID = 'G-NF6SVCGZDF';
+const PRODUCTION_HOSTS = new Set(['teraearlywine.com', 'www.teraearlywine.com']);
+const CAMPAIGN_TUPLES = new Map([
+  ['linkedin|social|website_baseline_2026_09|profile', {
+    campaign_source: 'linkedin', campaign_medium: 'social',
+    campaign_name: 'website_baseline_2026_09', campaign_content: 'profile',
+  }],
+  ['newsletter|email|website_baseline_2026_09|footer', {
+    campaign_source: 'newsletter', campaign_medium: 'email',
+    campaign_name: 'website_baseline_2026_09', campaign_content: 'footer',
+  }],
+]);
+const REFERRER_ORIGINS = new Map([
+  ['google.com', 'https://www.google.com/'],
+  ['www.google.com', 'https://www.google.com/'],
+  ['bing.com', 'https://www.bing.com/'],
+  ['www.bing.com', 'https://www.bing.com/'],
+  ['linkedin.com', 'https://www.linkedin.com/'],
+  ['www.linkedin.com', 'https://www.linkedin.com/'],
+  ['lnkd.in', 'https://www.linkedin.com/'],
+]);
+
+function canCollectAnalytics(config, hostname) {
+  if (!config || !config.measurementId) return false;
+  if (config.measurementId !== PRODUCTION_MEASUREMENT_ID) return true;
+  return config.debugMode === false
+    && PRODUCTION_HOSTS.has(hostname.toLowerCase());
+}
+
+function allowlistedAttribution(locationHref, referrer) {
+  const result = { page_referrer: '' };
+  try {
+    const url = new URL(locationHref);
+    const names = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
+    const values = names.map((name) => url.searchParams.getAll(name));
+    if (values.every((list) => list.length === 1 && !list[0].includes('|'))) {
+      const campaign = CAMPAIGN_TUPLES.get(values.map((list) => list[0]).join('|'));
+      if (campaign) Object.assign(result, campaign);
+    }
+  } catch (_) { /* Unknown campaign stays unknown. */ }
+  try {
+    const url = new URL(referrer);
+    if (url.protocol === 'https:' && !url.username && !url.password && !url.port) {
+      result.page_referrer = REFERRER_ORIGINS.get(url.hostname) || '';
+    }
+  } catch (_) { /* Unknown referrer stays blank. */ }
+  return result;
+}
+
 function readAnalyticsConfig() {
   const configElement = document.getElementById('analyticsConfig');
   if (!configElement) {
@@ -58,6 +107,7 @@ const analyticsConfig = readAnalyticsConfig();
 let analyticsEnabled = false;
 let googleAnalyticsInitialized = false;
 let sessionConsentChoice = null;
+let analyticsPageReferrer = '';
 
 function readConsentChoice() {
   try {
@@ -109,9 +159,7 @@ function notifyAnalyticsEnabled() {
 }
 
 function initializeGoogleAnalytics() {
-  if (!analyticsConfig) {
-    return;
-  }
+  if (!canCollectAnalytics(analyticsConfig, window.location.hostname)) return;
 
   analyticsEnabled = true;
   window[`ga-disable-${analyticsConfig.measurementId}`] = false;
@@ -127,6 +175,9 @@ function initializeGoogleAnalytics() {
     window.dataLayer.push(arguments);
   };
 
+  const attribution = allowlistedAttribution(window.location.href, document.referrer);
+  analyticsPageReferrer = attribution.page_referrer;
+
   window.gtag('js', new Date());
   window.gtag('set', 'ads_data_redaction', true);
   window.gtag('config', analyticsConfig.measurementId, {
@@ -134,7 +185,15 @@ function initializeGoogleAnalytics() {
     allow_ad_personalization_signals: false,
     cookie_domain: 'none',
     debug_mode: analyticsConfig.debugMode,
-    page_referrer: '',
+    // Explicit overrides prevent automatic UTM fallback, including unapproved
+    // term/id values alongside an otherwise approved campaign tuple.
+    campaign_source: '',
+    campaign_medium: '',
+    campaign_name: '',
+    campaign_content: '',
+    campaign_term: '',
+    campaign_id: '',
+    ...attribution,
     ...sanitizedPageLocation(),
   });
 
@@ -225,7 +284,7 @@ function trackEvent(eventName, parameters = {}) {
 
   window.gtag('event', eventName, {
     ...sanitized,
-    page_referrer: '',
+    page_referrer: analyticsPageReferrer,
   });
   return true;
 }

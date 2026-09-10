@@ -37,7 +37,7 @@ class FakeElement {
   }
 }
 
-function createHarness(initialConsent = null, storageAvailable = true) {
+function createHarness(initialConsent = null, storageAvailable = true, options = {}) {
   const storage = new Map();
   if (initialConsent) {
     storage.set('analytics_consent', initialConsent);
@@ -49,8 +49,8 @@ function createHarness(initialConsent = null, storageAvailable = true) {
   const contactSection = new FakeElement();
   const configElement = {
     textContent: JSON.stringify({
-      measurementId: 'G-TEST123',
-      debugMode: true,
+      measurementId: options.measurementId ?? 'G-TEST123',
+      debugMode: options.debugMode ?? true,
     }),
   };
   const banner = new FakeElement();
@@ -63,14 +63,14 @@ function createHarness(initialConsent = null, storageAvailable = true) {
   let cookieHeader = '';
   const document = {
     activeElement: null,
-    referrer: 'https://referrer.example/account?email=private%40example.com#secret',
+    referrer: options.referrer ?? 'https://referrer.example/account?email=private%40example.com#secret',
     head: {
       appendChild(element) {
         loadedScripts.push(element);
       },
     },
     getElementById(id) {
-      if (id === 'analyticsConfig') return configElement;
+      if (id === 'analyticsConfig') return options.missingConfig ? null : configElement;
       if (id === 'analyticsConsent') return banner;
       return null;
     },
@@ -149,12 +149,7 @@ function createHarness(initialConsent = null, storageAvailable = true) {
     document,
     IntersectionObserver: FakeIntersectionObserver,
     localStorage,
-    location: {
-      href: 'https://www.teraearlywine.com/work?email=person%40example.com#private',
-      hostname: 'www.teraearlywine.com',
-      origin: 'https://www.teraearlywine.com',
-      pathname: '/work',
-    },
+    location: new URL(options.href ?? 'https://www.teraearlywine.com/work?email=person%40example.com#private'),
   };
   const context = {
     Date,
@@ -169,6 +164,7 @@ function createHarness(initialConsent = null, storageAvailable = true) {
   vm.runInContext(analyticsSource, context, { filename: 'analytics.js' });
 
   return {
+    context,
     acceptButton,
     banner,
     contactSection,
@@ -405,3 +401,72 @@ assert.equal(serviceEvents.length, 1);
 assert.equal(serviceEvents[0][1], 'navigation_click');
 assert.equal(serviceEvents[0][2].destination_type, 'service');
 assert.equal(serviceEvents[0][2].placement, 'services');
+
+// Production routing must fail closed before a tag, config, or custom event exists.
+for (const host of ['localhost', '127.0.0.1', 'preview.example', 'teraearlywine.com.attacker.example', 'preview.teraearlywine.com']) {
+  const blocked = createHarness('accepted', true, {measurementId: 'G-NF6SVCGZDF', debugMode: false, href: `https://${host}/`});
+  dispatchContactSubmitted(blocked);
+  assert.equal(blocked.loadedScripts.length, 0, host);
+  assert.equal(blocked.window.gtag, undefined, host);
+  assert.deepEqual(commands(blocked), [], host);
+}
+for (const host of ['teraearlywine.com', 'www.teraearlywine.com']) {
+  const allowed = createHarness('accepted', true, {measurementId: 'G-NF6SVCGZDF', debugMode: false, href: `https://${host}/`});
+  allowed.acceptButton.click();
+  assert.equal(allowed.loadedScripts.length, 1);
+  const debugBlocked = createHarness('accepted', true, {measurementId: 'G-NF6SVCGZDF', debugMode: true, href: `https://${host}/`});
+  assert.equal(debugBlocked.loadedScripts.length, 0);
+}
+assert.equal(createHarness('accepted', true, {missingConfig: true}).loadedScripts.length, 0);
+assert.equal(createHarness('accepted', true, {href: 'http://localhost/', measurementId: 'G-TEST'}).loadedScripts.length, 1);
+
+const helperContext = createHarness().context;
+const attribution = (href, referrer = '') => JSON.parse(JSON.stringify(vm.runInContext(`allowlistedAttribution(${JSON.stringify(href)}, ${JSON.stringify(referrer)})`, helperContext)));
+const tagged = 'https://www.teraearlywine.com/?utm_source=linkedin&utm_medium=social&utm_campaign=website_baseline_2026_09&utm_content=profile';
+assert.equal(attribution(tagged).campaign_source, 'linkedin');
+assert.equal(attribution(tagged.replace('linkedin', 'newsletter').replace('social', 'email').replace('profile', 'footer')).campaign_source, 'newsletter');
+for (const href of [tagged + '&utm_source=private%40example.com', tagged.replace('linkedin', 'private%40example.com'), tagged.replace('&utm_content=profile', ''), tagged.replace('linkedin', 'linkedin%7C'), 'not a url']) {
+  assert.equal(attribution(href).campaign_source, undefined);
+}
+for (const referrer of ['https://www.google.com/search?q=private#secret', 'https://google.com/']) {
+  assert.equal(attribution(tagged, referrer).page_referrer, 'https://www.google.com/');
+}
+for (const referrer of ['https://www.google.com.attacker.example/', 'http://www.google.com/', 'https://user:password@www.google.com/', 'https://www.google.com:8443/', 'https://teraearlywine.com/', 'invalid']) {
+  assert.equal(attribution(tagged, referrer).page_referrer, '');
+}
+const attributed = createHarness(null, true, {href: tagged + '&utm_term=private%40example.com#secret', referrer: 'https://www.linkedin.com/private?secret=yes'});
+assert.deepEqual(commands(attributed), []);
+attributed.rejectButton.click();
+assert.equal(attributed.loadedScripts.length, 0);
+attributed.acceptButton.click();
+const attributedConfig = commands(attributed).find(([name]) => name === 'config')[2];
+assert.equal(attributedConfig.campaign_source, 'linkedin');
+assert.equal(attributedConfig.campaign_term, '');
+assert.equal(attributedConfig.campaign_id, '');
+assert.equal(attributedConfig.page_location, 'https://www.teraearlywine.com/');
+dispatchContactSubmitted(attributed);
+const attributedEvent = commands(attributed).filter(([name]) => name === 'event').at(-1)[2];
+assert.equal(attributedEvent.page_referrer, 'https://www.linkedin.com/');
+assert.equal(attributedEvent.campaign_source, undefined);
+assert.equal(JSON.stringify(commands(attributed)).includes('private'), false);
+attributed.reopenButton.click();
+const revokedCount = commands(attributed).length;
+dispatchContactSubmitted(attributed);
+assert.equal(commands(attributed).length, revokedCount);
+
+assert.equal(vm.runInContext("canCollectAnalytics(null, 'www.teraearlywine.com')", helperContext), false);
+assert.equal(vm.runInContext("canCollectAnalytics({measurementId: 'G-NF6SVCGZDF'}, 'www.teraearlywine.com')", helperContext), false);
+const unknownCampaign = createHarness('accepted', true, {href: tagged.replace('linkedin', 'private%40example.com')});
+const unknownConfig = commands(unknownCampaign).find(([name]) => name === 'config')[2];
+for (const field of ['campaign_source', 'campaign_medium', 'campaign_name', 'campaign_content', 'campaign_id', 'campaign_term']) {
+  assert.equal(unknownConfig[field], '');
+}
+assert.equal(JSON.stringify(commands(unknownCampaign)).includes('private'), false);
+for (const [referrer, origin] of [
+  ['https://www.bing.com/search?q=private', 'https://www.bing.com/'],
+  ['https://bing.com/', 'https://www.bing.com/'],
+  ['https://lnkd.in/private', 'https://www.linkedin.com/'],
+  ['https://linkedin.com/private', 'https://www.linkedin.com/'],
+]) {
+  assert.equal(attribution(tagged, referrer).page_referrer, origin);
+}
