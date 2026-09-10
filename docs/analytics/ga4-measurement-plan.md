@@ -151,7 +151,7 @@ retain the banner disclosure.
 Before release, read back automatic outbound-click collection disabled (avoiding
 full `link_url` and overlap), email/query-parameter redaction enabled, and all
 remaining enhanced-measurement settings compatible with this contract. Record
-unwanted-referral and retention settings. September 10 native readback confirms automatic outbound OFF, email redaction
+unwanted-referral and retention settings. September 10 read-only follow-up recorded Event data retention 2 months, User data 14 months, Reset on new user activity ON, and no nonempty unwanted-referral domain for the website tag. These settings were unchanged; see [the verification record](2026-09-10-acceptance-evidence.md). September 10 native readback confirms automatic outbound OFF, email redaction
 ON and query redaction ON for `email`, `firstname`, `lastname`, `address`, `phone`.
 Site search was disabled after an intercepted payload demonstrated a `q` marker
 leak; OFF persisted after reload and reopening settings. Form interactions,
