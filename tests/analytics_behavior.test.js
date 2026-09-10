@@ -481,3 +481,12 @@ for (const href of ['https://www.teraearlywine.com/person@example.com', 'https:/
   assert.equal(JSON.stringify(commands(unknownPage)).includes('PRIVATE_'), false);
   assert.equal(JSON.stringify(commands(unknownPage)).includes('person@example.com'), false);
 }
+
+// A false debug_mode parameter is not equivalent to omitting it in GA4.
+const productionDebugCheck = createHarness('accepted', true, {measurementId: 'G-NF6SVCGZDF', debugMode: false});
+const productionTagConfig = commands(productionDebugCheck).find(([name]) => name === 'config')[2];
+assert.equal(Object.hasOwn(productionTagConfig, 'debug_mode'), false);
+const testDebugCheck = createHarness('accepted', true, {measurementId: 'G-TEST123', debugMode: true, href: 'http://localhost/'});
+assert.equal(commands(testDebugCheck).find(([name]) => name === 'config')[2].debug_mode, true);
+const testNonDebugCheck = createHarness('accepted', true, {measurementId: 'G-TEST123', debugMode: false, href: 'http://localhost/'});
+assert.equal(Object.hasOwn(commands(testNonDebugCheck).find(([name]) => name === 'config')[2], 'debug_mode'), false);

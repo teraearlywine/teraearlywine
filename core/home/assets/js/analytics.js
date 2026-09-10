@@ -180,7 +180,9 @@ function initializeGoogleAnalytics() {
     allow_google_signals: false,
     allow_ad_personalization_signals: false,
     cookie_domain: 'none',
-    debug_mode: analyticsConfig.debugMode,
+    // GA4 requires omission to disable debug mode; false is not sufficient.
+    // The production host guard already rejects debugMode=true.
+    ...(analyticsConfig.debugMode ? { debug_mode: true } : {}),
     // Explicit overrides prevent automatic UTM fallback, including unapproved
     // term/id values alongside an otherwise approved campaign tuple.
     campaign_source: '',
