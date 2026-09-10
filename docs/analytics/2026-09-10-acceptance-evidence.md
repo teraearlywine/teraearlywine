@@ -118,3 +118,23 @@ PR #29 was independently reviewed, merged, and deployed as **`ga4-20260910-6a44b
 All 160 tests and the real-library network regression passed for the corrected code before merge. The earlier intake acknowledgment and HTTP204 tests occurred on the first release and remain labeled as such. They do not substitute for corrected-release native reporting acceptance.
 
 The final actual-serving matrix passed from `17:13:35` through `17:14:28 UTC`: all four cases, explicit consent/rejection/revocation, actual CTA event and payload privacy passed. Both `_dbg` and `ep.debug_mode` were absent across production payloads; live asset hash matched the reviewed corrected commit. All 24 requests were aborted, with zero new ingestion or form submissions. See `final-live-network-check-2026-09-10.json`. Realtime still did not establish the earlier expected contact events, and no native corrected-release receipt is claimed.
+
+## Final saved report layouts
+
+The reporting agent reopened the saved first-user and landing-page tabs and recorded these eight final layouts. Every tab retains the fixed dates and both production scope filters above; event-specific filters are additional.
+
+| Report / tab | Ordered dimensions and metrics | Additional event filter |
+|---|---|---|
+| traffic / Daily; owner tests may remain | Date, Views, Active users, Total users, Sessions, Engaged sessions | None |
+| traffic / Session-start events; not Sessions | Date, Event count | Event name exactly matches session_start |
+| acquisition / Session sources; shares withheld | Session source / medium, Session campaign, Active users, Total users, Sessions, Engaged sessions, Engagement rate | None |
+| acquisition / First-user sources; owner tests may remain | First user source / medium, New users | None |
+| content / Page paths; owner tests may remain | Page path and screen class, Active users, Total users, Views | None |
+| content / Landing pages; owner tests may remain | Landing page, Sessions, Engaged sessions, Engagement rate | None |
+| contact / Parallel paths; inquiries Unknown | Event name, Total users, Event count, Key events | Event name matches regex ^contact_(view|click|submit)$ |
+| contact / CTA dimensions; population pending | Event name, Contact method, CTA placement, Destination type, Total users, Event count, Key events | Event name matches regex ^contact_click$ |
+
+
+The first-user tab shows `(direct) / (none)` with 7 New users. The landing-page tab uses Landing page without query strings and shows `/`, 17 Sessions, 11 Engaged sessions and 64.71% Engagement rate. The exact requested average engagement time per active user metric was unavailable in the native Exploration selector; no session-based substitute is presented under that label. Verified legitimate-inquiry counts remain Unknown, and the private controlled QA receipt is excluded from such counts.
+
+The execution agent verified all 10 preserved CSV hashes, including two explicitly superseded exports. The private final manifest SHA256 is `9ce76eaf0970094247cda139490b44f38da549adeb3cf514c077059be50f66dc`. It records all eight final tab layouts and each export's complete filter list. The saved report contract still awaits native fresh receipts, dimension population, and owner/test acceptance.
