@@ -1,6 +1,14 @@
 # Contact outcome reconciliation — TER-43
 
-Audit date: September 10, 2026. Source implementation: `46519e2a8222f9dd6022805d578422f345c9fbf3` (origin/main). Status: **Review; live acceptance incomplete**.
+Audit and acceptance date: September 10, 2026. Original audit implementation: `46519e2a8222f9dd6022805d578422f345c9fbf3`. Status: **Acceptance complete for TER-43 scoped criteria**; continuing evidence boundaries are recorded below.
+
+## Current acceptance closure
+
+The [acceptance evidence](2026-09-10-acceptance-evidence.md), completed in [PR #31](https://github.com/teraearlywine/teraearlywine/pull/31) and [PR #32](https://github.com/teraearlywine/teraearlywine/pull/32), closes TER-43's scoped acceptance. One corrected-release QA submission at `2026-09-10T19:39:33.197Z` produced one observed mailbox notification and one matching intake receipt, [TER-49](https://linear.app/idea-factory-lab/issue/TER-49), explicitly canceled as QA. The private request marker matched those two delivery records and remains outside analytics.
+
+A subsequent native QA exploration filtered to Stream ID `15512913765` and public-host regex `^(www\.)?teraearlywine\.com$` showed **1 `contact_submit` event, 1 user and 1 key event**. Hour `2026091012` at GMT-07:00 is consistent with the controlled submission; it is not a unique join to the private delivery records. Source remained `(not set)`. The Today selector resolved to September 10 at observation, rather than defining an immutable report window.
+
+Existing controlled fixtures establish invalid/failure, repeated-request and concurrent-submit behavior within their tested scope. Serving-release consent and actual network checks are recorded in the acceptance evidence. Together with the controlled delivery and scoped native success receipt, these satisfy TER-43; a live provider failure/replay exercise or private-identifier analytics join is not an additional closure requirement. Provider-wide persistence/idempotency remains unproved, historical outcomes remain **Unknown**, enhanced `form_start` remains excluded pending follow-up, and booking clicks remain intent only. This contact-specific closure does not establish campaign attribution, a clean traffic baseline or a completed booking.
 
 ## Historical evidence
 
@@ -23,7 +31,7 @@ The full [TER-29](https://linear.app/idea-factory-lab/issue/TER-29) and [TER-37]
 | --- | --- | --- |
 | Contact form | `/contact` validates fields, CSRF, honeypot and the session-issued opaque ID. It accepts a broker receipt only with a matching submission ID and boolean replay flag. | A success response alone does not establish a legitimate inquiry, provider delivery status or qualified opportunity. |
 | Repeated form request | Session state reuses successful delivery state; normalized content is bound to the ID. Broker HMAC requests reuse that ID on retry. | Local tests do not prove broker persistence, provider idempotency or production behavior under concurrent requests with stale cookies. |
-| `contact_submit` | The enhanced form dispatches `contact:submitted` after an accepted success response. Analytics then gates collection on consent and sends no contact fields or ID. | GA4 receipt, exact unique-delivery counts and an actual business inquiry require separate evidence. A non-JavaScript successful form has no browser success event. |
+| `contact_submit` | The enhanced form dispatches `contact:submitted` after an accepted success response. Analytics then gates collection on consent and sends no contact fields or ID. | A scoped native QA success receipt is now observed; exact unique-delivery counts and an actual business inquiry require separate evidence. A non-JavaScript successful form has no browser success event. |
 | `contact_click` booking | Configured booking links occur in homepage hero/contact and service hero templates. The configured destination is a Google Calendar booking link. | A click does not establish a booked call. Count bookings only after a native calendar booking receipt is reviewed. |
 | Email intent | The analytics schema can represent `contact_method=email`. | No `mailto:` link exists in the audited templates. Email is not an active measured contact path in this build. A delivered inbound email must be verified in intake/mailbox evidence. |
 | Enhanced `form_start` | No application-specific `form_start` implementation exists in the audited source. | Correspondence to this contact form has not been established. Exclude it from conversion calculations until a controlled native browser/GA4 check confirms the originating form and ordering. |
@@ -39,13 +47,15 @@ The existing `tests/test_contact.py` suite passed all 25 cases with mocked broke
 - A second submit while the first request is in flight makes no second request and emits no extra success.
 - Failure keeps the original form ID for a safe retry.
 
-The existing analytics harness separately checks that accepted-consent `contact:submitted` produces `contact_submit` without private event detail. These are local contract tests, not real broker, mailbox, calendar or GA4 receipts. No contact submission or message was sent during this audit.
+The existing analytics harness separately checks that accepted-consent `contact:submitted` produces `contact_submit` without private event detail. These are local contract tests, not real broker, mailbox, calendar or GA4 receipts. No contact submission or message was sent during the original local audit; the later authorized controlled production receipt is recorded above.
 
-## Remaining acceptance evidence
+## Historical acceptance checklist and continuing boundaries
 
-1. Preserve the fixed property timezone readback and the original GA4 export provenance with the private audit evidence. Keep both historical events **Unknown** unless a unique, evidence-supported match becomes available; the later Linear records cannot supply that match.
-2. For one separately authorized controlled production success, record a private QA marker, exact timestamp/offset, submitted opaque ID, accepted broker receipt, exactly one provider/intake delivery and the corresponding consented `contact_submit` receipt in the intended GA4 stream. Keep private identifiers out of GA4 and public evidence.
-3. Repeat the same opaque request in a controlled fixture or explicitly authorized production test and establish one delivery total. Verify invalid validation and delivery failure produce no `contact_submit`; a simulated local upstream failure is not a production-provider failure receipt.
-4. Verify consent acceptance/refusal/revocation and actual network payloads on the serving release. Do not mark live acceptance complete based on mocked tests.
-5. Verify any claimed booked call with its native calendar receipt. If email is later exposed as a CTA, verify its rendered destination and report its click as intent only.
-6. Validate enhanced `form_start` against the actual form in an isolated test collection context. Until that happens, retain it as an unvalidated metric and omit ordered-form conversion rates.
+The original checklist is resolved for TER-43 as follows; these entries distinguish completed scoped checks from ongoing reporting limits.
+
+1. **Fulfilled:** fixed property timezone and original export provenance are retained. Both historical events remain **Unknown**; later Linear records do not establish a match.
+2. **Fulfilled:** the authorized corrected-release success has one observed mailbox notification, one matching intake receipt and a scoped native `contact_submit`/key-event receipt. Hour-level consistency does not establish a unique analytics-to-delivery join. Private identifiers remain outside GA4 and public evidence.
+3. **Fulfilled within fixture scope:** invalid/failure, repeated-success and concurrent-submit checks establish the tested behavior. They do not prove provider-wide persistence/idempotency or a live provider failure. Those broader claims are outside this closure; another production failure/replay test is not required for TER-43 acceptance.
+4. **Fulfilled:** serving-release consent acceptance/refusal/revocation and actual network payload checks are recorded in the acceptance evidence, separately from mocked tests.
+5. **Continuing boundary:** a booked call requires a native calendar receipt. No booking is claimed; booking clicks are intent only. Any future email CTA requires destination and intent verification.
+6. **Follow-up, excluded from current metrics:** enhanced `form_start` remains unvalidated against the actual contact form. Omit it and ordered-form conversion rates until isolated validation establishes the originating form and ordering.
