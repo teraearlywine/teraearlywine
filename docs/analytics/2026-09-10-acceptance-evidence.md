@@ -154,3 +154,19 @@ Before this new test, the native Events report for September 10 (Today, unfilter
 An independent read-only native audit at approximately 19:39:50 UTC on September 10 recorded [property data retention](https://analytics.google.com/analytics/web/#/a391533598p533228502/admin/datapolicies/dataretention): **Event data 2 months; User data 14 months; Reset on new user activity ON**. Save was disabled. These property settings affect the shared property; none was changed.
 
 Website stream 15512913765 → Google tag G-NF6SVCGZDF → List unwanted referrals displayed one **Referral domain contains** row with an empty Domain field and no nonempty configured domain. Save was disabled; the audit exited without editing or saving. This is not a populated referral exclusion and does not explain the acquisition discrepancy. Existing client-side referrer bounds are a separate collection control.
+
+## Acquisition comparison with the original report scope
+
+An independent native recheck completed at `2026-09-10T19:43:37.827719Z` uses the standard Traffic acquisition report, Session source / medium, All Users, no stream/hostname filters or comparisons, an empty table search, and all rows (1–2 of 2). The UI's Last 28 days resolved to **August 13–September 9, 2026 inclusive**, confirmed by the new CSV header. The four saved historical explorations were unchanged.
+
+| Native row | Sessions | Engaged sessions | Engagement rate | Event count |
+| --- | ---: | ---: | ---: | ---: |
+| Total | 33 | 23 | 69.7% displayed (23/33) | 298 |
+| (direct) / (none) | 33 | 23 | 0.696969696969697 in export (23/33) | 289 |
+| (not set) | 2 | 0 | 0 (0/2) | 9 |
+
+The compatible report still has 33 total Sessions versus 35 summed row Sessions. The native quality popover says **Unsampled report, 100% available data, Reporting showing intraday and daily data**. It provides no sampling or aggregation explanation for this discrepancy. The `(not set)` warning says no data was received for that value; it does not prove the discrepancy's cause. A separate primary-channel-group export labels these rows Direct and Unassigned; those labels must not be confused with the Session source / medium labels. Reporting identity remains the separately verified Blended setting; no cause is inferred. Channel shares remain withheld.
+
+**Source-date correction:** the earlier private `Traffic_acquisition_Session_source_medium.csv` header actually covers **June 12–September 9**, with 22 engaged sessions and 297 events; it must not be presented as an August 13–September 9 export. The new `Traffic_acquisition_Session_source_medium (1).csv` independently confirms the latter dates, 23 engaged sessions and 298 events, while reproducing the same 33-versus-35 session discrepancy. Original bytes are preserved separately.
+
+The private `ga4-acquisition-followup` manifest records native source URL, dates, scope, identity, quality notices and all three CSV hashes. New matched source/medium CSV SHA256: `cac5396d4b7cd11858ad155ac31f8e1f49a6b2bfe82f6771f5bf226b605eb04d`; manifest SHA256: `962075e38921ef4f91db1695a75c30ef6ff35ebd8603c598f752ed26af68c8a7`. The execution agent independently rehashed the preserved files. The same-scope investigation is now evidenced; the unresolved cause remains an explicit limitation, as TER-45 permits.
