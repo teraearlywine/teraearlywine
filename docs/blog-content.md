@@ -2,9 +2,15 @@
 
 The blog at `/blog/` uses the website's graphite, ivory, stone, and Inter visual language. Each article adds one point to the interactive sculpture. The first nine articles form a square, and 27 complete a 3 × 3 × 3 cube. Later articles extend the next outer shell while retaining the existing point coordinates.
 
-## First collection
+## GTM-aligned collection
 
-`core/home/blog_content.py` contains 27 original essays and notes about systems, AI and work, and the human side of building. They use Tera's first-person voice to express design principles and working practices, without invented client anecdotes or outcome claims. The first three entries offer a longer reading experience; the other notes explore distinct ideas.
+`core/home/blog_content.py` contains 27 articles written in third person for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
+
+The featured reading path contains three practical pieces: cloud bills versus carbon evidence, dashboard refresh frequency, and repeated processing before AI scales. Existing IDs, slugs, and article order remain stable, preserving published URLs and cube positions. Other articles retain their underlying topic while replacing personal reflections with a recognizable problem, an investigation, and a useful first step.
+
+The index and each article include a relevant offer and a link to the existing contact section. The primary offer is the paid Data Waste & Efficiency Diagnostic; follow-on articles connect to the AI-Ready Data Foundation Blueprint, Production AI Lighthouse, or Data & AI Reliability Office. Copy describes scope and deliverables without inventing prices, available capacity, client results, affiliations, or guaranteed savings.
+
+The refresh-frequency calculation is explicitly illustrative. Cost, resource use, and provider-reported emissions remain separate measurements. Environmental claims retain reporting boundaries and uncertainty; implementation and formal carbon assurance are separately scoped. Technical and measurement sections link to the Google Cloud and FinOps sources that support them. The internal strategy and acquisition operating details are not public article content.
 
 The user approved generating and publishing this collection. The blog routes are public in production without enabling debug or testing. Blog appears before Expertise in the shared navigation. Every article is also available through the HTML article list, including when the interactive cube cannot run.
 
@@ -20,11 +26,12 @@ Each article has:
 - `slug`: a unique URL segment.
 - `title`, `category`, and `dek`: plain-text display content.
 - `read_minutes`: an estimated reading time.
-- `sections`: a list of `{title, paragraphs}` objects.
+- `sections`: a list of `{title, paragraphs, sources}` objects; `sources` contains optional reference links with `title` and `url`.
+- `offer`: the relevant offer's `name`, `description`, and `cta`, selected from `OFFERS`.
 
-Cube coordinates follow the order of `ARTICLES`. Append new entries to preserve existing points; do not prepend or reorder this list. The two featured writing rows are currently an editorial selection of entries 2 and 3, independent of future publication scheduling.
+Cube coordinates follow the order of `ARTICLES`. Append new entries to preserve existing points; do not prepend or reorder this list. `FEATURED_ARTICLES` selects entries 25, 4, and 2 independently of cube order and publication scheduling. The archive lists all remaining articles.
 
-The index template receives `articles` and `cube_articles`. The latter is a JSON-safe list with `id`, `slug`, `title`, `category`, `dek`, `read_minutes`, and a server-generated `url`, rendered through Jinja's `tojson` filter.
+The index template receives `articles`, `featured_articles`, `diagnostic_offer`, and `cube_articles`. The latter is a JSON-safe list with `id`, `slug`, `title`, `category`, `dek`, `read_minutes`, and a server-generated `url`, rendered through Jinja's `tojson` filter. `BLOG_DESCRIPTION` keeps the index metadata and structured-data description consistent.
 
 The article template receives `article`, `next_article`, and `articles`. Both routes pass `is_blog=True` so shared templates load the blog styles and identify the current navigation item.
 

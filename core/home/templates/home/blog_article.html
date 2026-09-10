@@ -17,9 +17,18 @@
                 <section>
                     <h2>{{ section.title }}</h2>
                     {% for paragraph in section.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+                    {% if section.sources %}
+                    <p class="essay-sources">Reference: {% for source in section.sources %}<a href="{{ source.url }}">{{ source.title }}</a>{% if not loop.last %}; {% endif %}{% endfor %}.</p>
+                    {% endif %}
                 </section>
                 {% endfor %}
             </div>
+            <section class="blog-offer essay-offer" aria-labelledby="essay-offer-heading">
+                <p class="blog-kicker">A relevant next step</p>
+                <h2 id="essay-offer-heading">{{ article.offer.name }}</h2>
+                <p>{{ article.offer.description }}</p>
+                <a class="blog-text-link" href="{{ url_for('index.index') }}#contact">{{ article.offer.cta }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
+            </section>
             <nav class="essay-next" aria-label="Next article">
                 <span class="blog-kicker">Keep exploring</span>
                 <a class="writing-row" href="{{ url_for('index.blog_article', slug=next_article.slug) }}">{{ next_article.title }}<img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="26" height="26"></a>
