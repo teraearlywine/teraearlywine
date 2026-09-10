@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
           setStatus(
             response.status === 400
               ? 'Please check the highlighted fields and try again.'
-              : 'We could not send your message right now. Please try again.',
+              : 'The message could not be sent right now. Please try again.',
             true,
           );
           return;
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setStatus(
           error?.name === 'AbortError'
             ? 'Delivery is taking longer than expected. Please wait a moment before trying again.'
-            : 'We could not send your message right now. Please try again.',
+            : 'The message could not be sent right now. Please try again.',
           true,
         );
       } finally {

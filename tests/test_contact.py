@@ -390,7 +390,7 @@ def test_timeout_returns_generic_error_without_secrets_or_submission_content(
     assert response.status_code == 502
     assert response.json == {
         'errors': {},
-        'message': 'We could not send your message right now. Please try again.',
+        'message': 'The message could not be sent right now. Please try again.',
         'ok': False,
     }
     for private_value in (
@@ -442,7 +442,7 @@ def test_html_delivery_failure_does_not_echo_submission_content(
     document = response.get_data(as_text=True)
 
     assert response.status_code == 502
-    assert 'We could not send your message right now. Please try again.' in document
+    assert 'The message could not be sent right now. Please try again.' in document
     for private_value in (TEST_NAME, TEST_EMAIL, TEST_MESSAGE):
         assert private_value not in document
 

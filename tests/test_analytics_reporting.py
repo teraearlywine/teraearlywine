@@ -194,11 +194,11 @@ def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
     )
 
     assert (
-        'I fix the data systems your reporting, compliance, and AI depend on.'
+        'Tera strengthens the data systems that reporting, compliance, and AI depend on.'
         in document
     )
     assert (
-        'I work with leaders in regulated and critical operations'
+        'Tera Earlywine helps leaders in regulated and critical operations'
         in document
     )
     assert 'Value / Risk Diagnostic' in document
