@@ -170,3 +170,26 @@ The compatible report still has 33 total Sessions versus 35 summed row Sessions.
 **Source-date correction:** the earlier private `Traffic_acquisition_Session_source_medium.csv` header actually covers **June 12–September 9**, with 22 engaged sessions and 297 events; it must not be presented as an August 13–September 9 export. The new `Traffic_acquisition_Session_source_medium (1).csv` independently confirms the latter dates, 23 engaged sessions and 298 events, while reproducing the same 33-versus-35 session discrepancy. Original bytes are preserved separately.
 
 The private `ga4-acquisition-followup` manifest records native source URL, dates, scope, identity, quality notices and all three CSV hashes. New matched source/medium CSV SHA256: `cac5396d4b7cd11858ad155ac31f8e1f49a6b2bfe82f6771f5bf226b605eb04d`; manifest SHA256: `962075e38921ef4f91db1695a75c30ef6ff35ebd8603c598f752ed26af68c8a7`. The execution agent independently rehashed the preserved files. The same-scope investigation is now evidenced; the unresolved cause remains an explicit limitation, as TER-45 permits.
+
+## Scoped form-success receipt and user waiver
+
+A subsequent September 10 native readback in the signed-in internal browser used a separate [QA exploration](https://analytics.google.com/analytics/web/#/analysis/a391533598p533228502/edit/62iKwF2GT0ivuRWddcgZAA), with **Stream ID exactly matches `15512913765` AND Hostname matches `^(www\.)?teraearlywine\.com$`**. It showed `contact_submit`: **1 user, 1 event, 1 key event**. A separate production-scoped standard Events report showed hour `2026091012`, consistent with the 19:39 UTC corrected-release QA submission under the property's displayed GMT-07:00 offset. This hour-level agreement is not a unique join to the private intake/mailbox receipt. That standard Events report, using Session source / medium as the secondary dimension, showed `(not set)`; the approved campaign classification is not established.
+
+The QA selector was **Today**, resolving to September 10 at observation. This URL is not an immutable dated snapshot; later visits must verify the selected date. The four saved historical reports retain their original fixed dates. The scoped form-success/key-event observation supersedes the earlier missing-receipt status for that event only. It does not establish booking-click ingestion or populated CTA parameters.
+
+The user explicitly approved skipping/canceling the unresolved **booking-click native ingestion and CTA-parameter population verification** and proceeding with the goal. The waiver removed these two checks as acceptance blockers; the waiver itself is not a pass. Do not infer a verified CTA conversion, completed booking, legitimate inquiry or campaign attribution from this waiver. Preserve the historical `(not set)` breakdown; later native population evidence is recorded separately below.
+
+This narrow waiver does not waive the unresolved attribution/source classification, historical acquisition discrepancy, or internal/owner-test contamination controls. It does not declare a clean baseline or remove the requirement for 30 complete property-calendar days after release and reporting acceptance, followed by at least 48 hours of processing. Baseline dates remain unset until the remaining acceptance decisions are recorded.
+
+## Later processed booking-event evidence
+
+At approximately 23:26 UTC on September 10, an additional read of the existing QA exploration showed new processed data without generating more test traffic. The selector still displayed Today, September 10. Exact Stream ID 15512913765 and the public-host regex remained applied. The parallel-contact tab now showed `contact_click`: 2 users, 3 events, 0 key events; `contact_submit`: 1 user, 1 event, 1 key event; and `contact_view`: 3 users, 4 events, 0 key events. Unique users must not be summed across rows.
+
+The CTA tab retained the same scope plus exact `contact_click` filtering and showed these native parameter combinations:
+
+| Event | Contact method | CTA placement | Destination type | Users | Events | Key events |
+| --- | --- | --- | --- | ---: | ---: | ---: |
+| contact_click | booking | contact | booking | 1 | 1 | 0 |
+| contact_click | booking | hero | booking | 2 | 2 | 0 |
+
+This establishes native booking-event receipt and population of all three registered CTA dimensions for the scoped test day. It does not uniquely attribute an event to a particular test click or prove a booked appointment, legitimate inquiry, clean baseline, or useful campaign classification. The prior waiver remains the owner's scope decision; this later evidence is an observation, not a reinstated testing gate. The historical reports and native settings were unchanged.

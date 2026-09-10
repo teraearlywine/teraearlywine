@@ -17,8 +17,8 @@ or separate dashboard is in scope.
 | Reporting timezone | September 10, 2026 Admin readback: country United Kingdom; selected label `(GMT-07:00) GMT-07:00`. Do not infer an IANA zone or daylight-saving behavior from this label. |
 | Timezone evidence | [Property settings](https://analytics.google.com/analytics/web/#/a391533598p533228502/admin/property/settings); unchanged; historical timezone changes unknown |
 | Historical windows | August 13–September 9, 2026; history check June 12–September 9, 2026, inclusive property-calendar dates |
-| Release acceptance | Serving version and consent/payload checks verified September 10; native GA4 receipt and internal/test controls pending TER-44. See [acceptance evidence](2026-09-10-acceptance-evidence.md). |
-| Report acceptance | Four scoped reports saved and historical exports preserved; fresh dimension/receipt and owner/test acceptance pending TER-45. |
+| Release acceptance | Serving version, consent/payload checks and scoped native form-success receipt verified September 10; internal/test controls remain unresolved. Booking-click verification was waived by the user; later scoped booking events and CTA parameter population were observed. Attribution validation remains unresolved. See [acceptance evidence](2026-09-10-acceptance-evidence.md). |
+| Report acceptance | Four scoped reports saved and historical exports preserved; scoped form-success receipt observed. User waived booking-click native ingestion and CTA-parameter population verification; later native CTA population is recorded separately. Owner/test acceptance and attribution limits remain unresolved. |
 | Baseline start | Not started; next complete property-calendar day after both release and report acceptance |
 
 Public-host filtering removes local hosts, not all owner/testing visits. The
@@ -82,8 +82,12 @@ receipt ledger.
 On September 10, live Admin readback verified these Event-scoped definitions:
 Contact method → `contact_method`; CTA placement → `placement`; Destination type
 → `destination_type`. [Custom definitions](https://analytics.google.com/analytics/web/#/a391533598p533228502/admin/customdefinitions/hub)
-are registered; new-event population remains pending processing and TER-42
-verification. September 10 native Admin verifies `contact_submit` as primary key event,
+are registered. On September 10 the user waived booking-click native ingestion
+and CTA-parameter population verification as acceptance blockers. A later scoped
+QA report showed three booking-click events with booking method/destination and
+hero/contact placements. This native population evidence does not prove individual
+test linkage, completed appointments or CTA conversion rates.
+September 10 native Admin verifies `contact_submit` as primary key event,
 counting **Once per event**. Its original designation effective date remains
 unknown; the readback date does not establish when counting began.
 Keep `contact_click` outside key-event totals. Neither designation nor dimension
