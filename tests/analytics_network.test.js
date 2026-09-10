@@ -12,7 +12,7 @@ const path = require('node:path');
 
 const source = fs.readFileSync(path.join(__dirname, '../core/home/assets/js/analytics.js'), 'utf8');
 const html = `<!doctype html><title>Analytics boundary test</title>
-<script id="analyticsConfig" type="application/json">{"measurementId":"G-NF6SVCGZDF","debugMode":false}</script>
+<script id="analyticsConfig" type="application/json">{"measurementId":"G-NF6SVCGZDF","debugMode":false,"pagePath":"/"}</script>
 <div id="analyticsConsent"><button data-consent-choice="accepted">Accept</button>
 <button data-consent-choice="rejected">Reject</button></div><button data-consent-reopen>Privacy</button>
 <form action="/contact" method="post" data-contact-form>
@@ -28,7 +28,9 @@ test('live Google tag honors consent and bounded attribution in serialized reque
     ...(process.env.GA4_BROWSER_CHANNEL ? {channel: process.env.GA4_BROWSER_CHANNEL} : {}),
   });
   try {
-    for (const variant of ['unknown', 'linkedin', 'newsletter']) {
+    for (const variant of ['unknown', 'linkedin', 'newsletter', 'unknown_path']) {
+      const isUnknown = variant.startsWith('unknown');
+      const pagePath = variant === 'unknown_path' ? '/404' : '/';
       const context = await browser.newContext({serviceWorkers: 'block'});
       try {
         const requests = [];
@@ -37,7 +39,7 @@ test('live Google tag honors consent and bounded attribution in serialized reque
           const request = route.request();
           const url = new URL(request.url());
           if (url.hostname === 'www.teraearlywine.com') {
-            return route.fulfill({contentType: 'text/html', body: html});
+            return route.fulfill({contentType: 'text/html', body: html.replace('"pagePath":"/"', `"pagePath":"${pagePath}"`)});
           }
           // Only the library itself may reach Google. Never send a collect hit.
           if (url.hostname === 'www.googletagmanager.com' && url.pathname === '/gtag/js') {
@@ -53,8 +55,8 @@ test('live Google tag honors consent and bounded attribution in serialized reque
           : variant === 'newsletter'
             ? 'utm_source=newsletter&utm_medium=email&utm_campaign=website_baseline_2026_09&utm_content=footer'
             : 'utm_source=PRIVATE_SOURCE&utm_medium=PRIVATE_MEDIUM&utm_campaign=PRIVATE_NAME&utm_content=PRIVATE_CONTENT';
-        await page.goto(`https://www.teraearlywine.com/?${campaign}&utm_id=PRIVATE_ID&utm_term=PRIVATE_TERM&gclid=PRIVATE_GCLID&utm_source_platform=PRIVATE_PLATFORM&utm_creative_format=PRIVATE_CREATIVE&utm_marketing_tactic=PRIVATE_TACTIC&q=PRIVATE_SEARCH&search=PRIVATE_QUERY#PRIVATE_HASH`, {
-          referer: variant === 'unknown' ? 'https://unknown.example/PRIVATE_REF' : 'https://www.google.com/search?q=PRIVATE_REF',
+        await page.goto(`https://www.teraearlywine.com/${variant === 'unknown_path' ? 'customer/PRIVATE_ID' : ''}?${campaign}&utm_id=PRIVATE_ID&utm_term=PRIVATE_TERM&gclid=PRIVATE_GCLID&utm_source_platform=PRIVATE_PLATFORM&utm_creative_format=PRIVATE_CREATIVE&utm_marketing_tactic=PRIVATE_TACTIC&q=PRIVATE_SEARCH&search=PRIVATE_QUERY#PRIVATE_HASH`, {
+          referer: isUnknown ? 'https://unknown.example/PRIVATE_REF' : 'https://www.google.com/search?q=PRIVATE_REF',
         });
         await page.addScriptTag({content: source});
         await page.waitForTimeout(300);
@@ -68,12 +70,12 @@ test('live Google tag honors consent and bounded attribution in serialized reque
         await page.click('[data-consent-choice="accepted"]');
         const pageView = await waitForEvent(requests, 'page_view');
         assert.equal(scripts, 1);
-        assert.equal(pageView.get('dl'), 'https://www.teraearlywine.com/');
-        assert.equal(pageView.get('dr') || '', variant === 'unknown' ? '' : 'https://www.google.com/');
-        assert.equal(pageView.get('cs'), variant === 'unknown' ? '' : variant);
-        assert.equal(pageView.get('cm'), variant === 'unknown' ? '' : variant === 'linkedin' ? 'social' : 'email');
-        assert.equal(pageView.get('cn'), variant === 'unknown' ? '' : 'website_baseline_2026_09');
-        assert.equal(pageView.get('cc'), variant === 'unknown' ? '' : variant === 'linkedin' ? 'profile' : 'footer');
+        assert.equal(pageView.get('dl'), 'https://www.teraearlywine.com' + pagePath);
+        assert.equal(pageView.get('dr') || '', isUnknown ? '' : 'https://www.google.com/');
+        assert.equal(pageView.get('cs'), isUnknown ? '' : variant);
+        assert.equal(pageView.get('cm'), isUnknown ? '' : variant === 'linkedin' ? 'social' : 'email');
+        assert.equal(pageView.get('cn'), isUnknown ? '' : 'website_baseline_2026_09');
+        assert.equal(pageView.get('cc'), isUnknown ? '' : variant === 'linkedin' ? 'profile' : 'footer');
         assert.equal(pageView.get('ci'), '');
         assert.equal(pageView.get('ck'), '');
         await page.evaluate(() => document.querySelector('form').addEventListener('submit', (event) => event.preventDefault()));

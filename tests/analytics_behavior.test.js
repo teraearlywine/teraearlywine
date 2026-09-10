@@ -51,6 +51,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     textContent: JSON.stringify({
       measurementId: options.measurementId ?? 'G-TEST123',
       debugMode: options.debugMode ?? true,
+      pagePath: options.pagePath ?? '/',
     }),
   };
   const banner = new FakeElement();
@@ -242,8 +243,8 @@ const configCommand = commands(harness).find(([name]) => name === 'config');
 assert.ok(configCommand);
 assert.equal(configCommand[2].cookie_domain, 'none');
 assert.equal(configCommand[2].page_referrer, '');
-assert.equal(configCommand[2].page_location, 'https://www.teraearlywine.com/work');
-assert.equal(configCommand[2].page_path, '/work');
+assert.equal(configCommand[2].page_location, 'https://www.teraearlywine.com/');
+assert.equal(configCommand[2].page_path, '/');
 assert.equal(JSON.stringify(configCommand).includes('person%40example.com'), false);
 assert.equal(JSON.stringify(configCommand).includes('#private'), false);
 assert.equal(JSON.stringify(configCommand).includes('referrer.example'), false);
@@ -469,4 +470,14 @@ for (const [referrer, origin] of [
   ['https://linkedin.com/private', 'https://www.linkedin.com/'],
 ]) {
   assert.equal(attribution(tagged, referrer).page_referrer, origin);
+}
+
+for (const href of ['https://www.teraearlywine.com/person@example.com', 'https://www.teraearlywine.com/customer/PRIVATE_ID?email=PRIVATE_EMAIL#PRIVATE_FRAGMENT']) {
+  const unknownPage = createHarness('accepted', true, {href, pagePath: '/404'});
+  const config = commands(unknownPage).find(([name]) => name === 'config')[2];
+  assert.equal(config.page_location, 'https://www.teraearlywine.com/404');
+  assert.equal(config.page_path, '/404');
+  dispatchContactSubmitted(unknownPage);
+  assert.equal(JSON.stringify(commands(unknownPage)).includes('PRIVATE_'), false);
+  assert.equal(JSON.stringify(commands(unknownPage)).includes('person@example.com'), false);
 }

@@ -97,6 +97,7 @@ function readAnalyticsConfig() {
     return {
       measurementId: config.measurementId,
       debugMode: config.debugMode === true,
+      pagePath: typeof config.pagePath === 'string' ? config.pagePath : '/404',
     };
   } catch (error) {
     return null;
@@ -140,18 +141,13 @@ function clearConsentChoice() {
 }
 
 function sanitizedPageLocation() {
-  try {
-    const pageUrl = new URL(window.location.href);
-    return {
-      page_location: `${pageUrl.origin}${pageUrl.pathname}`,
-      page_path: pageUrl.pathname,
-    };
-  } catch (error) {
-    return {
-      page_location: window.location.origin + window.location.pathname,
-      page_path: window.location.pathname,
-    };
-  }
+  // Flask supplies only a known route/content path or a fixed error path.
+  // Never fall back to the browser pathname, including on unknown URLs.
+  const pagePath = analyticsConfig?.pagePath || '/404';
+  return {
+    page_location: window.location.origin + pagePath,
+    page_path: pagePath,
+  };
 }
 
 function notifyAnalyticsEnabled() {

@@ -114,7 +114,7 @@ def test_production_ga_configuration_disables_debug_and_defers_google(app_factor
         re.DOTALL,
     )
     assert json.loads(match.group(1)) == {
-        'measurementId': 'G-NF6SVCGZDF', 'debugMode': False,
+        'measurementId': 'G-NF6SVCGZDF', 'debugMode': False, 'pagePath': '/',
     }
     assert 'googletagmanager.com' not in document
     assert 'assets/js/analytics.js' in document
@@ -413,6 +413,12 @@ def test_404_and_500_pages_are_noindex_and_track_the_home_link(app_factory):
         assert home_link['data-analytics-event'] == 'navigation_click'
         assert home_link['data-placement'] == 'error'
         assert home_link['data-destination-type'] == 'home'
+        analytics_match = re.search(
+            r'<script id="analyticsConfig" type="application/json">\s*(.*?)\s*</script>',
+            document, re.DOTALL,
+        )
+        assert json.loads(analytics_match.group(1))['pagePath'] == f'/{expected_status}'
+
 
 
 def test_analytics_client_has_basic_consent_and_sanitization_contracts():
@@ -435,8 +441,8 @@ def test_analytics_client_has_basic_consent_and_sanitization_contracts():
     assert "document.querySelector('[data-analytics-contact-view]')" in source
     assert 'entry.intersectionRatio >= 0.5' in source
     assert 'observer.disconnect()' in source
-    assert 'pageUrl.origin}${pageUrl.pathname}' in source
-    assert 'page_path: pageUrl.pathname' in source
+    assert 'page_location: window.location.origin + pagePath' in source
+    assert 'page_path: pagePath' in source
 
 
 def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_factory):
@@ -684,3 +690,37 @@ def test_javascript_consent_behavior():
         text=True,
         capture_output=True,
     )
+
+
+@pytest.mark.parametrize('path', [
+    '/person@example.com', '/customer/PRIVATE_ID',
+    '/blog/PRIVATE_ID/', '/services/PRIVATE_ID',
+])
+def test_unknown_paths_report_fixed_404_without_raw_path(app_factory, path):
+    app = app_factory(GOOGLE_ANALYTICS_MEASUREMENT_ID='G-NF6SVCGZDF')
+    response = app.test_client().get(path + '?email=PRIVATE_EMAIL')
+    assert response.status_code == 404
+    match = re.search(
+        r'<script id="analyticsConfig" type="application/json">\s*(.*?)\s*</script>',
+        response.get_data(as_text=True), re.DOTALL,
+    )
+    assert json.loads(match.group(1))['pagePath'] == '/404'
+    assert 'PRIVATE_' not in match.group(1)
+    assert 'person@example.com' not in match.group(1)
+
+
+def test_known_content_paths_are_preserved_in_analytics_config(app_factory):
+    from core.home.home import ARTICLES, SERVICES
+    app = app_factory(GOOGLE_ANALYTICS_MEASUREMENT_ID='G-NF6SVCGZDF')
+    paths = ['/', '/blog/']
+    paths += [f'/services/{slug}' for slug in SERVICES]
+    paths += [f"/blog/{article['slug']}/" for article in ARTICLES]
+    for path in paths:
+        response = app.test_client().get(path + '?email=PRIVATE_EMAIL')
+        assert response.status_code == 200
+        match = re.search(
+            r'<script id="analyticsConfig" type="application/json">\s*(.*?)\s*</script>',
+            response.get_data(as_text=True), re.DOTALL,
+        )
+        assert json.loads(match.group(1))['pagePath'] == path
+        assert 'PRIVATE_EMAIL' not in match.group(1)

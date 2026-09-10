@@ -104,11 +104,11 @@ def register_error_handlers(app):
 
     @app.errorhandler(404)
     def not_found(e):
-        return render_template('home/404.html'), 404
+        return render_template('home/404.html', analytics_page_path='/404'), 404
 
     @app.errorhandler(500)
     def server_error(e):
-        return render_template('home/500.html'), 500
+        return render_template('home/500.html', analytics_page_path='/500'), 500
 
 
 def register_canonical_redirect(app, env):
