@@ -55,11 +55,14 @@ function createHarness(fetchImplementation) {
   const navLinks = new FakeElement();
   const navToggle = new FakeElement();
   const documentListeners = new Map();
+  const dispatchedEvents = [];
   const document = {
     addEventListener(type, callback) {
       documentListeners.set(type, callback);
     },
-    dispatchEvent() {},
+    dispatchEvent(event) {
+      dispatchedEvents.push(event.type);
+    },
     getElementById(id) {
       if (id === 'navbar') return navbar;
       if (id === 'navLinks') return navLinks;
@@ -114,6 +117,7 @@ function createHarness(fetchImplementation) {
       });
     },
     contactForm,
+    dispatchedEvents,
     runTimer(delay) {
       const timer = [...timers.values()].find(item => item.delay === delay);
       assert.ok(timer, `missing ${delay}ms timer`);
@@ -161,6 +165,7 @@ async function testSuccessfulSubmissionRestoresTheForm() {
   assert.equal(harness.submissionId.value, 'next-submission-id');
   assert.equal(harness.contactForm.resetCount, 1);
   assert.equal(harness.timers.size, 0);
+  assert.deepEqual(harness.dispatchedEvents, ['contact:submitted']);
 }
 
 async function testTimedOutSubmissionRestoresTheForm() {
@@ -181,12 +186,69 @@ async function testTimedOutSubmissionRestoresTheForm() {
   assert.equal(harness.submitButton.disabled, false);
   assert.equal(harness.submitButton.textContent, 'Send message');
   assert.equal(harness.contactForm.resetCount, 0);
+  assert.deepEqual(harness.dispatchedEvents, []);
   assert.equal(harness.timers.size, 0);
+}
+
+async function testInvalidFormDoesNotRequestOrEmitSuccess() {
+  let calls = 0;
+  const harness = createHarness(() => { calls += 1; });
+  harness.contactForm.reportValidity = () => false;
+  await harness.submit();
+  assert.equal(calls, 0);
+  assert.deepEqual(harness.dispatchedEvents, []);
+}
+
+async function testRejectedResponsesNeverEmitSuccess() {
+  const responses = [
+    { ok: false, status: 400, payload: { ok: false, errors: {} } },
+    { ok: false, status: 502, payload: { ok: false } },
+    { ok: false, status: 503, payload: { ok: false } },
+    { ok: true, status: 200, payload: { ok: false } },
+    { ok: true, status: 200, payload: { ok: true } },
+    { ok: true, status: 200, invalidJson: true },
+  ];
+  for (const response of responses) {
+    const harness = createHarness(async () => ({
+      ...response,
+      async json() {
+        if (response.invalidJson) throw new SyntaxError('Invalid JSON');
+        return response.payload;
+      },
+    }));
+    await harness.submit();
+    assert.deepEqual(harness.dispatchedEvents, []);
+    assert.equal(harness.contactForm.resetCount, 0);
+    assert.equal(harness.submissionId.value, 'initial-submission-id');
+    assert.equal(harness.submitButton.disabled, false);
+  }
+}
+
+async function testConcurrentSubmitDeliversAndEmitsOnce() {
+  let resolveFetch;
+  let calls = 0;
+  const harness = createHarness(() => {
+    calls += 1;
+    return new Promise(resolve => { resolveFetch = resolve; });
+  });
+  const first = harness.submit();
+  await harness.submit();
+  assert.equal(calls, 1);
+  assert.deepEqual(harness.dispatchedEvents, []);
+  resolveFetch({
+    ok: true,
+    async json() { return { ok: true, submission_id: 'next-submission-id' }; },
+  });
+  await first;
+  assert.deepEqual(harness.dispatchedEvents, ['contact:submitted']);
 }
 
 Promise.resolve()
   .then(testSuccessfulSubmissionRestoresTheForm)
   .then(testTimedOutSubmissionRestoresTheForm)
+  .then(testInvalidFormDoesNotRequestOrEmitSuccess)
+  .then(testRejectedResponsesNeverEmitSuccess)
+  .then(testConcurrentSubmitDeliversAndEmitsOnce)
   .catch(error => {
     console.error(error);
     process.exitCode = 1;
