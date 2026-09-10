@@ -19,7 +19,9 @@ from flask import (
     url_for,
 )
 
-from core.home.blog_content import ARTICLES, ARTICLES_BY_SLUG
+from core.home.blog_content import (
+    ARTICLES, ARTICLES_BY_SLUG, BLOG_DESCRIPTION, FEATURED_ARTICLES, OFFERS,
+)
 from core.home.contact_delivery import (
     ContactDeliveryError,
     ContactSubmission,
@@ -386,9 +388,7 @@ def seo_metadata():
                 '@id': f'{blog_url}#blog',
                 'url': blog_url,
                 'name': 'Blog | Tera Earlywine',
-                'description': (
-                    'Notes on data, AI, and the human side of building systems.'
-                ),
+                'description': BLOG_DESCRIPTION,
                 'author': author,
                 'blogPost': [
                     {'@type': 'BlogPosting', 'headline': item['title'],
@@ -581,12 +581,12 @@ def blog():
     return render_template(
         'home/blog_index.html',
         articles=ARTICLES,
+        featured_articles=FEATURED_ARTICLES,
+        diagnostic_offer=OFFERS['diagnostic'],
         cube_articles=cube_articles,
         is_blog=True,
         page_title='Blog | Tera Earlywine',
-        page_description=(
-            'Notes on data, AI, and the human side of building systems.'
-        ),
+        page_description=BLOG_DESCRIPTION,
     )
 
 

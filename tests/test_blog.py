@@ -71,6 +71,13 @@ def test_each_cube_destination_renders_its_article_and_metadata(app_factory, art
     for section in article['sections']:
         for paragraph in section['paragraphs']:
             assert paragraph in document
+        for source in section['sources']:
+            assert {'href': source['url']} in collect_elements(document, 'a')
+            assert source['title'] in document
+    assert article['offer']['name'] in document
+    assert article['offer']['description'] in document
+    assert article['offer']['cta'] in document
+    assert {'class': 'blog-text-link', 'href': '/#contact'} in collect_elements(document, 'a')
     assert len(collect_elements(document, 'h1')) == 1
     canonical = f"{SITE_URL}/blog/{article['slug']}/"
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
@@ -107,6 +114,24 @@ def test_blog_index_is_indexable_and_describes_all_articles(app_factory):
     assert len(blog['blogPost']) == len(ARTICLES)
     assert 'illustrative writing' not in document
     assert 'sample notes' not in document
+
+
+def test_featured_reading_path_preserves_all_article_destinations(app_factory):
+    app = app_factory()
+    with captured_templates(app) as rendered:
+        response = app.test_client().get('/blog/')
+    context = rendered[-1][1]
+    assert [article['slug'] for article in context['featured_articles']] == [
+        'measure-the-whole-path',
+        'a-dashboard-needs-a-decision',
+        'the-work-after-the-demo',
+    ]
+    links = collect_elements(response.get_data(as_text=True), 'a')
+    reading_links = [link['href'] for link in links if 'writing-row' in link.get('class', '')]
+    assert len(reading_links) == len(set(reading_links)) == len(ARTICLES)
+    assert set(reading_links) == {f"/blog/{article['slug']}/" for article in ARTICLES}
+    assert {'class': 'blog-text-link', 'href': '/#contact'} in links
+    assert 'id="contact"' in app.test_client().get('/').get_data(as_text=True)
 
 
 @pytest.mark.parametrize('path', ['/blog/'] + [f"/blog/{article['slug']}/" for article in ARTICLES])
