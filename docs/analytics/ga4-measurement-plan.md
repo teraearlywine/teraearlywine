@@ -17,8 +17,8 @@ or separate dashboard is in scope.
 | Reporting timezone | September 10, 2026 Admin readback: country United Kingdom; selected label `(GMT-07:00) GMT-07:00`. Do not infer an IANA zone or daylight-saving behavior from this label. |
 | Timezone evidence | [Property settings](https://analytics.google.com/analytics/web/#/a391533598p533228502/admin/property/settings); unchanged; historical timezone changes unknown |
 | Historical windows | August 13–September 9, 2026; history check June 12–September 9, 2026, inclusive property-calendar dates |
-| Release acceptance | Pending TER-44 serving-version, browser payload, consent and native receipt evidence |
-| Report acceptance | Pending TER-45 four saved report URLs, scope readback and export evidence |
+| Release acceptance | Serving version and consent/payload checks verified September 10; native GA4 receipt and internal/test controls pending TER-44. See [acceptance evidence](2026-09-10-acceptance-evidence.md). |
+| Report acceptance | Four scoped reports saved and historical exports preserved; fresh dimension/receipt and owner/test acceptance pending TER-45. |
 | Baseline start | Not started; next complete property-calendar day after both release and report acceptance |
 
 Public-host filtering removes local hosts, not all owner/testing visits. The
@@ -170,10 +170,12 @@ A navigation URL alone does not prove a saved scoped report.
 
 | Saved name | Layout and dimensions | Metrics | Saved URL / acceptance |
 | --- | --- | --- | --- |
-| Website — Production traffic | Free-form Date rows; Hostname/Stream ID for scope audit; separate `session_start` event tab | Views, Total users, Active users, Sessions, Engaged sessions; Event count in event tab | Pending TER-45 |
-| Website — Production acquisition | Session source / medium rows, Session campaign secondary; separate first-user source / medium tab | Sessions, Engaged sessions, Engagement rate; New users in first-user tab | Pending TER-45 |
-| Website — Production content | Page path and screen class rows; separate Landing page tab | Views, Active users, average engagement time per active user; Sessions/Engaged sessions for landing pages | Pending TER-45 |
-| Website — Production contact | Event name: `contact_view`, `contact_click`, `contact_submit`; `form_start` only after validation; click tabs by registered method/placement/destination | Event count, Total users per event; `contact_submit` key events separately; private verified-inquiry aggregate alongside | Pending TER-45 |
+| Website — Production traffic | Free-form Date rows; Hostname/Stream ID for scope audit; separate `session_start` event tab | Views, Total users, Active users, Sessions, Engaged sessions; Event count in event tab | [Saved exploration](https://analytics.google.com/analytics/web/#/analysis/a391533598p533228502/edit/Zi76PnDmSdKlCAe6RqVFkA); acceptance pending |
+| Website — Production acquisition | Session source / medium rows, Session campaign secondary; separate first-user source / medium tab | Sessions, Engaged sessions, Engagement rate; New users in first-user tab | [Saved exploration](https://analytics.google.com/analytics/web/#/analysis/a391533598p533228502/edit/pWUbebTBTHSLODx2oW-mag); acceptance pending |
+| Website — Production content | Page path and screen class rows; separate Landing page tab | Views, Active users, average engagement time per active user; Sessions/Engaged sessions for landing pages | [Saved exploration](https://analytics.google.com/analytics/web/#/analysis/a391533598p533228502/edit/q09eRrmSQ2ijuHPnM63hHw); acceptance pending |
+| Website — Production contact | Event name: `contact_view`, `contact_click`, `contact_submit`; `form_start` only after validation; click tabs by registered method/placement/destination | Event count, Total users per event; `contact_submit` key events separately; private verified-inquiry aggregate alongside | [Saved exploration](https://analytics.google.com/analytics/web/#/analysis/a391533598p533228502/edit/XBuxaflaQdykKLcErkJ4FQ); acceptance pending |
+
+The saved historical snapshot uses August 13–September 7, 2026 inclusive. The content metric selector did not offer average engagement time per active user on September 10; this requested metric remains unavailable and is not silently replaced with a session-based average. Saved layouts and remaining acceptance limits are recorded in [the verification record](2026-09-10-acceptance-evidence.md).
 
 Content groups must be non-overlapping: exact `/`, exact `/blog/`, articles under
 `/blog/`, service paths under `/services/`, and Other. Unknown dimension rows stay

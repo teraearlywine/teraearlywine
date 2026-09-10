@@ -1,0 +1,60 @@
+{
+  "startedAt": "2026-09-10T17:06:57.877Z",
+  "purpose": "Controlled QA before baseline: approved LinkedIn landing and one real booking CTA click. No booking navigation or form submission.",
+  "requests": [
+    {
+      "at": "2026-09-10T17:07:00.109Z",
+      "host": "www.google-analytics.com",
+      "method": "POST",
+      "events": [
+        {
+          "en": "page_view",
+          "dl": "https://www.teraearlywine.com/",
+          "dr": "",
+          "cs": "linkedin",
+          "cm": "social",
+          "cn": "website_baseline_2026_09",
+          "cc": "profile",
+          "ep.contact_method": null,
+          "ep.placement": null,
+          "ep.destination_type": null
+        }
+      ],
+      "allowed": true,
+      "responseStatus": 204,
+      "respondedAt": "2026-09-10T17:07:00.272Z",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "at": "2026-09-10T17:07:05.327Z",
+      "host": "www.google-analytics.com",
+      "method": "POST",
+      "events": [
+        {
+          "en": "contact_click",
+          "dl": "https://www.teraearlywine.com/",
+          "dr": "",
+          "cs": "linkedin",
+          "cm": "social",
+          "cn": "website_baseline_2026_09",
+          "cc": "profile",
+          "ep.contact_method": "booking",
+          "ep.placement": "hero",
+          "ep.destination_type": "booking"
+        }
+      ],
+      "allowed": true,
+      "responseStatus": 204,
+      "respondedAt": "2026-09-10T17:07:05.376Z",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "status": "passed",
+  "config": {
+    "debugMode": false,
+    "measurementId": "G-NF6SVCGZDF",
+    "pagePath": "/"
+  },
+  "ctaClickedAt": "2026-09-10T17:07:00.333Z",
+  "finishedAt": "2026-09-10T17:07:08.628Z"
+}

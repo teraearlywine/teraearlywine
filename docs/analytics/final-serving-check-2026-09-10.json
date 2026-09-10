@@ -1,0 +1,14 @@
+{
+  "version": "ga4-20260910-6a44b81",
+  "commit": "6a44b8117aa5859ab4a3a7d890ebc94c1d44b9d5",
+  "allocation": 1.0,
+  "servingStatus": "SERVING",
+  "config": {
+    "debugMode": false,
+    "measurementId": "G-NF6SVCGZDF",
+    "pagePath": "/"
+  },
+  "asset": "/static/assets/js/analytics.js?v=6a5c5f658cf9",
+  "sha256": "6a5c5f658cf90f073d2e6b6ea1798e0f6d418ad334b677ad358552b21115f26e",
+  "matches_reviewed_source": true
+}
