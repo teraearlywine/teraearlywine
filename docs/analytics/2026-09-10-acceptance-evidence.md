@@ -138,3 +138,35 @@ The reporting agent reopened the saved first-user and landing-page tabs and reco
 The first-user tab shows `(direct) / (none)` with 7 New users. The landing-page tab uses Landing page without query strings and shows `/`, 17 Sessions, 11 Engaged sessions and 64.71% Engagement rate. The exact requested average engagement time per active user metric was unavailable in the native Exploration selector; no session-based substitute is presented under that label. Verified legitimate-inquiry counts remain Unknown, and the private controlled QA receipt is excluded from such counts.
 
 The execution agent verified all 10 preserved CSV hashes, including two explicitly superseded exports. The private final manifest SHA256 is `9ce76eaf0970094247cda139490b44f38da549adeb3cf514c077059be50f66dc`. It records all eight final tab layouts and each export's complete filter list. The saved report contract still awaits native fresh receipts, dimension population, and owner/test acceptance.
+
+## Corrected-release controlled receipt follow-up
+
+At approximately 19:38–19:40 UTC on September 10, a new native Chrome visit exercised the corrected serving release with the approved LinkedIn campaign tuple. The live analytics asset still matches SHA256 `6a5c5f658cf90f073d2e6b6ea1798e0f6d418ad334b677ad358552b21115f26e`; independent App Engine readback remains `ga4-20260910-6a44b81`, SERVING, traffic allocation 1.00.
+
+Analytics acceptance was explicitly selected through Privacy choices. Empty-form submission focused the required name field with “Please fill out this field”; an incomplete engagement selection also blocked submission. These are native browser validation checks, not simulated provider failures. After completing the required fields, one labeled QA form was submitted at `2026-09-10T19:39:33.197Z`; success UI read “Thanks — your message has been sent.” Browser error logs were empty. One hero booking CTA was clicked; no appointment was booked.
+
+The corrected-release test produced one original mailbox notification at `19:39:38 UTC` and one matching Linear intake at `19:39:40.023 UTC`. The opaque request marker matched in both private systems. [TER-49](https://linear.app/idea-factory-lab/issue/TER-49) was labeled **QA ONLY — corrected-release measurement receipt** and set Canceled. Form content, personal email, opaque request marker and mailbox ID remain private. This closes the earlier omission of controlled intake delivery on the corrected release. It does not prove repeated-request provider idempotency or a native GA4 event.
+
+Before this new test, the native Events report for September 10 (Today, unfiltered All Users, property 533228502) showed 31 events across five names: page_view 15, user_engagement 8, navigation_click 4, session_start 3 and contact_view 1. No contact_click/contact_submit appeared. This is an unsettled, shared-property snapshot, not a production-only baseline. After the corrected-release test, Realtime still showed no expected receipt at the first readback. Native GA4 ingestion, source classification, key-event receipt and populated CTA dimensions remain unaccepted; another synthetic test is not a substitute for investigating or observing those records.
+
+## Retention and unwanted-referral readback
+
+An independent read-only native audit at approximately 19:39:50 UTC on September 10 recorded [property data retention](https://analytics.google.com/analytics/web/#/a391533598p533228502/admin/datapolicies/dataretention): **Event data 2 months; User data 14 months; Reset on new user activity ON**. Save was disabled. These property settings affect the shared property; none was changed.
+
+Website stream 15512913765 → Google tag G-NF6SVCGZDF → List unwanted referrals displayed one **Referral domain contains** row with an empty Domain field and no nonempty configured domain. Save was disabled; the audit exited without editing or saving. This is not a populated referral exclusion and does not explain the acquisition discrepancy. Existing client-side referrer bounds are a separate collection control.
+
+## Acquisition comparison with the original report scope
+
+An independent native recheck completed at `2026-09-10T19:43:37.827719Z` uses the standard Traffic acquisition report, Session source / medium, All Users, no stream/hostname filters or comparisons, an empty table search, and all rows (1–2 of 2). The UI's Last 28 days resolved to **August 13–September 9, 2026 inclusive**, confirmed by the new CSV header. The four saved historical explorations were unchanged.
+
+| Native row | Sessions | Engaged sessions | Engagement rate | Event count |
+| --- | ---: | ---: | ---: | ---: |
+| Total | 33 | 23 | 69.7% displayed (23/33) | 298 |
+| (direct) / (none) | 33 | 23 | 0.696969696969697 in export (23/33) | 289 |
+| (not set) | 2 | 0 | 0 (0/2) | 9 |
+
+The compatible report still has 33 total Sessions versus 35 summed row Sessions. The native quality popover says **Unsampled report, 100% available data, Reporting showing intraday and daily data**. It provides no sampling or aggregation explanation for this discrepancy. The `(not set)` warning says no data was received for that value; it does not prove the discrepancy's cause. A separate primary-channel-group export labels these rows Direct and Unassigned; those labels must not be confused with the Session source / medium labels. Reporting identity remains the separately verified Blended setting; no cause is inferred. Channel shares remain withheld.
+
+**Source-date correction:** the earlier private `Traffic_acquisition_Session_source_medium.csv` header actually covers **June 12–September 9**, with 22 engaged sessions and 297 events; it must not be presented as an August 13–September 9 export. The new `Traffic_acquisition_Session_source_medium (1).csv` independently confirms the latter dates, 23 engaged sessions and 298 events, while reproducing the same 33-versus-35 session discrepancy. Original bytes are preserved separately.
+
+The private `ga4-acquisition-followup` manifest records native source URL, dates, scope, identity, quality notices and all three CSV hashes. New matched source/medium CSV SHA256: `cac5396d4b7cd11858ad155ac31f8e1f49a6b2bfe82f6771f5bf226b605eb04d`; manifest SHA256: `962075e38921ef4f91db1695a75c30ef6ff35ebd8603c598f752ed26af68c8a7`. The execution agent independently rehashed the preserved files. The same-scope investigation is now evidenced; the unresolved cause remains an explicit limitation, as TER-45 permits.
