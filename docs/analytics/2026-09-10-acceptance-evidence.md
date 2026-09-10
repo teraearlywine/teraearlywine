@@ -131,7 +131,7 @@ The reporting agent reopened the saved first-user and landing-page tabs and reco
 | acquisition / First-user sources; owner tests may remain | First user source / medium, New users | None |
 | content / Page paths; owner tests may remain | Page path and screen class, Active users, Total users, Views | None |
 | content / Landing pages; owner tests may remain | Landing page, Sessions, Engaged sessions, Engagement rate | None |
-| contact / Parallel paths; inquiries Unknown | Event name, Total users, Event count, Key events | Event name matches regex ^contact_(view|click|submit)$ |
+| contact / Parallel paths; inquiries Unknown | Event name, Total users, Event count, Key events | Event name matches regex `^contact_(view\|click\|submit)$` |
 | contact / CTA dimensions; population pending | Event name, Contact method, CTA placement, Destination type, Total users, Event count, Key events | Event name matches regex ^contact_click$ |
 
 
