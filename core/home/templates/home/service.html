@@ -25,7 +25,7 @@
         <section class="section service-context" aria-labelledby="problem-heading">
             <div class="container service-columns">
                 <div>
-                    <p class="section-kicker">When to bring me in</p>
+                    <p class="section-kicker">When to engage Tera</p>
                     <h2 class="section-title" id="problem-heading">{{ service.problem_title }}</h2>
                 </div>
                 <div class="service-prose">
@@ -40,7 +40,7 @@
         <section class="section service-deliverables" aria-labelledby="deliverables-heading">
             <div class="container">
                 <p class="section-kicker">Scope with a purpose</p>
-                <h2 class="section-title" id="deliverables-heading">What we work toward.</h2>
+                <h2 class="section-title" id="deliverables-heading">Engagement outcomes.</h2>
                 <div class="service-deliverable-grid">
                     {% for title, description in service.deliverables %}
                     <article>
@@ -61,9 +61,9 @@
                 </div>
                 <div class="service-prose">
                     <p>{{ service.approach }}</p>
-                    <h3>Experience I bring</h3>
+                    <h3>Relevant experience</h3>
                     <p>{{ service.experience }}</p>
-                    <a class="service-text-link" href="{{ url_for('index.index') }}#experience">Explore my background <span aria-hidden="true">↗</span></a>
+                    <a class="service-text-link" href="{{ url_for('index.index') }}#experience">Explore Tera's background <span aria-hidden="true">↗</span></a>
                 </div>
             </div>
         </section>

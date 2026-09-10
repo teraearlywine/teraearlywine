@@ -853,6 +853,8 @@ li[id] {
   .nav-brand {
     font-size: 20px;
     z-index: 1001;
+    white-space: normal;
+    line-height: 1.2;
   }
   .nav-toggle {
     display: block;

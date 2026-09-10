@@ -11,7 +11,7 @@ SERVICES = {
         ),
         'headline': 'Build a foundation your team can trust.',
         'intro': (
-            'I help enterprise data leaders modernize the systems their reporting, '
+            'Tera Earlywine helps enterprise data leaders modernize the systems their reporting, '
             'compliance, and AI depend on. The work starts with the decisions your '
             'platform needs to support and the production constraints it has to '
             'respect.'
@@ -20,7 +20,7 @@ SERVICES = {
         'problem': (
             'A growing stack can leave your team with inconsistent business '
             'definitions, fragile dependencies, rising costs, and unclear ownership. '
-            'Replacing tools alone does not resolve those problems. I work through the'
+            'Replacing tools alone does not resolve those problems. Tera works through the'
             ' architecture and operating model together, so a new platform has a clear'
             ' purpose and a team that can run it.'
         ),
@@ -53,22 +53,22 @@ SERVICES = {
             ),
         ],
         'approach': (
-            'I begin with a bounded assessment of the workloads that matter most. '
-            'Together, we identify what should stay, what needs to change, and what '
+            'Tera begins with a bounded assessment of the workloads that matter most. '
+            'She works with the client team to identify what should stay, what needs to change, and what '
             'evidence will justify each step. A blueprint then connects technical '
             'decisions to business priorities and gives the delivery team a sequence '
             'it can execute.'
         ),
         'experience': (
-            'My experience spans enterprise migration programs, data-platform '
+            'Tera’s experience spans enterprise migration programs, data-platform '
             'leadership at Block and Mercari, and hands-on work with SQL, Python, dbt,'
-            ' Airflow, Snowflake, BigQuery, and GCP. I bring that operating context to'
+            ' Airflow, Snowflake, BigQuery, and GCP. She brings that operating context to'
             ' architecture decisions, including the handoff and maintenance work that '
             'follows a launch.'
         ),
         'starting_point': (
             'Bring the business priorities, the current platform constraints, and one '
-            'workflow that illustrates the problem. A fit call helps us decide whether'
+            'workflow that illustrates the problem. A fit call helps establish whether'
             ' a diagnostic or a Data Foundation Blueprint is the right starting point.'
         ),
     },
@@ -82,7 +82,7 @@ SERVICES = {
         ),
         'headline': 'Give a stalled migration a credible path forward.',
         'intro': (
-            'I help teams recover data migrations when the deadline is approaching, '
+            'Tera Earlywine helps teams recover data migrations when the deadline is approaching, '
             'the results do not reconcile, or production continuity is at risk. The '
             'first task is to make the failure modes visible and agree on what a safe '
             'next step looks like.'
@@ -91,8 +91,8 @@ SERVICES = {
         'problem': (
             'A migration can look nearly complete while downstream reports still '
             'disagree, undocumented dependencies keep appearing, and no one owns the '
-            'cutover decision. I trace the gap between the old and new systems, '
-            'separate blockers from follow-up work, and help your team establish a '
+            'cutover decision. Tera traces the gap between the old and new systems, '
+            'separates blockers from follow-up work, and helps the client team establish a '
             'realistic release boundary.'
         ),
         'signals': [
@@ -124,23 +124,23 @@ SERVICES = {
             ),
         ],
         'approach': (
-            'I start with a representative failing workflow and follow it through the '
-            'source, transformation, and consuming system. That gives us a concrete '
-            'basis for diagnosis. We then agree on acceptance criteria, sequence the '
-            'fixes, and rehearse the transition with the people who will own it in '
+            'Tera starts with a representative failing workflow and follows it through the '
+            'source, transformation, and consuming system to establish a concrete '
+            'basis for diagnosis. She works with the client team to agree on acceptance '
+            'criteria, sequence fixes, and rehearse the transition with the people who will own it in '
             'production.'
         ),
         'experience': (
-            'My work has included enterprise migration programs spanning 500+ '
-            'workflows. That experience informs how I approach dependencies, business-'
-            'logic validation, and production continuity. I combine hands-on data '
+            'Tera’s work has included enterprise migration programs spanning 500+ '
+            'workflows. That experience informs her approach to dependencies, business-'
+            'logic validation, and production continuity. She combines hands-on data '
             'engineering with the coordination needed to make release decisions '
             'understandable to both engineering and business owners.'
         ),
         'starting_point': (
             'Bring the current migration plan, the most important unresolved '
             'discrepancy, and the deadline or operational constraint driving urgency. '
-            'We can use the fit call to identify the smallest useful diagnostic scope.'
+            'The fit call helps identify the smallest useful diagnostic scope.'
         ),
     },
     'production-ai-systems': {
@@ -153,7 +153,7 @@ SERVICES = {
         ),
         'headline': 'Make an AI workflow ready for real operations.',
         'intro': (
-            'I help enterprise teams turn a promising AI workflow into a system they '
+            'Tera Earlywine helps enterprise teams turn a promising AI workflow into a system they '
             'can evaluate, control, and operate. The focus is a bounded business use '
             'case with clear ownership and evidence for a production-readiness '
             'decision.'
@@ -162,7 +162,7 @@ SERVICES = {
         'problem': (
             'An AI pilot may work in a demonstration while leaving accuracy, '
             'permissions, failure recovery, and ongoing cost unresolved. In regulated '
-            'and critical operations, those questions shape the system. I work through'
+            'and critical operations, those questions shape the system. Tera works through'
             ' the data foundation and operational controls alongside the workflow '
             'itself.'
         ),
@@ -196,16 +196,16 @@ SERVICES = {
         ],
         'approach': (
             'The Production AI Lighthouse starts with one use case and the evidence '
-            'needed to judge it. I establish a baseline, build the smallest useful '
-            'workflow, and test its behavior under realistic failure conditions. We '
-            'use the results to decide whether to release, revise, or stop before '
+            'needed to judge it. Tera establishes a baseline, builds the smallest useful '
+            'workflow, and tests its behavior under realistic failure conditions. The '
+            'results support a decision to release, revise, or stop before '
             'expanding the scope.'
         ),
         'experience': (
-            'I bring enterprise data engineering experience across fintech, '
-            'marketplaces, and regulated operations. I am designing a governed multi-'
+            'Tera brings enterprise data engineering experience across fintech, '
+            'marketplaces, and regulated operations. She is designing a governed multi-'
             'agent system for compliance data engineering, with attention to '
-            'auditability, security, and reliability. That ongoing work informs my '
+            'auditability, security, and reliability. That ongoing work informs her '
             'approach to state, permissions, recovery, and operational ownership.'
         ),
         'starting_point': (
@@ -225,7 +225,7 @@ SERVICES = {
         ),
         'headline': 'Give critical data work clear direction.',
         'intro': (
-            'I work with enterprise leaders who need experienced data-platform '
+            'Tera Earlywine works with enterprise leaders who need experienced data-platform '
             'judgment and hands-on delivery support. Fractional leadership connects '
             'business priorities, technical decisions, and the operating '
             'responsibilities that keep a platform reliable.'
@@ -234,7 +234,7 @@ SERVICES = {
         'problem': (
             'A capable team can still be pulled between urgent incidents, a migration '
             'backlog, cost pressure, and new AI requests. Without an agreed direction,'
-            ' every decision becomes a separate negotiation. I help establish '
+            ' every decision becomes a separate negotiation. Tera helps establish '
             'priorities, clarify ownership, and make the tradeoffs visible enough to '
             'act on.'
         ),
@@ -267,22 +267,22 @@ SERVICES = {
             ),
         ],
         'approach': (
-            'I begin by understanding the team, the commitments already in flight, and'
-            ' the decisions that are blocked. We agree on a bounded remit and a '
-            'working cadence, then connect architecture review and delivery support to'
+            'Tera begins by understanding the team, the commitments already in flight, and'
+            ' the decisions that are blocked. She works with the client to agree on a bounded remit and a '
+            'working cadence, then connects architecture review and delivery support to'
             ' that remit. The aim is to strengthen the team’s ability to make and '
             'carry out decisions.'
         ),
         'experience': (
-            'My background includes staff-level data engineering at Block, data '
-            'engineering at Mercari, and independent consulting. I have worked across '
+            'Tera’s background includes staff-level data engineering at Block, data '
+            'engineering at Mercari, and independent consulting. She has worked across '
             'platform modernization, reliability, governance, and business-facing data'
-            ' products. That mix helps me connect detailed implementation questions to'
+            ' products. That experience helps her connect detailed implementation questions to'
             ' the wider delivery and operating context.'
         ),
         'starting_point': (
             'Bring the decisions that are waiting, the team structure, and the '
-            'outcomes you need to protect. We can use a fit call to determine the '
+            'outcomes that need protection. A fit call helps determine the '
             'leadership scope, where hands-on support would help, and how ownership '
             'should transition over time.'
         ),

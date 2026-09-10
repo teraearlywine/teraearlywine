@@ -511,7 +511,7 @@ def contact():
         )
         return _contact_form_response(
             form,
-            'We could not send your message right now. Please try again.',
+            'The message could not be sent right now. Please try again.',
             502,
         )
 
