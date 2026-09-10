@@ -76,6 +76,8 @@ test('live Google tag honors consent and bounded attribution in serialized reque
         assert.equal(pageView.get('cm'), isUnknown ? '' : variant === 'linkedin' ? 'social' : 'email');
         assert.equal(pageView.get('cn'), isUnknown ? '' : 'website_baseline_2026_09');
         assert.equal(pageView.get('cc'), isUnknown ? '' : variant === 'linkedin' ? 'profile' : 'footer');
+        assert.equal(pageView.get('_dbg'), null);
+        assert.equal(pageView.get('ep.debug_mode'), null);
         assert.equal(pageView.get('ci'), '');
         assert.equal(pageView.get('ck'), '');
         await page.evaluate(() => document.querySelector('form').addEventListener('submit', (event) => event.preventDefault()));
@@ -94,6 +96,11 @@ test('live Google tag honors consent and bounded attribution in serialized reque
         await page.evaluate(() => document.dispatchEvent(new Event('contact:submitted')));
         await page.waitForTimeout(1500);
         assert.equal(requests.length, beforeRevokedEvent);
+        for (const request of requests) {
+          const serialized = request.url + '&' + request.body;
+          assert.equal(serialized.includes('debug_mode'), false);
+          assert.equal(new URL(request.url).searchParams.has('_dbg'), false);
+        }
         assert.equal(JSON.stringify(requests).includes('PRIVATE_'), false);
       } finally {
         await context.close();
