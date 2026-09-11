@@ -255,12 +255,14 @@ def test_success_sends_exact_signed_broker_payload(
     assert len(calls) == 1
     broker_url, broker_request = calls[0]
     assert broker_url == BROKER_URL
+    assert 0 <= broker_request['json']['spamContext']['elapsedSeconds'] <= 2
     assert broker_request['json'] == {
         'email': TEST_EMAIL,
         'engagementType': TEST_ENGAGEMENT,
         'message': TEST_MESSAGE,
         'name': TEST_NAME,
         'submissionId': submission_id,
+        'spamContext': {'honeypot': '', 'elapsedSeconds': broker_request['json']['spamContext']['elapsedSeconds'], 'challengeToken': ''},
     }
     assert broker_request['timeout'] == 15.0
     timestamp = broker_request['headers']['X-Contact-Timestamp']
@@ -495,3 +497,34 @@ def test_deployment_config_references_secret_manager_without_secret_values():
         re.MULTILINE,
     ) is None
     assert re.search(r'^\s+SECRET_KEY:', deployment_config, re.MULTILINE) is None
+
+
+@pytest.mark.parametrize(('status', 'body', 'challenge'), [
+    (403, {'error': 'SUBMISSION_NOT_ACCEPTED'}, False),
+    (429, {'error': 'SUBMISSION_NOT_ACCEPTED'}, False),
+    (403, {'error': 'CHALLENGE_REQUIRED'}, True),
+    (200, {'suppressed': True}, False),
+])
+def test_filtered_broker_response_never_claims_sent(contact_app, monkeypatch, status, body, challenge):
+    client = contact_app.test_client()
+    form, _ = _contact_form(client)
+    receipt = {'submissionId': form['submission_id'], 'replayed': True, **body}
+    monkeypatch.setattr('core.home.contact_delivery.httpx.post', lambda *a, **k: StubResponse(receipt, status))
+    response = _post_contact(client, form)
+    assert response.status_code == status
+    assert response.json['ok'] is False
+    assert response.json.get('challenge_required', False) is challenge
+    assert 'SUBMISSION_NOT_ACCEPTED' not in response.get_data(as_text=True)
+    assert 'Thanks' not in response.get_data(as_text=True)
+
+
+def test_challenge_html_has_widget_without_echoing_message(app_factory, monkeypatch):
+    app = app_factory(CONTACT_BROKER_URL=BROKER_URL, CONTACT_BROKER_SECRET=BROKER_SECRET, CONTACT_TURNSTILE_SITE_KEY='test-site-key')
+    client = app.test_client()
+    form, _ = _contact_form(client)
+    monkeypatch.setattr('core.home.contact_delivery.httpx.post', lambda *a, **k: StubResponse({'error': 'CHALLENGE_REQUIRED'}, 403))
+    response = client.post('/contact', data=form)
+    assert response.status_code == 403
+    document = response.get_data(as_text=True)
+    assert 'data-contact-challenge data-sitekey="test-site-key">' in document
+    assert TEST_MESSAGE not in document

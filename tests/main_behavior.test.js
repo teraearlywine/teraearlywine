@@ -42,7 +42,7 @@ function createHarness(fetchImplementation) {
     },
   };
   contactForm.querySelector = (selector) => (
-    selector === '[data-contact-submit]' ? submitButton : status
+    selector === '[data-contact-submit]' ? submitButton : (selector === '[data-contact-status]' ? status : null)
   );
   contactForm.querySelectorAll = () => [];
   contactForm.reportValidity = () => true;

@@ -161,6 +161,7 @@ def create_app(env=''):
         'GOOGLE_ANALYTICS_DEBUG',
         '',
     ).strip().lower() in {'1', 'true', 'yes', 'on'}
+    app.config['CONTACT_TURNSTILE_SITE_KEY'] = os.environ.get('CONTACT_TURNSTILE_SITE_KEY', '').strip()
     app.config['CONTACT_EMAIL'] = os.environ.get('CONTACT_EMAIL', '').strip()
     app.config['CONTACT_EMAIL'] = (
         app.config['CONTACT_EMAIL'] or 'tera@idea-factory.io'

@@ -11,6 +11,14 @@ class ContactDeliveryError(RuntimeError):
     """Represent a broker failure without retaining its response or payload."""
 
 
+class ContactFiltered(ContactDeliveryError):
+    def __init__(self, status, challenge=False, suppressed=False):
+        super().__init__('submission_not_accepted')
+        self.status = status
+        self.challenge = challenge
+        self.suppressed = suppressed
+
+
 @dataclass(frozen=True)
 class ContactSubmission:
     submission_id: str
@@ -18,6 +26,7 @@ class ContactSubmission:
     email: str
     engagement_type: str
     message: str
+    spam_context: dict | None = None
 
 
 def _canonical_payload(submission):
@@ -28,6 +37,8 @@ def _canonical_payload(submission):
         'name': submission.name,
         'submissionId': submission.submission_id,
     }
+    if submission.spam_context is not None:
+        payload['spamContext'] = submission.spam_context
     canonical = json.dumps(
         payload,
         ensure_ascii=False,
@@ -63,6 +74,12 @@ def deliver_contact_submission(
             json=payload,
             timeout=timeout_seconds,
         )
+        if response.status_code in (403, 429):
+            try:
+                challenge = response.json().get('error') == 'CHALLENGE_REQUIRED'
+            except (ValueError, AttributeError):
+                challenge = False
+            raise ContactFiltered(response.status_code, challenge=challenge)
         response.raise_for_status()
         receipt = response.json()
     except (httpx.HTTPError, ValueError) as error:
@@ -74,3 +91,6 @@ def deliver_contact_submission(
         or not isinstance(receipt.get('replayed'), bool)
     ):
         raise ContactDeliveryError('broker_invalid_receipt')
+
+    if receipt.get('suppressed') is True:
+        raise ContactFiltered(200, suppressed=True)
