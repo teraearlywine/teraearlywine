@@ -24,6 +24,7 @@ from core.home.blog_content import (
 )
 from core.home.contact_delivery import (
     ContactDeliveryError,
+    ContactFiltered,
     ContactSubmission,
     deliver_contact_submission,
 )
@@ -142,7 +143,7 @@ def _new_contact_submission():
     return submission_id
 
 
-def _contact_form_response(form, message, status_code):
+def _contact_form_response(form, message, status_code, challenge=False):
     if request.accept_mimetypes.best == 'application/json':
         field_errors = {
             field_name: errors
@@ -159,6 +160,7 @@ def _contact_form_response(form, message, status_code):
                 'ok': False,
                 'message': message,
                 'errors': field_errors,
+                **({'challenge_required': True} if challenge else {}),
             }
         ), status_code
 
@@ -173,6 +175,7 @@ def _contact_form_response(form, message, status_code):
         'home/home.html',
         contact_form=safe_form,
         contact_error=message,
+        contact_challenge=challenge,
     ), status_code
 
 
@@ -454,6 +457,9 @@ def contact():
     """Validate and deliver a website contact submission."""
     form = ContactForm()
     invalid_message = 'Please check the highlighted fields and try again.'
+    if form.website.data:
+        current_app.logger.warning('contact_spam_decision ruleId=honeypot timestamp=%s count=1', int(time.time()))
+        return _contact_form_response(form, 'Your submission could not be accepted. Please try again later.', 400)
     if not form.validate_on_submit():
         return _contact_form_response(form, invalid_message, 400)
 
@@ -489,9 +495,14 @@ def contact():
     submission = ContactSubmission(
         submission_id=submission_id,
         name=form.name.data,
-        email=form.email.data,
+        email=''.join(form.email.data.split()).lower(),
         engagement_type=form.engagement_type.data,
         message=form.message.data,
+        spam_context={
+            'honeypot': form.website.data or '',
+            'elapsedSeconds': max(0, int(time.time()) - state['created_at']),
+            'challengeToken': request.form.get('cf-turnstile-response', '')[:2048],
+        },
     )
     fingerprint = _contact_submission_fingerprint(submission)
     if state['fingerprint'] and state['fingerprint'] != fingerprint:
@@ -520,6 +531,14 @@ def contact():
             state['delivered'] = True
             states[submission_id] = state
             _store_contact_submission_states(states)
+    except ContactFiltered as error:
+        return _contact_form_response(
+            form,
+            ('Please complete the verification and submit again.' if error.challenge
+             else 'Your submission could not be accepted. Please try again later.'),
+            error.status,
+            challenge=error.challenge,
+        )
     except ContactDeliveryError as error:
         current_app.logger.warning(
             'Contact delivery failed for submission %s: %s',

@@ -29,7 +29,9 @@ class FakeElement {
   }
 }
 
-function createHarness(fetchImplementation) {
+function createHarness(fetchImplementation, challengeConfigured = false) {
+  const challenge = challengeConfigured ? { hidden: true, dataset: { sitekey: "test-key" } } : null;
+  const widgetCalls = { render: 0, reset: 0 };
   const submitButton = new FakeElement('Send message');
   const status = new FakeElement();
   const submissionId = { value: 'initial-submission-id' };
@@ -42,7 +44,7 @@ function createHarness(fetchImplementation) {
     },
   };
   contactForm.querySelector = (selector) => (
-    selector === '[data-contact-submit]' ? submitButton : status
+    selector === '[data-contact-submit]' ? submitButton : (selector === '[data-contact-status]' ? status : (selector === '[data-contact-challenge]' ? challenge : null))
   );
   contactForm.querySelectorAll = () => [];
   contactForm.reportValidity = () => true;
@@ -85,6 +87,15 @@ function createHarness(fetchImplementation) {
   let nextTimerId = 0;
   const timers = new Map();
   const window = {
+    turnstile: {
+      render(element, options) {
+        assert.equal(element, challenge);
+        assert.equal(options.action, "contact");
+        widgetCalls.render++;
+        return "widget-id";
+      },
+      reset() { widgetCalls.reset++; },
+    },
     addEventListener() {},
     clearTimeout(timerId) {
       timers.delete(timerId);
@@ -117,6 +128,8 @@ function createHarness(fetchImplementation) {
       });
     },
     contactForm,
+    challenge,
+    widgetCalls,
     dispatchedEvents,
     runTimer(delay) {
       const timer = [...timers.values()].find(item => item.delay === delay);
@@ -204,6 +217,8 @@ async function testRejectedResponsesNeverEmitSuccess() {
     { ok: false, status: 400, payload: { ok: false, errors: {} } },
     { ok: false, status: 502, payload: { ok: false } },
     { ok: false, status: 503, payload: { ok: false } },
+    { ok: false, status: 403, payload: { ok: false } },
+    { ok: false, status: 429, payload: { ok: false } },
     { ok: true, status: 200, payload: { ok: false } },
     { ok: true, status: 200, payload: { ok: true } },
     { ok: true, status: 200, invalidJson: true },
@@ -243,12 +258,40 @@ async function testConcurrentSubmitDeliversAndEmitsOnce() {
   assert.deepEqual(harness.dispatchedEvents, ['contact:submitted']);
 }
 
+async function testChallengeRendersAndAllowsExplicitRetry() {
+  let attempts = 0;
+  const harness = createHarness(async () => {
+    attempts++;
+    return attempts === 1
+      ? { ok: false, status: 403, async json() { return { ok: false, challenge_required: true }; } }
+      : { ok: true, status: 200, async json() { return { ok: true, submission_id: 'new-id' }; } };
+  }, true);
+  await harness.submit();
+  assert.equal(harness.challenge.hidden, false);
+  assert.equal(harness.widgetCalls.render, 1);
+  assert.equal(harness.contactForm.resetCount, 0);
+  assert.deepEqual(harness.dispatchedEvents, []);
+  assert.equal(harness.submitButton.disabled, false);
+  await harness.submit();
+  assert.equal(harness.widgetCalls.reset, 1);
+  assert.deepEqual(harness.dispatchedEvents, ['contact:submitted']);
+}
+
+async function testMissingChallengeConfigurationFailsClearly() {
+  const harness = createHarness(async () => ({ ok: false, status: 403, async json() { return { ok: false, challenge_required: true }; } }));
+  await harness.submit();
+  assert.match(harness.status.textContent, /Verification is temporarily unavailable/);
+  assert.deepEqual(harness.dispatchedEvents, []);
+}
+
 Promise.resolve()
   .then(testSuccessfulSubmissionRestoresTheForm)
   .then(testTimedOutSubmissionRestoresTheForm)
   .then(testInvalidFormDoesNotRequestOrEmitSuccess)
   .then(testRejectedResponsesNeverEmitSuccess)
   .then(testConcurrentSubmitDeliversAndEmitsOnce)
+  .then(testChallengeRendersAndAllowsExplicitRetry)
+  .then(testMissingChallengeConfigurationFailsClearly)
   .catch(error => {
     console.error(error);
     process.exitCode = 1;
