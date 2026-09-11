@@ -8,7 +8,7 @@ Firestore transactions enforce 24-hour duplicates across sessions and instances,
 
 Short text repeated three times plus completion under three seconds requires Turnstile verification. The website signs elapsed time derived from its server-issued session record; client-supplied timing is ignored. The broker retains challenge state to prevent waiting before retry from bypassing verification. The broker verifies tokens with Cloudflare, including expected hostname and `contact` action. Tokens are not stored or logged. Missing provider credentials or provider errors cannot grant verification.
 
-Configure CONTACT_TURNSTILE_SITE_KEY on the website and CONTACT_TURNSTILE_SECRET (Secret Manager) plus CONTACT_TURNSTILE_HOSTNAME on the broker. Follow https://developers.cloudflare.com/turnstile/get-started/server-side-validation/. Until credentials are configured, flagged visitors receive verification-unavailable feedback and cannot complete that challenged submission. This is a release acceptance gap, not completed bot verification.
+Configure CONTACT_TURNSTILE_SITE_KEY on the website and CONTACT_TURNSTILE_SECRET (Secret Manager) plus CONTACT_TURNSTILE_HOSTNAME on the broker. Follow https://developers.cloudflare.com/turnstile/get-started/server-side-validation/. Until credentials are configured, flagged visitors receive verification-unavailable feedback and cannot complete that challenged submission. This was a release acceptance gap during initial staging; live Turnstile acceptance is recorded below.
 
 Deploy the broker before this website change because the HMAC payload now includes `spamContext`. Broker delivery identity excludes this changing context, preserving recovery after timeouts and challenge retries. Roll back the website before rolling back the broker. A broker outage fails closed with no local fallback delivery.
 
@@ -38,4 +38,12 @@ Approved test submission 98cc8162-2d9f-45c9-ae48-13fcee3a37d2 returned HTTP 200.
 
 Validation totals: website 171 passed; shared 160 passed; database 31 passed; API 376 passed, one existing skip. All 17 separately enabled HTTP end-to-end scenarios passed. The Firestore emulator concurrency/expiry/rate/challenge scenario passed, and scoped build, lint and typecheck passed. Firestore TTL on contactSpamState.expiresAt is ACTIVE.
 
-Production has not been promoted. Live Turnstile challenge completion remains unverified because the public site key and broker secret are not configured. Supply the site key and a Secret Manager reference for the secret to finish provider acceptance and production rollout. Local challenge rendering, server verification checks and solved/rejected retry paths are tested; they are not a substitute for provider acceptance.
+At this initial checkpoint production was not promoted and provider credentials were missing. The later live verification below closes that credential and staging challenge gap.
+
+## Live Turnstile verification — 2026-09-11
+
+Cloudflare widget `teraearlywine.com contact form` is configured in Managed mode, with no pre-clearance, for teraearlywine.com (including www) and the exact staging hostname contact-turnstile-v1-dot-teraearlywine.uw.r.appspot.com. Public site key: 0x4AAAAAAEwpCSBMtk4Jw2lM. The private key was transferred directly into Secret Manager CONTACT_TURNSTILE_SECRET, version 1, in pj-engine-sandbox. The if-api service account has secretAccessor on that secret; no private key was written to source, local files or task logs.
+
+Live browser verification used one controlled QA message with a pre-seeded technical challenge flag, avoiding extra email deliveries merely to trigger repetition. The first submission returned challenge_required, Cloudflare visibly reported Success, and explicit resubmission passed the real server verifier. The technical state transitioned from challenge=true to ownership by submission 1535f5cd-afbc-40c6-a2f5-6da1acf21b55. No message existed in Gmail before verification. Afterward Gmail receipt 1a09206dc40bdabd and Linear TER-52 confirmed delivery; TER-52 was renamed QA-only and canceled. The staging broker expected the exact staging hostname; production expects www.teraearlywine.com. Both validate action=contact.
+
+Terraform now persists the production hostname and pins the secret reference to version 1. terraform fmt -check and terraform validate pass; 30 focused contact tests pass. Production candidate versions are being prepared; traffic promotion and production receipt checks follow this staging acceptance.
