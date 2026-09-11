@@ -46,4 +46,21 @@ Cloudflare widget `teraearlywine.com contact form` is configured in Managed mode
 
 Live browser verification used one controlled QA message with a pre-seeded technical challenge flag, avoiding extra email deliveries merely to trigger repetition. The first submission returned challenge_required, Cloudflare visibly reported Success, and explicit resubmission passed the real server verifier. The technical state transitioned from challenge=true to ownership by submission 1535f5cd-afbc-40c6-a2f5-6da1acf21b55. No message existed in Gmail before verification. Afterward Gmail receipt 1a09206dc40bdabd and Linear TER-52 confirmed delivery; TER-52 was renamed QA-only and canceled. The staging broker expected the exact staging hostname; production expects www.teraearlywine.com. Both validate action=contact.
 
-Terraform now persists the production hostname and pins the secret reference to version 1. terraform fmt -check and terraform validate pass; 30 focused contact tests pass. Production candidate versions are being prepared; traffic promotion and production receipt checks follow this staging acceptance.
+Terraform now persists the production hostname and pins the secret reference to version 1. terraform fmt -check and terraform validate pass; 30 focused contact tests pass. Production promotion and native receipt checks passed as recorded below.
+
+## Production acceptance — 2026-09-11 20:00 UTC
+
+Cloud Run if-api-contact-turnstile-prod-v1 and App Engine contact-turnstile-prod-v1 each serve 100% of production traffic, confirmed by native service readback. The broker uses the immutable Cloud Build ba6c912d-105c-4b4c-a069-25cbdb246901 image from implementation 7e3c724; later commits add deployment configuration and evidence only. The website runtime is e068bbe; later commits update documentation only. The broker loads Secret Manager CONTACT_TURNSTILE_SECRET version 1 and validates hostname www.teraearlywine.com and action contact. The website includes the matching public site key. Terraform persists the hostname and pinned secret reference; fmt and validate pass.
+
+All three source spam submissions replayed against https://www.teraearlywine.com returned generic HTTP 403. Each had no Firestore contactDeliveries or mail document, and exact-ID Gmail searches returned no messages. The complete Linear creation window contained only the approved QA inquiry. Rejected IDs:
+
+- 4a031017-7a96-4ebb-9832-1ca92ab62c5d
+- 9bb55aa2-24e0-4328-a21a-855033d7b6ae
+- f9d9c9c7-94c9-44e2-b195-d6710c06e78d
+
+Public browser challenge acceptance used a unique approved QA message with only its technical challenge flag pre-seeded, avoiding extra inbox messages to trigger repetition. Before verification there was no Gmail receipt. The form displayed the real Cloudflare Success result, then explicit resubmission passed server verification and displayed successful delivery. Firestore challenge state changed to owner 06e6c83b-5667-471c-8201-fb19d14f6da4; delivery status is completed and mail state SUCCESS. Native receipts:
+
+- Gmail: https://mail.google.com/mail/#all/1a0920d27d6e6ee0
+- Linear: https://linear.app/idea-factory-lab/issue/TER-53/qa-only-production-turnstile-acceptance (QA-only and canceled after verification)
+
+Production Cloud Logging recorded three blocked_email events at 19:55:54–55 UTC and one challenge_required event at 19:56:04 UTC, each count=1. Staging had already passed the same real provider challenge with Gmail receipt 1a09206dc40bdabd and QA-only canceled issue TER-52. Together with all 17 HTTP scenarios and the regression suites above, production native acceptance closes the prior credential and rollout gap.
