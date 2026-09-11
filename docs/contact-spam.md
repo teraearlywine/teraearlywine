@@ -21,3 +21,21 @@ Run `python -m pytest -q` for website regressions. To exercise real website-to-b
 The broker fixture uses the real signature validation, spam rules and Firestore transaction. It counts mail, Linear and operation calls instead of contacting providers. Its challenge verifier accepts only the explicit test token; separate broker tests exercise the real provider verifier against success, wrong hostname/action, invalid tokens and network failure. The fixture is loopback-only and refuses a production project.
 
 The 17 HTTP scenarios cover nine spam replays, four legitimate language/price cases, cross-session normalized duplicates, honeypot rejection, rate limiting, and challenge rejection/solved retry. Native staged Gmail and Linear receipts must be verified separately; fixture success is not provider delivery evidence.
+
+## Staged acceptance — 2026-09-11 19:39 UTC
+
+Website PR: https://github.com/teraearlywine/teraearlywine/pull/34. Broker PR: https://github.com/idea-factory-lab/pj-engine/pull/142.
+
+The Cloud Build ba6c912d-105c-4b4c-a069-25cbdb246901 image deployed as if-api-contact-spam-7e3c724. Website version contact-spam-1f30629 points to that tagged broker. Both serve 0% of production traffic. The staged website is https://contact-spam-1f30629-dot-teraearlywine.uw.r.appspot.com.
+
+All three source spam replays returned HTTP 403 with generic text. For each submission below, Firestore returned no contactDeliveries document and no mail document. Gmail exact-ID search returned no messages; the complete Linear creation window contained only the approved QA receipt. Cloud Logging contained exactly three blocked_email count=1 events, with no submitted text.
+
+- dfa325df-eaff-4287-891f-3cebf316838e — rejected; no delivery or mail record.
+- abad6b8b-3b15-4635-9c0b-2a46e6b3056f — rejected; no delivery or mail record.
+- 2100a3d3-c5dd-4a3b-8432-7d74dd27bd81 — rejected; no delivery or mail record.
+
+Approved test submission 98cc8162-2d9f-45c9-ae48-13fcee3a37d2 returned HTTP 200. Firestore delivery status is completed and mail delivery state SUCCESS. Native Gmail receipt: https://mail.google.com/mail/#all/1a091fb0d07f746a. Native Linear receipt: https://linear.app/idea-factory-lab/issue/TER-51/qa-only-contact-spam-filter-acceptance-receipt (marked QA-only and canceled after verification). Marker: contact-spam-acceptance-20260911T193851Z.
+
+Validation totals: website 171 passed; shared 160 passed; database 31 passed; API 376 passed, one existing skip. All 17 separately enabled HTTP end-to-end scenarios passed. The Firestore emulator concurrency/expiry/rate/challenge scenario passed, and scoped build, lint and typecheck passed. Firestore TTL on contactSpamState.expiresAt is ACTIVE.
+
+Production has not been promoted. Live Turnstile challenge completion remains unverified because the public site key and broker secret are not configured. Supply the site key and a Secret Manager reference for the secret to finish provider acceptance and production rollout. Local challenge rendering, server verification checks and solved/rejected retry paths are tested; they are not a substitute for provider acceptance.
