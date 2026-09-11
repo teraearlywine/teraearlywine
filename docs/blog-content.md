@@ -39,7 +39,9 @@ The article template receives `article`, `next_article`, and `articles`. Both ro
 
 `/rss.xml` publishes an RSS 2.0 feed from the same article collection, with titles, summaries, categories, and canonical article links. Appended articles appear first without changing cube order. Article URLs serve as stable GUIDs, so edits do not create new subscriptions entries. Publication dates are omitted until actual release dates are recorded. The shared page header advertises the feed to readers, and the blog introduction includes a visible subscription link.
 
-The feed requires `SITE_URL`; without it the endpoint returns 503 and subscription links are hidden. Responses support ETag revalidation and a five-minute public cache. New posts enter the feed when the updated website is deployed.
+The visible subscription link opens `/blog/subscribe/`, a styled HTML page explaining how to add the feed to a reader. It offers the canonical address in a selectable field and a copy button that confirms a successful copy or selects the address for manual copying if clipboard access is unavailable. The field and instructions work without JavaScript. A separate, explicitly labeled link opens the raw XML. The shared discovery link still points directly to `/rss.xml` for feed readers.
+
+The feed requires `SITE_URL`; without it the endpoint returns 503, the subscription page explains that subscriptions are temporarily unavailable, and the blog's subscription link is hidden. Feed responses support ETag revalidation and a five-minute public cache. New posts enter the feed when the updated website is deployed.
 
 ## Verification
 

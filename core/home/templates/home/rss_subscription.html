@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'home/includes/header.html' %}
+<body class="blog-page blog-article-page">
+    {% include 'home/core/navigation.html' %}
+    <main id="main" class="blog-essay rss-subscription">
+        <a class="blog-back" href="{{ url_for('index.blog') }}">Back to the blog</a>
+        <header class="essay-header">
+            <p class="blog-kicker">Subscribe via RSS</p>
+            <h1>New articles.<br>In your reader.</h1>
+            <p class="essay-dek">Warehouse efficiency, reliable data, and production AI. Follow along at your own pace.</p>
+        </header>
+        {% if rss_url %}
+        <section class="rss-setup" aria-labelledby="rss-setup-heading">
+            <h2 id="rss-setup-heading">Add the blog to your reader</h2>
+            <p>Copy this feed address, then paste it into your reader’s “Add feed” or “Follow website” option and confirm the subscription.</p>
+            <label for="rssAddress">Feed address</label>
+            <textarea id="rssAddress" rows="2" readonly spellcheck="false" aria-describedby="rss-copy-status">{{ rss_url }}</textarea>
+            <button id="rssCopy" class="rss-copy-button" type="button" hidden>Copy feed address</button>
+            <p id="rss-copy-status" class="rss-copy-status" role="status" aria-live="polite">You can also select and copy the address directly.</p>
+        </section>
+        <section class="rss-about" aria-labelledby="rss-about-heading">
+            <h2 id="rss-about-heading">New to RSS?</h2>
+            <p>An RSS reader brings articles from the websites you follow into one place. Add this feed once and new posts appear there automatically.</p>
+            <p>Choose a reader such as <a href="https://feedly.com/" target="_blank" rel="noopener noreferrer">Feedly</a> or <a href="https://www.inoreader.com/" target="_blank" rel="noopener noreferrer">Inoreader</a>, then add the address above. Updates arrive in your reader, not by email.</p>
+            <a class="blog-text-link" href="{{ rss_url }}">View the RSS feed (XML)</a>
+        </section>
+        {% else %}
+        <section class="rss-setup">
+            <h2>RSS subscriptions are temporarily unavailable</h2>
+            <p>Please try again later, or <a href="{{ url_for('index.blog') }}">browse the articles</a>.</p>
+        </section>
+        {% endif %}
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+    <script type="module" src="{{ url_for('index.static', filename='js/rss-subscription.js') }}"></script>
+</body>
+</html>

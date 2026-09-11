@@ -65,6 +65,20 @@
 .essay-dek { font-size: clamp(23px, 2.4vw, 32px); font-weight: 100; font-style: italic; line-height: 1.45; letter-spacing: -.02em; }
 .essay-byline { font-size: 13px; margin-top: 27px; }
 .essay-byline span { color: var(--stone); margin-left: 18px; font-size: 11px; }
+.rss-subscription .essay-header { padding-bottom: 32px; }
+.rss-subscription .essay-dek { max-width: 720px; }
+.rss-setup, .rss-about { padding-top: 32px; }
+.rss-setup h2, .rss-about h2 { font-size: 24px; letter-spacing: -.03em; margin-bottom: 14px; }
+.rss-setup p, .rss-about p { max-width: 720px; font-size: 17px; line-height: 1.7; color: #e0d7cd; margin-bottom: 16px; }
+.rss-setup label { display: block; font-size: 13px; margin: 24px 0 10px; }
+.rss-setup textarea { display: block; width: 100%; min-width: 0; padding: 16px; resize: none; font: 16px/1.6 monospace; color: var(--ivory); background: #ffffff08; border: 1px solid #c7b7a480; border-radius: 6px; overflow-wrap: anywhere; }
+.rss-copy-button { display: inline-block; margin-top: 16px; padding: 13px 22px; font: 500 16px/1.4 Inter, sans-serif; color: var(--graphite); background: var(--ivory); border: 1px solid var(--ivory); border-radius: 4px; cursor: pointer; }
+.rss-copy-button:hover { background: var(--stone); border-color: var(--stone); }
+.rss-setup textarea:focus-visible, .rss-copy-button:focus-visible { outline: 2px solid var(--ivory); outline-offset: 4px; }
+.rss-setup .rss-copy-status { font-size: 14px; min-height: 48px; margin: 12px 0 0; }
+.rss-about { margin-top: 24px; border-top: 1px solid #c7b7a445; }
+.rss-about a { text-underline-offset: 4px; }
+.rss-about .blog-text-link { font-size: 14px; margin-top: 0; text-decoration: underline; }
 .essay-prose { max-width: 670px; margin: 0 auto; padding-top: 44px; }
 .essay-prose section { margin-bottom: 40px; }
 .essay-prose h2 { font-size: 26px; letter-spacing: -.035em; line-height: 1.3; margin-bottom: 19px; }

@@ -57,10 +57,34 @@ def test_feed_discovery_and_missing_configuration(app_factory):
                    link.get('type') == 'application/rss+xml' and
                    link.get('href') == f'{SITE_URL}/rss.xml'
                    for link in collect_elements(document, 'link'))
-    assert 'Subscribe via RSS' in client.get('/blog/').get_data(as_text=True)
+    blog = client.get('/blog/').get_data(as_text=True)
+    assert 'Subscribe via RSS' in blog
+    assert {'class': 'blog-text-link', 'href': '/blog/subscribe/'} in collect_elements(blog, 'a')
     unconfigured = app_factory().test_client()
     assert unconfigured.get('/rss.xml').status_code == 503
     assert 'application/rss+xml' not in unconfigured.get('/blog/').get_data(as_text=True)
+
+
+def test_subscription_page_offers_a_copyable_feed_with_safe_metadata(app_factory):
+    client = app_factory(SITE_URL=SITE_URL, GOOGLE_ANALYTICS_MEASUREMENT_ID='G-TEST123').test_client()
+    response = client.get('/blog/subscribe/?q=private@example.com', base_url='https://untrusted.example')
+    assert response.status_code == 200
+    assert response.mimetype == 'text/html'
+    document = response.get_data(as_text=True)
+    inputs = collect_elements(document, 'textarea')
+    assert any(field.get('id') == 'rssAddress' and
+               'readonly' in field for field in inputs)
+    assert {'rel': 'canonical', 'href': f'{SITE_URL}/blog/subscribe/'} in collect_elements(document, 'link')
+    assert '"pagePath": "/blog/subscribe/"' in document
+    assert 'private@example.com' not in document
+    assert 'js/blog.js' not in document
+    assert client.get('/rss.xml').mimetype == 'application/rss+xml'
+
+
+def test_subscription_page_without_site_url_explains_unavailability(app_factory):
+    response = app_factory().test_client().get('/blog/subscribe/')
+    assert response.status_code == 503
+    assert 'RSS subscriptions are temporarily unavailable' in response.get_data(as_text=True)
 
 
 def test_production_feed_redirects_to_configured_origin(app_factory):

@@ -238,11 +238,12 @@ def seo_metadata():
     service_slug = (request.view_args or {}).get('slug')
     service = SERVICES.get(service_slug) if request.endpoint == 'index.service' else None
     is_blog_index = request.endpoint == 'index.blog'
+    is_rss_subscription = request.endpoint == 'index.rss_subscription'
     article = (
         ARTICLES_BY_SLUG.get(service_slug)
         if request.endpoint == 'index.blog_article' else None
     )
-    is_blog = request.endpoint in {'index.blog', 'index.blog_article'}
+    is_blog = request.endpoint in {'index.blog', 'index.blog_article', 'index.rss_subscription'}
     canonical_url = homepage_url if is_homepage else ''
     # Derive analytics paths from registered routes and known content, never
     # request.path: even a 404 URL may contain an email or private identifier.
@@ -255,6 +256,9 @@ def seo_metadata():
         analytics_page_path = url_for('index.blog')
     elif article:
         analytics_page_path = url_for('index.blog_article', slug=article['slug'])
+    elif is_rss_subscription:
+        analytics_page_path = url_for('index.rss_subscription')
+        canonical_url = f'{site_url}{analytics_page_path}' if site_url else ''
 
     structured_data = None
     if is_homepage and homepage_url:
@@ -620,6 +624,19 @@ def rss():
     response.cache_control.max_age = 300
     response.add_etag()
     return response.make_conditional(request)
+
+
+@index_bp.route('/blog/subscribe/')
+def rss_subscription():
+    """Help visitors add the RSS feed to their preferred reader."""
+    return render_template(
+        'home/rss_subscription.html',
+        page_title='Subscribe via RSS | Tera Earlywine',
+        page_description=(
+            'Follow Tera Earlywine’s articles on warehouse efficiency, '
+            'reliable data, and production AI in your RSS reader.'
+        ),
+    ), 200 if _site_url() else 503
 
 
 @index_bp.route('/blog/')
