@@ -8,6 +8,9 @@
             <header class="blog-intro">
                 <h1 id="blog-heading">More useful work.<br>Less wasted compute.</h1>
                 <p>Warehouse efficiency, reliable data, and production AI.</p>
+                {% if rss_url %}
+                <a class="blog-text-link" href="{{ rss_url }}">Subscribe via RSS</a>
+                {% endif %}
             </header>
             <div class="cube-explorer" id="cubeExplorer">
                 <div class="cube-stage" id="cubeStage">

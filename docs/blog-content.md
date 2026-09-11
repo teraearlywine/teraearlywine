@@ -35,6 +35,12 @@ The index template receives `articles`, `featured_articles`, `diagnostic_offer`,
 
 The article template receives `article`, `next_article`, and `articles`. Both routes pass `is_blog=True` so shared templates load the blog styles and identify the current navigation item.
 
+## RSS subscriptions
+
+`/rss.xml` publishes an RSS 2.0 feed from the same article collection, with titles, summaries, categories, and canonical article links. Appended articles appear first without changing cube order. Article URLs serve as stable GUIDs, so edits do not create new subscriptions entries. Publication dates are omitted until actual release dates are recorded. The shared page header advertises the feed to readers, and the blog introduction includes a visible subscription link.
+
+The feed requires `SITE_URL`; without it the endpoint returns 503 and subscription links are hidden. Responses support ETag revalidation and a five-minute public cache. New posts enter the feed when the updated website is deployed.
+
 ## Verification
 
 Production-mode tests exercise the index and all 27 article URLs with debug and testing explicitly disabled. They also check article content, canonical URLs, structured data, sitemap coverage, navigation order, missing-site-configuration behavior, and unknown-article 404s. Publishing still requires a separate live deployment and native readback; local tests alone do not establish that the site is live.

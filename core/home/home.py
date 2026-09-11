@@ -418,6 +418,7 @@ def seo_metadata():
     return {
         'canonical_url': canonical_url,
         'analytics_page_path': analytics_page_path,
+        'rss_url': f'{site_url}/rss.xml' if site_url else '',
         'is_homepage': is_homepage,
         'page_og_type': 'article' if article else 'website',
         'is_blog': is_blog,
@@ -576,6 +577,49 @@ def sitemap():
         xml_declaration=True,
     )
     return Response(document, mimetype='application/xml')
+
+
+@index_bp.route('/rss.xml')
+def rss():
+    """Publish article summaries using canonical links and stable identities."""
+    site_url = _site_url()
+    if not site_url:
+        abort(503)
+
+    atom = 'http://www.w3.org/2005/Atom'
+    ElementTree.register_namespace('atom', atom)
+    root = ElementTree.Element('rss', version='2.0')
+    channel = ElementTree.SubElement(root, 'channel')
+    for name, value in (
+        ('title', 'Tera Earlywine — Blog'),
+        ('link', f'{site_url}/blog/'),
+        ('description', BLOG_DESCRIPTION),
+        ('language', 'en-us'),
+    ):
+        ElementTree.SubElement(channel, name).text = value
+    ElementTree.SubElement(channel, f'{{{atom}}}link', {
+        'href': f'{site_url}/rss.xml', 'rel': 'self',
+        'type': 'application/rss+xml',
+    })
+    # New articles are appended to preserve cube positions; show those first.
+    for article in reversed(ARTICLES):
+        item = ElementTree.SubElement(channel, 'item')
+        article_url = f"{site_url}/blog/{article['slug']}/"
+        for name, value in (
+            ('title', article['title']), ('link', article_url),
+            ('description', article['dek']), ('category', article['category']),
+        ):
+            ElementTree.SubElement(item, name).text = value
+        ElementTree.SubElement(item, 'guid', isPermaLink='true').text = article_url
+
+    response = Response(
+        ElementTree.tostring(root, encoding='utf-8', xml_declaration=True),
+        mimetype='application/rss+xml',
+    )
+    response.cache_control.public = True
+    response.cache_control.max_age = 300
+    response.add_etag()
+    return response.make_conditional(request)
 
 
 @index_bp.route('/blog/')
