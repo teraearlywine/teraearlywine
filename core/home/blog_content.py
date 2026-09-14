@@ -600,6 +600,13 @@ ARTICLES = [
                 "If it's still working, I'd look at its progress before giving it more time. If it's stuck, I'd answer the question or narrow the assignment. Then I can decide whether another focus block makes sense.",
             ),
             _section(
+                'Give the timer its own status workflow',
+                "I'd take this a step further with a secondary workflow forked from the main app and synced with the timer. Its job would be to send me a status report at each timer gate: what's finished, what's still running, what's blocked, and whether it needs anything from me.",
+                "For that to be useful, the reporting workflow needs access to the main task's current status and outputs. A copy of the original conversation would go stale as the work progresses. I'd want each report to link to the latest result, say when the status was checked, and flag anything it couldn't verify.",
+                "The timer would trigger the check-in, and the secondary workflow would turn that check into a short update. I could read it, make any needed decision, and start the next block. If the main task finishes early or hits a blocker that needs me, I'd want that notification right away instead of waiting for the next gate.",
+                "That's the setup I'd like to try: the main workflow does the work, and the secondary workflow keeps me informed on the timer's rhythm. The timer alone doesn't create that connection; the app needs a way to schedule the checks and deliver the reports.",
+            ),
+            _section(
                 'Does it buy back attention?',
                 "That's what I'd want to find out. Did I get a useful stretch of focused work? Was the agent's output usable? How much time did I spend checking and fixing it? Those answers matter more to me than how many workflows were running at once.",
                 "It's a small experiment: hand off a clear task, set a timer, focus elsewhere, and come back with enough attention to review the result. Take a break, then decide what's next. The tomato now has a delegation job.",
