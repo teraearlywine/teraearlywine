@@ -131,6 +131,35 @@ document.addEventListener('DOMContentLoaded', () => {
       firstInvalidField?.focus();
     };
 
+    const challenge = contactForm.querySelector('[data-contact-challenge]');
+    let challengeWidget;
+    const showChallenge = () => {
+      if (!challenge) {
+        setStatus('Verification is temporarily unavailable. Please try again later.', true);
+        return;
+      }
+      challenge.hidden = false;
+      const render = () => {
+        if (challengeWidget !== undefined) window.turnstile.reset(challengeWidget);
+        else challengeWidget = window.turnstile.render(challenge, {
+          sitekey: challenge.dataset.sitekey, action: 'contact',
+        });
+      };
+      if (window.turnstile) render();
+      else if (!document.querySelector('[data-turnstile-script]')) {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.dataset.turnstileScript = '';
+        script.onload = render;
+        script.onerror = () => {
+          script.remove();
+          setStatus('Verification could not load. Please try again.', true);
+        };
+        document.head.appendChild(script);
+      }
+    };
+    if (challenge && !challenge.hidden) showChallenge();
+
     contactForm.addEventListener('submit', async event => {
       event.preventDefault();
       if (!contactForm.reportValidity() || submitButton.disabled) {
@@ -162,6 +191,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const payload = await response.json().catch(() => ({}));
 
+        if (payload.challenge_required === true) {
+          setStatus('Please complete the verification and submit again.', true);
+          showChallenge();
+          return;
+        }
+        if ([403, 429].includes(response.status) || (response.ok && payload.ok === false)) {
+          setStatus('Your submission could not be accepted. Please try again later.', true);
+          return;
+        }
         if (
           !response.ok
           || payload.ok !== true
@@ -178,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         contactForm.reset();
+        if (challengeWidget !== undefined) window.turnstile.reset(challengeWidget);
         contactForm.elements.namedItem('submission_id').value = (
           payload.submission_id
         );

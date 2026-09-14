@@ -111,6 +111,9 @@
                 aria-live="polite"
                 data-contact-status
             >{% if contact_error %}{{ contact_error }}{% elif success_messages %}{{ success_messages[0] }}{% endif %}</p>
+            {% if config.get('CONTACT_TURNSTILE_SITE_KEY') %}
+            <div data-contact-challenge data-sitekey="{{ config['CONTACT_TURNSTILE_SITE_KEY'] }}"{% if not contact_challenge %} hidden{% endif %}></div>
+            {% endif %}
         </form>
         {% if booking_url %}
         <div
