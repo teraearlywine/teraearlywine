@@ -4,7 +4,7 @@ The blog at `/blog/` uses the website's graphite, ivory, stone, and Inter visual
 
 ## GTM-aligned collection
 
-`core/home/blog_content.py` contains 27 articles written in third person for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
+`core/home/blog_content.py` contains 28 articles written in third person for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
 
 The featured reading path contains three practical pieces: cloud bills versus carbon evidence, dashboard refresh frequency, and repeated processing before AI scales. Existing IDs, slugs, and article order remain stable, preserving published URLs and cube positions. Other articles retain their underlying topic while replacing personal reflections with a recognizable problem, an investigation, and a useful first step.
 
@@ -17,6 +17,8 @@ The user approved generating and publishing this collection. The blog routes are
 Canonical URLs follow the configured `SITE_URL`. The index uses Blog structured data, articles use BlogPosting structured data, and both include breadcrumbs. All article URLs are included in the public sitemap. Publication dates remain unset until they can be grounded in an actual release record. Unknown article URLs return an unindexed 404.
 
 The older abandoned journal content and documentation are not used by these routes. This change does not create a content calendar or release schedule.
+
+Article 28, `pomodoro-for-ai-agents`, develops Tera's timer-and-agent tweet into a practical launch, focus, and review rhythm. It appends the first node of the next cube shell, preserving the original 27 positions, and appears first in RSS when deployed.
 
 ## Article contract
 
@@ -45,4 +47,4 @@ The feed requires `SITE_URL`; without it the endpoint returns 503, the subscript
 
 ## Verification
 
-Production-mode tests exercise the index and all 27 article URLs with debug and testing explicitly disabled. They also check article content, canonical URLs, structured data, sitemap coverage, navigation order, missing-site-configuration behavior, and unknown-article 404s. Publishing still requires a separate live deployment and native readback; local tests alone do not establish that the site is live.
+Production-mode tests exercise the index and all article URLs with debug and testing explicitly disabled. They also check article content, canonical URLs, structured data, sitemap coverage, navigation order, missing-site-configuration behavior, and unknown-article 404s. Publishing still requires a separate live deployment and native readback; local tests alone do not establish that the site is live.

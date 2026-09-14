@@ -577,6 +577,33 @@ ARTICLES = [
             ),
         ], offer='diagnostic',
     ),
+    _article(
+        28, 'pomodoro-for-ai-agents', 'Pomodoro for AI agents: fire it off, then check it.',
+        'Production AI',
+        'Set a timer, launch an AI agent workflow, and give the result a deliberate review window.',
+        [
+            _section(
+                'Put the waiting time to work',
+                'Tera Earlywine proposes a playful twist on the Pomodoro timer: set a timer, fire off an AI agent workflow, and come back to "check it" when it finishes. The agent works through a bounded assignment while its human counterpart gives another task a focused block of attention. The timer marks a rendezvous with the work.',
+                'The appeal is simple. An agent that takes several minutes to research, draft, or run checks does not need an audience for every step. A planned return gives that waiting period a purpose and gives the eventual result a place in the day.',
+            ),
+            _section(
+                'Launch something that can finish',
+                'Before starting the clock, the assignment needs an output, a boundary, and a stopping point. For example: review these pipeline logs, identify likely causes of the failed run, and return a short explanation with evidence. Leave changes to the pipeline for a separate decision.',
+                'For an illustrative 25-minute block, the agent could investigate those logs while the engineer drafts an unrelated design note. The two tasks should be independent enough that neither needs the other to move forward. One agent assignment and one human focus task are enough to try the rhythm.',
+            ),
+            _section(
+                'Treat the timer as a checkpoint',
+                'A timer cannot guarantee that an agent has finished. At the checkpoint, the result may be ready, still running, or blocked on a question. A completion notification can signal that there is something to inspect; the timer provides a fallback reminder to return.',
+                'The review is the "check it" part: open the output, inspect the supporting evidence, and decide whether to accept it, request one focused revision, or stop. If the run is still active, inspect its status before extending the window. A finished run still needs a usable result.',
+            ),
+            _section(
+                'Keep the experiment small',
+                'The useful question is whether the rhythm leaves more room for focused work after review and correction time are included. A simple trial can record the assignment, the returned output, the review effort, and whether the result was usable. More simultaneous runs are only useful when there is capacity to inspect what comes back.',
+                'Set the timer. Fire off the workflow. Give another task some attention. Then come back and check it. The tomato now has a delegation job.',
+            ),
+        ], offer='lighthouse',
+    ),
 ]
 
 ARTICLES_BY_SLUG = {article['slug']: article for article in ARTICLES}
