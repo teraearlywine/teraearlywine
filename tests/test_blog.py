@@ -46,10 +46,10 @@ def test_blog_cube_has_distinct_destinations_and_safe_data(app_factory):
     assert name == 'home/blog_index.html'
     assert context['is_blog'] is True
     cube_articles = context['cube_articles']
-    assert len(cube_articles) == 27
-    assert len({article['id'] for article in cube_articles}) == 27
-    assert len({article['url'] for article in cube_articles}) == 27
-    assert len({article['title'] for article in cube_articles}) == 27
+    assert len(cube_articles) == len(ARTICLES)
+    assert len({article['id'] for article in cube_articles}) == len(ARTICLES)
+    assert len({article['url'] for article in cube_articles}) == len(ARTICLES)
+    assert len({article['title'] for article in cube_articles}) == len(ARTICLES)
     assert json.loads(json.dumps(cube_articles)) == cube_articles
     assert all(article['url'] == f"/blog/{article['slug']}/" for article in cube_articles)
 
