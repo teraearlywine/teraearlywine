@@ -29,3 +29,9 @@ Screenshots: [desktop](home-desktop.png), [mobile](home-mobile.png), [blog mobil
 ## Release procedure
 
 Deploy the merged commit to App Engine `teraearlywine/default` with no promotion. Capture current traffic first (observed baseline: `pomodoro-gates-20260914`, 100%). Verify version-specific routes, assets, RSS, browser rendering and controls before assigning 100% traffic. Recheck native allocation and the canonical domain afterwards. On failure, restore the captured baseline and verify recovery. Record actual release results separately after verification.
+
+## Hero alignment refinement — 2026-09-20
+
+At Tera's request, the landscape cube now shares the hero copy's horizontal row at widths of 1024px and above. The image is cropped to its right-hand artwork without stretching, with no text/image overlap. Narrow screens preserve copy-before-art reading order and the existing stacked layout. Copy, actions, and blog cube behavior are unchanged.
+
+Chrome geometry and visual checks passed at 320, 390, 768, 1024, 1440, and 1920px; no horizontal overflow or page exceptions. Python suite: 174 passed, 17 existing broker/emulator skips. [Desktop screenshot](hero-aligned-desktop.png).
