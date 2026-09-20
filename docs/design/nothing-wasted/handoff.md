@@ -35,3 +35,9 @@ Deploy the merged commit to App Engine `teraearlywine/default` with no promotion
 At Tera's request, the landscape cube now shares the hero copy's horizontal row at widths of 1024px and above. The image is cropped to its right-hand artwork without stretching, with no text/image overlap. Narrow screens preserve copy-before-art reading order and the existing stacked layout. Copy, actions, and blog cube behavior are unchanged.
 
 Chrome geometry and visual checks passed at 320, 390, 768, 1024, 1440, and 1920px; no horizontal overflow or page exceptions. Python suite: 174 passed, 17 existing broker/emulator skips. [Desktop screenshot](hero-aligned-desktop.png).
+
+## Blog alignment refinement — 2026-09-20
+
+The archive header is left-aligned to the same 1280px content grid as the writing list and offer. The explorer uses the full content width instead of a separate right-anchored maximum. Caption, reset, and growth controls belong to the cube column; the preview remains beside the cube on desktop and follows it on mobile. The subtitle uses the site's body scale instead of competing with the heading. Shared navigation inherits the site's gutters.
+
+Six-width Chrome checks (320–1920px) verify aligned content edges, controls centered under the cube, separate preview bounds, all 28 pins, keyboard selection, growth, Escape focus restoration, reset, and no page errors/overflow. Python: 174 passed, 17 existing skips. JavaScript: 14 passed, 1 optional live-network skip. [Desktop](blog-aligned-desktop.png) / [mobile](blog-aligned-mobile.png).
