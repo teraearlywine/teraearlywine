@@ -1,5 +1,8 @@
 <footer class="site-footer">
     <div class="container site-footer__content">
+        <div class="footer-identity">
+            <img class="footer-logo" src="{{ url_for('index.static', filename='images/nothing-wasted-logo-800.webp') }}" alt="Tera Earlywine Consulting" width="800" height="267" loading="lazy">
+        </div>
         <p>&copy; 2026 Tera Earlywine</p>
         {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
         <button class="privacy-choices-button" type="button" data-consent-reopen>

@@ -1,15 +1,7 @@
 <section id="hero" class="hero" aria-labelledby="hero-heading">
-    <img class="hero-art"
-         src="{{ url_for('index.static', filename='images/hero-glass-retina-1536.webp') }}"
-         srcset="{{ url_for('index.static', filename='images/hero-glass-retina-768.webp') }} 768w,
-                 {{ url_for('index.static', filename='images/hero-glass-retina-1536.webp') }} 1536w,
-                 {{ url_for('index.static', filename='images/hero-glass-retina-2304.webp') }} 2304w,
-                 {{ url_for('index.static', filename='images/hero-glass-retina-3072.webp') }} 3072w"
-         sizes="(max-width: 423px) 423px, 100vw"
-         alt="" fetchpriority="high" width="3072" height="2544">
     <div class="hero-content">
         <p class="hero-eyebrow">For enterprise data leaders</p>
-        <h1 class="hero-name" id="hero-heading">Modernize<br>your data.<em>Put AI into<br>production.</em></h1>
+        <h1 class="hero-name" id="hero-heading">Modernize your data.<em>Put AI into production.</em></h1>
         <p class="hero-tagline">Tera Earlywine helps leaders in regulated and critical operations assess production risk, design reliable data foundations, and deliver AI workflows with clear controls and ownership.</p>
         <div class="hero-actions">
             {% if config.get('BOOKING_URL') %}
@@ -18,6 +10,12 @@
             <a class="hero-booking" href="#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your priorities</a>
         </div>
     </div>
+    <img class="hero-art"
+         src="{{ url_for('index.static', filename='images/nothing-wasted-landscape-1440.webp') }}"
+         srcset="{{ url_for('index.static', filename='images/nothing-wasted-landscape-768.webp') }} 768w,
+                 {{ url_for('index.static', filename='images/nothing-wasted-landscape-1440.webp') }} 1440w,
+                 {{ url_for('index.static', filename='images/nothing-wasted-landscape-2172.webp') }} 2172w"
+         sizes="100vw" alt="" width="2172" height="724" fetchpriority="high">
     <div class="hero-journey">
         <p>A structured delivery path</p>
         <ol>
