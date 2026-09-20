@@ -13,10 +13,28 @@
                 {% endif %}
             </header>
             <div class="cube-explorer" id="cubeExplorer">
-                <div class="cube-stage" id="cubeStage">
-                    <canvas id="blogCube" aria-hidden="true" data-environment="{{ url_for('index.static', filename='images/blog-studio-environment.png') }}"></canvas>
-                    <div class="cube-points" id="cubePoints" role="group" aria-label="Explore articles in the cube"></div>
-                    <p class="cube-loading" id="cubeStatus" role="status">Bringing ideas into focus…</p>
+                <div class="cube-visual">
+                    <div class="cube-stage" id="cubeStage">
+                        <canvas id="blogCube" aria-hidden="true" data-environment="{{ url_for('index.static', filename='images/blog-studio-environment.png') }}"></canvas>
+                        <div class="cube-points" id="cubePoints" role="group" aria-label="Explore articles in the cube"></div>
+                        <p class="cube-loading" id="cubeStatus" role="status">Bringing ideas into focus…</p>
+                    </div>
+                    <p class="cube-caption">Every article adds a point. Explore to see what takes shape.</p>
+                    <div class="cube-tools" id="cubeTools" hidden>
+                        <button type="button" class="blog-quiet-button" id="resetCube">Reset view</button>
+                        <span aria-hidden="true">/</span>
+                        <button type="button" class="blog-quiet-button" id="growthToggle" aria-expanded="false" aria-controls="growthControls">Watch it grow</button>
+                    </div>
+                    <div class="growth-controls" id="growthControls" hidden>
+                        <label for="growthRange">Articles in the cube <output id="growthCount" for="growthRange">{{ articles|length }}</output></label>
+                        <input type="range" id="growthRange" min="1" max="{{ articles|length }}" value="{{ articles|length }}" aria-describedby="growthExplanation">
+                        <div class="growth-milestones">
+                            <button type="button" data-count="9">9 · A square</button>
+                            <button type="button" data-count="10">10 · A new layer</button>
+                            <button type="button" data-count="27">27 · A cube</button>
+                        </div>
+                        <p id="growthExplanation">One point per article. Earlier points keep their place.</p>
+                    </div>
                 </div>
                 <span class="cube-connector" id="cubeConnector" aria-hidden="true" hidden></span>
                 <aside class="article-preview" id="articlePreview" aria-labelledby="previewTitle">
@@ -26,22 +44,6 @@
                     <a id="previewLink" class="blog-text-link" href="{{ url_for('index.blog_article', slug=articles[0].slug) }}">Read article <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
                 </aside>
                 <span class="sr-only" id="selectionStatus" aria-live="polite"></span>
-            </div>
-            <p class="cube-caption">Every article adds a point. Explore to see what takes shape.</p>
-            <div class="cube-tools" id="cubeTools" hidden>
-                <button type="button" class="blog-quiet-button" id="resetCube">Reset view</button>
-                <span aria-hidden="true">/</span>
-                <button type="button" class="blog-quiet-button" id="growthToggle" aria-expanded="false" aria-controls="growthControls">Watch it grow</button>
-            </div>
-            <div class="growth-controls" id="growthControls" hidden>
-                <label for="growthRange">Articles in the cube <output id="growthCount" for="growthRange">{{ articles|length }}</output></label>
-                <input type="range" id="growthRange" min="1" max="{{ articles|length }}" value="{{ articles|length }}" aria-describedby="growthExplanation">
-                <div class="growth-milestones">
-                    <button type="button" data-count="9">9 · A square</button>
-                    <button type="button" data-count="10">10 · A new layer</button>
-                    <button type="button" data-count="27">27 · A cube</button>
-                </div>
-                <p id="growthExplanation">One point per article. Earlier points keep their place.</p>
             </div>
             <noscript><p class="cube-fallback">Explore the articles in the list below.</p></noscript>
         </section>
