@@ -431,7 +431,7 @@ def seo_metadata():
         'is_blog': is_blog,
         'services': SERVICES,
         'social_image_url': (
-            f"{site_url}{url_for('index.static', filename='images/hero-glass-retina-1536.webp')}"
+            f"{site_url}{url_for('index.static', filename='images/nothing-wasted-social.jpg')}"
             if site_url else ''
         ),
         'search_console_verification': str(

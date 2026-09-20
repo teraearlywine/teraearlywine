@@ -220,7 +220,7 @@ def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
     assert 'Value / Risk Diagnostic' in document
     assert 'Data Foundation Blueprint' in document
     assert 'Production AI Lighthouse' in document
-    assert 'Modernize<br>your data.' in document
+    assert 'Modernize your data.' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document
@@ -584,11 +584,11 @@ def test_small_text_colors_meet_wcag_aa():
     def resolve_color(value):
         variable_match = re.fullmatch(r'var\((--[^)]+)\)', value)
         if variable_match:
-            return declaration(
-                consultancy_source,
+            return resolve_color(declaration(
+                main_source,
                 ':root',
                 variable_match.group(1),
-            )
+            ))
         return value
 
     def contrast_ratio(foreground, background):
@@ -615,10 +615,13 @@ def test_small_text_colors_meet_wcag_aa():
         )
         return (lighter + 0.05) / (darker + 0.05)
 
-    assert '--color-text-accessible-muted: #5f6368;' in main_source
-    assert '--color-accent-hover: #0041c2;' in main_source
-    assert contrast_ratio('#5f6368', '#ffffff') >= 4.5
-    assert contrast_ratio('#0041c2', '#ffffff') >= 4.5
+    # Resolve the shared tokens rather than pinning a superseded palette.
+    for background in ('var(--ivory)', 'var(--sage)'):
+        for foreground in ('var(--color-text)', 'var(--color-text-secondary)',
+                           'var(--color-text-accessible-muted)', 'var(--color-error)'):
+            assert contrast_ratio(resolve_color(foreground), resolve_color(background)) >= 4.5
+    for background in ('var(--color-accent)', 'var(--color-accent-hover)'):
+        assert contrast_ratio(resolve_color('var(--ivory)'), resolve_color(background)) >= 4.5
     assert '.consent-banner p {' in main_source
     assert 'color: var(--color-text-accessible-muted);' in main_source
 

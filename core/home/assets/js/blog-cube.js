@@ -25,8 +25,16 @@ export async function createBlogCube({
     return null;
   }
 
+  const style = getComputedStyle(canvas);
+  const brand = (name) => new THREE.Color(style.getPropertyValue(name).trim());
+  const palette = {
+    ivory: brand('--ivory'),
+    charcoal: brand('--graphite'),
+    moss: brand('--moss'),
+    sage: brand('--sage'),
+  };
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x3b3a38);
+  scene.background = null;
   const camera = new THREE.OrthographicCamera(-3, 3, 2.5, -2.5, 0.1, 80);
   camera.position.set(5.8, 3.9, 7.5);
   camera.lookAt(0, -0.08, 0);
@@ -61,7 +69,7 @@ export async function createBlogCube({
     // A failed decorative image must not take the article explorer offline.
     console.warn('The cube is using its built-in studio lighting.', error);
   }
-  if (!environmentTarget) environmentTarget = makeStudioEnvironment(pmrem);
+  if (!environmentTarget) environmentTarget = makeStudioEnvironment(pmrem, palette);
   scene.environment = environmentTarget.texture;
   keep(environmentTarget);
   pmrem.dispose();
@@ -69,11 +77,11 @@ export async function createBlogCube({
   const sculpture = new THREE.Group();
   sculpture.rotation.set(REST_ROTATION.x, REST_ROTATION.y, 0);
   scene.add(sculpture);
-  scene.add(new THREE.AmbientLight(0xe9e3d8, 0.65));
-  const keyLight = new THREE.DirectionalLight(0xfff1df, 2.1);
+  scene.add(new THREE.AmbientLight(palette.ivory, 0.65));
+  const keyLight = new THREE.DirectionalLight(palette.ivory, 2.1);
   keyLight.position.set(-3, 6, 5);
   scene.add(keyLight);
-  const rimLight = new THREE.DirectionalLight(0xf7f4ed, 2.2);
+  const rimLight = new THREE.DirectionalLight(palette.ivory, 2.2);
   rimLight.position.set(4, 1, -4);
   scene.add(rimLight);
 
@@ -88,12 +96,12 @@ export async function createBlogCube({
   const sphereGeometry = keep(new THREE.SphereGeometry(0.145, 36, 24));
   const sphereMaterial = keep(new THREE.MeshPhysicalMaterial({
     envMap: environmentTarget.texture,
-    color: 0xffffff,
+    color: palette.ivory,
     metalness: 0,
     roughness: 0.035,
     transmission: 0.92,
     thickness: 0.3,
-    attenuationColor: new THREE.Color(0x655748),
+    attenuationColor: palette.moss,
     attenuationDistance: 0.3,
     ior: 1.49,
     clearcoat: 1,
@@ -103,8 +111,8 @@ export async function createBlogCube({
     opacity: 1,
   }));
   const selectedMaterial = keep(sphereMaterial.clone());
-  selectedMaterial.color.set(0xfff4e1);
-  selectedMaterial.emissive.set(0xf4dec0);
+  selectedMaterial.color.set(palette.sage);
+  selectedMaterial.emissive.set(palette.moss);
   selectedMaterial.emissiveIntensity = 0.45;
   selectedMaterial.envMapIntensity = 6;
 
@@ -133,7 +141,7 @@ export async function createBlogCube({
 
   const strutGeometry = keep(new THREE.CylinderGeometry(0.009, 0.009, 1, 8));
   const strutMaterial = keep(new THREE.MeshStandardMaterial({
-    color: 0xb6aa96, metalness: 0.83, roughness: 0.24, envMapIntensity: 1.55,
+    color: palette.moss, metalness: 0.83, roughness: 0.24, envMapIntensity: 1.55,
   }));
   const struts = getCubeConnections(coordinates).map(([a, b]) => {
     const mesh = new THREE.Mesh(strutGeometry, strutMaterial);
@@ -142,14 +150,14 @@ export async function createBlogCube({
   });
 
   const layerMaterial = keep(new THREE.MeshPhysicalMaterial({
-    color: 0xe9decc, metalness: 0.08, roughness: 0.12,
+    color: palette.sage, metalness: 0.08, roughness: 0.12,
     transmission: 0.68, thickness: 0.012, transparent: true, opacity: 0.095,
     side: THREE.DoubleSide, depthWrite: false, envMapIntensity: 1.1,
   }));
   const layerWidth = (side - 1) * SPACING + 0.44;
   const layerGeometry = keep(new THREE.PlaneGeometry(layerWidth, layerWidth));
   const edgeGeometry = keep(new THREE.EdgesGeometry(layerGeometry));
-  const edgeMaterial = keep(new THREE.LineBasicMaterial({ color: 0xe3d4bd, transparent: true, opacity: 0.52 }));
+  const edgeMaterial = keep(new THREE.LineBasicMaterial({ color: palette.moss, transparent: true, opacity: 0.52 }));
   const layers = Array.from({ length: side }, (_, z) => {
     const group = new THREE.Group();
     const pane = new THREE.Mesh(layerGeometry, layerMaterial);
@@ -160,13 +168,13 @@ export async function createBlogCube({
     return { group, offset: 0, target: 0, baseZ: group.position.z };
   });
 
-  const haloMaterial = keep(new THREE.MeshBasicMaterial({ color: 0xf4dec0, transparent: true, opacity: 0.62, depthTest: false }));
+  const haloMaterial = keep(new THREE.MeshBasicMaterial({ color: palette.moss, transparent: true, opacity: 0.62, depthTest: false }));
   const halo = new THREE.Mesh(keep(new THREE.TorusGeometry(0.213, 0.003, 6, 64)), haloMaterial);
   halo.visible = false;
   halo.renderOrder = 10;
   scene.add(halo);
   const glowTexture = keep(radialTexture());
-  const glowMaterial = keep(new THREE.SpriteMaterial({ map: glowTexture, color: 0xf9d8ac, transparent: true, opacity: 0.32, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+  const glowMaterial = keep(new THREE.SpriteMaterial({ map: glowTexture, color: palette.sage, transparent: true, opacity: 0.32, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
   const glow = new THREE.Sprite(glowMaterial);
   glow.scale.setScalar(0.83);
   glow.visible = false;
@@ -388,13 +396,13 @@ function radialTexture() {
 }
 
 /** Local light cards keep real reflections if the optional studio image fails. */
-function makeStudioEnvironment(pmrem) {
+function makeStudioEnvironment(pmrem, palette) {
   const studio = new THREE.Scene();
   const shellGeometry = new THREE.SphereGeometry(20, 24, 12);
-  const shellMaterial = new THREE.MeshBasicMaterial({ color: 0x44423e, side: THREE.BackSide });
+  const shellMaterial = new THREE.MeshBasicMaterial({ color: palette.charcoal, side: THREE.BackSide });
   studio.add(new THREE.Mesh(shellGeometry, shellMaterial));
   const cardGeometry = new THREE.PlaneGeometry(6, 10);
-  const cardMaterial = new THREE.MeshBasicMaterial({ color: new THREE.Color(5, 4.4, 3.6), side: THREE.DoubleSide });
+  const cardMaterial = new THREE.MeshBasicMaterial({ color: palette.ivory.clone().multiplyScalar(5), side: THREE.DoubleSide });
   [[-7, 5, 5], [8, 4, -3], [0, 9, 0]].forEach(([x, y, z]) => {
     const card = new THREE.Mesh(cardGeometry, cardMaterial);
     card.position.set(x, y, z);
