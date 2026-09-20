@@ -930,7 +930,7 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   background: var(--ivory);
 }
 
-/* Copy remains live and precedes the decorative landscape at every width. */
+/* Live copy and artwork share a desktop row; narrow screens retain reading order. */
 .hero { display: flex; flex-direction: column; min-height: 0; padding: 0; background: var(--ivory); color: var(--graphite); text-align: left; }
 
 .hero-content { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 160px 24px 48px; }
@@ -1238,4 +1238,23 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   .hero-journey img { width: 20px; }
   .method-list { grid-template-columns: 1fr; }
   .footer-identity { padding: 24px; }
+}
+
+@media (min-width: 1024px) {
+  .hero-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+    padding: 160px 0 32px max(24px, calc((100vw - 1280px) / 2));
+  }
+  .hero-content {
+    padding: 0 32px 0 0;
+    margin: 0;
+  }
+  .hero-name { font-size: clamp(60px, 5.6vw, 88px); }
+  .hero-art {
+    height: clamp(440px, 42vw, 660px);
+    aspect-ratio: auto;
+    object-position: right center;
+  }
 }

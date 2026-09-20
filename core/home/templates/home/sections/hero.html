@@ -1,21 +1,23 @@
 <section id="hero" class="hero" aria-labelledby="hero-heading">
-    <div class="hero-content">
-        <p class="hero-eyebrow">For enterprise data leaders</p>
-        <h1 class="hero-name" id="hero-heading">Modernize your data.<em>Put AI into production.</em></h1>
-        <p class="hero-tagline">Tera Earlywine helps leaders in regulated and critical operations assess production risk, design reliable data foundations, and deliver AI workflows with clear controls and ownership.</p>
-        <div class="hero-actions">
-            {% if config.get('BOOKING_URL') %}
-            <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
-            {% endif %}
-            <a class="hero-booking" href="#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your priorities</a>
+    <div class="hero-main">
+        <div class="hero-content">
+            <p class="hero-eyebrow">For enterprise data leaders</p>
+            <h1 class="hero-name" id="hero-heading">Modernize your data.<em>Put AI into production.</em></h1>
+            <p class="hero-tagline">Tera Earlywine helps leaders in regulated and critical operations assess production risk, design reliable data foundations, and deliver AI workflows with clear controls and ownership.</p>
+            <div class="hero-actions">
+                {% if config.get('BOOKING_URL') %}
+                <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
+                {% endif %}
+                <a class="hero-booking" href="#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your priorities</a>
+            </div>
         </div>
+        <img class="hero-art"
+             src="{{ url_for('index.static', filename='images/nothing-wasted-landscape-1440.webp') }}"
+             srcset="{{ url_for('index.static', filename='images/nothing-wasted-landscape-768.webp') }} 768w,
+                     {{ url_for('index.static', filename='images/nothing-wasted-landscape-1440.webp') }} 1440w,
+                     {{ url_for('index.static', filename='images/nothing-wasted-landscape-2172.webp') }} 2172w"
+             sizes="100vw" alt="" width="2172" height="724" fetchpriority="high">
     </div>
-    <img class="hero-art"
-         src="{{ url_for('index.static', filename='images/nothing-wasted-landscape-1440.webp') }}"
-         srcset="{{ url_for('index.static', filename='images/nothing-wasted-landscape-768.webp') }} 768w,
-                 {{ url_for('index.static', filename='images/nothing-wasted-landscape-1440.webp') }} 1440w,
-                 {{ url_for('index.static', filename='images/nothing-wasted-landscape-2172.webp') }} 2172w"
-         sizes="100vw" alt="" width="2172" height="724" fetchpriority="high">
     <div class="hero-journey">
         <p>A structured delivery path</p>
         <ol>
