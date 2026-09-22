@@ -613,6 +613,75 @@ ARTICLES = [
             ),
         ], offer='lighthouse',
     ),
+    _article(
+        29, 'sql-techniques-and-the-bottom-line', 'SQL and the bottom line: when optimization pays.',
+        'Warehouse efficiency',
+        'The financial trade-offs behind scans, joins, indexes, and incremental models—and how to tell whether the savings justify the work.',
+        [
+            _section(
+                'Every query has an operating cost',
+                'A query that finishes in thirty seconds instead of three minutes is a technical improvement. Its financial value depends on what happens next: a smaller bill, room for more customers on the same infrastructure, an earlier business decision, or less time spent fixing failed jobs.',
+                'SQL choices distribute costs across compute, storage, engineering, and operations. Reading less data can lower recurring charges. Saving an intermediate result adds storage and refresh work. An incremental model can reduce daily processing while making corrections harder. The useful question is which choice delivers the required business result at the lowest sustainable total cost.',
+            ),
+            _section(
+                'Start with what the platform actually bills',
+                'BigQuery on-demand query pricing is based on data processed; capacity pricing is based on allocated compute capacity over time. Reducing a scan can therefore have a different financial effect in each model. Under an existing capacity commitment, a faster query may initially create headroom while the committed bill stays the same.',
+                'Snowflake virtual warehouse charges depend on warehouse size, cluster count, and running time, with a sixty-second minimum when compute starts and per-second billing afterward. A query finishing sooner only reduces that compute charge if it changes the billed resources or running time. Other queries may keep the warehouse busy.',
+                'The business case should identify the mechanism that turns efficiency into money: fewer billable bytes, less paid runtime, lower autoscaling demand, or a future capacity purchase avoided. Capacity released and cash saved belong on separate lines.',
+                sources=(
+                    {'title': 'Google Cloud: BigQuery slots and pricing models', 'url': 'https://docs.cloud.google.com/bigquery/docs/slots'},
+                    {'title': 'Snowflake: warehouse billing considerations', 'url': 'https://docs.snowflake.com/en/user-guide/warehouses-considerations'},
+                ),
+            ),
+            _section(
+                'Scan less before building more',
+                'Selecting only required columns and filtering on the partition column can reduce data read in BigQuery. Adding LIMIT to SELECT * does not provide the same scan reduction. These are useful early candidates because a small SQL change may remove work from every execution.',
+                'The trade-off is completeness. A narrow date filter that excludes a late settlement or corrected transaction can make a report cheaper and wrong. Define the required reporting period and correction window, then check the query plan and billed bytes. An inexpensive rewrite earns its value through repeated use and equivalent results.',
+                sources=(BIGQUERY_COMPUTE,),
+            ),
+            _section(
+                'Fix joins before paying to hide their effects',
+                'A join between two datasets with multiple rows per customer can multiply records. Adding DISTINCT afterward may remove some duplicates while leaving inflated totals or unnecessary processing. Establish what one row represents on each side, validate key uniqueness, and aggregate before joining only when that preserves the intended calculation.',
+                'The financial benefit has two parts: less processing and less downstream reconciliation. The cost is the time needed to establish the correct business definition. For a revenue or settlement report, that investigation can matter more than shaving another second from execution.',
+                sources=(BIGQUERY_COMPUTE,),
+            ),
+            _section(
+                'Materialize when reuse covers the carrying cost',
+                'A stored summary or materialized view can avoid recalculating the same expensive aggregation for multiple consumers. BigQuery materialized views carry query, refresh, and storage costs. Their supported SQL and refresh behavior also affect whether they fit a workload.',
+                'Compare the repeated computation avoided with the added refresh, storage, and maintenance expense. A heavily reused daily summary may justify that trade. A rarely opened report may cost more to maintain than to calculate when someone needs it. Define freshness and access requirements before creating another copy of business data.',
+                sources=({'title': 'Google Cloud: materialized views and their costs', 'url': 'https://docs.cloud.google.com/bigquery/docs/materialized-views-intro'},),
+            ),
+            _section(
+                'Incremental models buy efficiency with operational responsibility',
+                'An incremental SQL model processes a selected set of new or changed records instead of rebuilding the entire output each time. In dbt, the filtering logic, strategy, and unique key determine which records are processed and how existing rows are updated. Changes to transformation logic can require rebuilding historical results.',
+                'That can be an attractive exchange for a large history with a small daily change set. The engineering budget must also cover late arrivals, corrections, deletions, duplicate prevention, and recovery. A three-day lookback is inadequate if a material correction can arrive weeks later and there is no separate repair path.',
+                'Compare normal runs plus expected backfills, periodic rebuilds, and support time against the full-refresh baseline. A small table that rebuilds cheaply may not justify the extra moving parts.',
+                sources=({'title': 'dbt: configuring incremental models', 'url': 'https://docs.getdbt.com/docs/build/incremental-models'},),
+            ),
+            _section(
+                'Indexes and approximation each have a price',
+                'In PostgreSQL, an index can accelerate selective lookups and joins, but the database must maintain it as data changes. That adds write overhead, alongside the space occupied by the index. Measure the read benefit against write performance and storage. Indexing every plausible column can move the cost into transaction processing.',
+                'Approximate aggregation makes a different exchange. BigQuery approximate functions can reduce memory use and processing time while introducing statistical uncertainty. An exploratory audience estimate may tolerate that uncertainty; an exact reconciliation requirement does not. The workload owner must accept the error tolerance before estimated counts replace exact ones.',
+                sources=(
+                    {'title': 'PostgreSQL: indexes and maintenance overhead', 'url': 'https://www.postgresql.org/docs/current/indexes-intro.html'},
+                    {'title': 'Google Cloud: approximate aggregate functions', 'url': 'https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/approximate_aggregate_functions'},
+                ),
+            ),
+            _section(
+                'Put the proposal through a payback calculation',
+                'Consider an illustrative workload running 1,000 times per month. Assume its billable scan falls from 2 TiB to 0.5 TiB per run and use a hypothetical effective rate of $5 per TiB. These are planning assumptions, not a provider price quote or a client result. Gross monthly compute savings would be 1,000 × (2 − 0.5) × $5 = $7,500.',
+                'Now assume $600 per month in additional storage and refresh charges, plus four hours of monthly upkeep valued at a loaded engineering rate of $150 per hour. Net monthly economic benefit is $7,500 − $600 − $600 = $6,300. If implementation and validation take forty hours at that rate, the $6,000 investment has a simple payback of about 0.95 months after the change is operating.',
+                'That estimate assumes stable volume, equivalent outputs, no additional incident costs, and fully avoidable scan charges. At half the execution volume, with the same added costs, monthly benefit falls to $2,550 and payback rises to about 2.35 months. Under a fixed commitment with no bill reduction, the immediate cash-savings case must be recalculated.',
+                'The distinction matters to the bottom line. In the original scenario, the provider bill falls by $6,900 per month before labor. Valuing existing staff time makes the investment comparison more realistic, but does not mean payroll changes. Track cash expenditure, engineering capacity, and avoided future spend separately; do not count the same benefit twice.',
+            ),
+            _section(
+                'Choose the next change by business value',
+                'Rank candidates by avoidable recurring cost, execution frequency, implementation effort, and operational risk. Compare representative workloads, including peak periods and corrections, and keep output quality and freshness constant. Record retries, failed runs, and manual repair alongside compute and storage. Cost per successful reporting cycle is more useful than cost per query attempt.',
+                'Lower recurring expense can improve operating profit if other factors stay constant. A gross-margin improvement also depends on whether that expense is classified as cost of revenue. Faster reports may have business value, but a revenue claim needs evidence connecting the earlier answer to a changed decision or customer outcome.',
+                'Start with one recurring workload whose owner, bill, and required output are clear. A Data Waste & Efficiency Diagnostic can turn that evidence into ranked SQL improvements, a payback estimate, and a validation plan. The strongest proposal makes the financial benefit and the ongoing responsibility equally visible.',
+            ),
+        ], offer='diagnostic',
+    ),
 ]
 
 ARTICLES_BY_SLUG = {article['slug']: article for article in ARTICLES}

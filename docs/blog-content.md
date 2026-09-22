@@ -4,7 +4,7 @@ The blog at `/blog/` uses the website's graphite, ivory, stone, and Inter visual
 
 ## GTM-aligned collection
 
-`core/home/blog_content.py` contains 28 articles for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
+`core/home/blog_content.py` contains 29 articles for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
 
 The featured reading path contains three practical pieces: cloud bills versus carbon evidence, dashboard refresh frequency, and repeated processing before AI scales. Existing IDs, slugs, and article order remain stable, preserving published URLs and cube positions. Other articles retain their underlying topic while replacing personal reflections with a recognizable problem, an investigation, and a useful first step.
 
@@ -21,6 +21,8 @@ The older abandoned journal content and documentation are not used by these rout
 The original collection uses third person. At Tera's request, article 28, `pomodoro-for-ai-agents`, uses a casual first-person voice to develop her timer-and-agent tweet into a practical launch, focus, and review rhythm. It appends the first node of the next cube shell, preserving the original 27 positions, and appears first in RSS when deployed.
 
 ## Article contract
+
+Article 29, `sql-techniques-and-the-bottom-line`, was prepared on September 22, 2026. It connects SQL techniques to billing models, maintenance costs, payback, and operating profit, using linked provider documentation and explicitly hypothetical financial examples. It appends to the existing collection; preparation does not establish a live publication date.
 
 Each article has:
 
