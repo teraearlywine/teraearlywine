@@ -15,7 +15,7 @@
             <div class="essay-prose">
                 {% for section in article.sections %}
                 <section>
-                    {% if section.title %}<h2>{{ section.title }}</h2>{% endif %}
+                    <h2>{{ section.title }}</h2>
                     {% for paragraph in section.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
                     {% if section.sources %}
                     <p class="essay-sources">Reference: {% for source in section.sources %}<a href="{{ source.url }}">{{ source.title }}</a>{% if not loop.last %}; {% endif %}{% endfor %}.</p>

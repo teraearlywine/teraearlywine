@@ -22,8 +22,6 @@ The original collection uses third person. At Tera's request, article 28, `pomod
 
 ## Article contract
 
-On September 23, 2026, Tera approved replacing article 29 with “Your Margins Are on Fire. Your Executives Brought Marshmallows.” The revision uses the approved direct editorial voice, keeps the existing ID and URL, labels its financial example hypothetical, and cites the IEA for electricity consumption while distinguishing resource use from measured environmental impact. The introductory section has no heading; the article template omits empty headings. Deployment verification is pending.
-
 Article 29, `sql-techniques-and-the-bottom-line`, was prepared on September 22, 2026. It connects SQL techniques to billing models, maintenance costs, payback, and operating profit, using linked provider documentation and explicitly hypothetical financial examples. It appends to the existing collection; preparation does not establish a live publication date.
 
 Published September 22, 2026 after explicit approval. Source commit `59733b21` deployed as App Engine version `sql-20260922-59733b21` in project `teraearlywine`, service `default`. Native service readback confirmed 100% traffic on the new version. The public article, full text and source links, blog listing, newest RSS entry (29 total), sitemap, homepage, and 14 article assets passed live checks. The local regression suite passed 176 tests; 17 broker/emulator tests were skipped because that integration environment was not requested.
