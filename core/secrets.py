@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 def load_secret(setting_name, logger):
@@ -31,9 +32,21 @@ def load_secret(setting_name, logger):
         resource_name = f'{secret_id}/versions/latest'
 
     try:
+        import certifi
+        import grpc
         from google.cloud import secretmanager
+        from google.cloud.secretmanager_v1.services.secret_manager_service.transports import (
+            SecretManagerServiceGrpcTransport,
+        )
 
-        client = secretmanager.SecretManagerServiceClient()
+        # gRPC carries a separate root bundle. Use the same patched trust store
+        # as HTTPX/Requests so the eMudhra and AAA cross-sign paths stay removed.
+        transport = SecretManagerServiceGrpcTransport(
+            ssl_channel_credentials=grpc.ssl_channel_credentials(
+                root_certificates=Path(certifi.where()).read_bytes(),
+            ),
+        )
+        client = secretmanager.SecretManagerServiceClient(transport=transport)
         response = client.access_secret_version(
             request={'name': resource_name},
         )
