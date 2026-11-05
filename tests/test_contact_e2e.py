@@ -12,6 +12,10 @@ TEMPLATES = [
     'হাই, আমি আপনার মূল্য জানতে চেয়েছিলাম.',
     'Ողջույն, ես ուզում էի իմանալ ձեր գինը.',
     'Hæ, ég vildi vita verð þitt.',
+    'Salam, qiymətinizi bilmək istədim.',
+    'Hi, ego volo scire vestri pretium.',
+    'Ola, quería saber o seu prezo.',
+    'Ciao, volevo sapere il tuo prezzo.',
 ]
 
 
@@ -87,3 +91,46 @@ def test_challenge_required_and_solved_retry(e2e):
     form['cf-turnstile-response'] = 'test-fixture-solved'
     assert _post_contact(client, form).json['ok'] is True
     assert counts()['emails'] == counts()['linear'] == 3
+
+
+def test_november_richard_template_has_zero_effects(e2e):
+    response = submit(e2e, name='RichardVax', email='changed@gmx.com',
+                      message='Gfihudwgfyehjwowjifwhu fuehiqokewwfueiweqijwihrwu ifwiqdjwrhwijwijwirhwu teraearlywine.com')
+    assert response.status_code == 403
+    assert counts() == dict(requests=1, reservations=0, emails=0, linear=0, completions=0)
+
+
+@pytest.mark.parametrize('name,email', [
+    ('Roberttek', 'rotated@gmail.com'),
+    ('RichardVax', 'rotated@gmx.com'),
+    ('Changed name', 'aveyekoha655@gmail.com'),
+    ('Changed name', 'alan-baker424245242@gmx.com'),
+])
+def test_rotated_campaign_requires_verification_and_delivers_once(e2e, name, email):
+    client = e2e.test_client()
+    form, _ = _contact_form(client)
+    form.update(name=name, email=email, message='Could we discuss a data assessment for our team?')
+    response = _post_contact(client, form)
+    assert response.status_code == 403
+    assert response.json['challenge_required'] is True
+    assert counts() == dict(requests=1, reservations=0, emails=0, linear=0, completions=0)
+    form['cf-turnstile-response'] = 'forged'
+    assert _post_contact(client, form).status_code == 403
+    assert counts() == dict(requests=2, reservations=0, emails=0, linear=0, completions=0)
+    form['cf-turnstile-response'] = 'test-fixture-solved'
+    assert _post_contact(client, form).json['ok'] is True
+    assert counts() == dict(requests=3, reservations=1, emails=1, linear=1, completions=1)
+    # Session retry and a new-session duplicate must not create new deliveries.
+    form['cf-turnstile-response'] = ''
+    assert _post_contact(client, form).json['ok'] is True
+    duplicate = submit(e2e, name=name, email=email, message=form['message'])
+    assert duplicate.status_code == 200
+    assert duplicate.json['ok'] is False
+    assert counts() == dict(requests=4, reservations=1, emails=1, linear=1, completions=1)
+
+
+@pytest.mark.parametrize('name,email', [('Richard Vax', 'normal@gmx.com'), ('Robert Smith', 'normal@gmail.com')])
+def test_ordinary_names_domains_and_generic_price_question_pass(e2e, name, email):
+    response = submit(e2e, name=name, email=email, message='What is your price?')
+    assert response.json['ok'] is True
+    assert counts()['emails'] == counts()['linear'] == 1
