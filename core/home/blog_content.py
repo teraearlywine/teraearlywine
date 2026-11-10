@@ -1,8 +1,10 @@
-"""Third-person articles on warehouse efficiency, reliable data, and production AI.
+"""Articles on warehouse efficiency, reliable data, and production AI.
 
 Stable article IDs, slugs, and ordering preserve public links and cube positions.
 Examples are illustrative; client outcomes and environmental savings are not implied.
 """
+
+from markupsafe import Markup
 
 
 BLOG_DESCRIPTION = (
@@ -682,9 +684,37 @@ ARTICLES = [
             ),
         ], offer='diagnostic',
     ),
+    _article(
+        30, 'nothing-wasted', 'Nothing Wasted',
+        'Personal reflection',
+        'On a lifelong connection to the environment, a career in data, and the cost of compute.',
+        [
+            _section(
+                "Then",
+                "I was a tree-hugging, free-hugs-giving hippie before I became a data engineer. As a child and teenager, I felt deeply connected to the earth and her oceans; I was most comfortable running barefoot through dirt and sand if I wasn’t launching myself via cannonball, back dives, or jackknives into our pool.",
+                "There’s even a photo of me swimming a little too far out into the Hawaiian waters to pluck a trash bag out of the ocean in 2014.",
+                "In high school, AP environmental science was one of my favorite classes. My teacher, Mrs. Johnson, was the first to introduce me to what a warming planet could look like—so I volunteered quarterly for beach cleanups and attended green club meetings when ASB & leadership responsibilities weren’t taking over my lunch hour. When I turned 18, I registered to vote as a proud member of the Green Party and never looked back.",
+                "As I’ve come to learn, being born in the mid-90s means I had a childhood without technology, which meant I played outdoors (possibly too much sometimes) when it mattered. However, like many others, I came of age during the fall of Sun Microsystems and the rise of Google, YouTube, and Facebook. We experienced pure magic, then witnessed its transition into a net negative for society, and healed from the fallout before anyone else.",
+                "I say this because, throughout my save-the-turtles and climate-change-focused youth, growing up in Silicon Valley, technology was always an underpinning that piqued my curiosity and sparked my imagination. It led me to major in Operations and Technology Management and helped shape my early career, when I started as a Junior Business Intelligence Analyst writing so much SQL that I began to dream about it. To this day, I still write SQL in my sleep sometimes—ruminating on the differences between LEFT and RIGHT JOINs and lately the cost of compute.",
+            ),
+            _section(
+                "Now",
+                "I know I can’t take moral responsibility for the environmental impact of data centers and AI. But knowing what is happening, let alone why, is a cold, hard, uncomfortable truth that has made me take a second look at my career. I’ve spent the last decade working on everything from curating dashboards to building API integrations, as well as analyzing data warehouses and how they can directly impact a company’s bottom line when SQL is written one way versus another—including calculating the carbon footprint of a query.",
+                "It’s safe to say that the impact of AI and data centers on our environment has me existentially concerned—to the extent that I’ve seriously discussed leaving the tech industry altogether with my family and rejoining the ranks as a barista slinging tea, as I did in high school at Teavana, or as a prep cook chopping vegetables and ripping up kale at Que Seraw Seraw throughout college.",
+                Markup("The scale is hard to ignore. The International Energy Agency estimates that data centers used 485 terawatt-hours of electricity worldwide in 2025 and projects that figure will roughly double by 2030. AI is one driver of that growth. <a href=\"https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary\">Source: IEA, Key Questions on Energy and AI</a>."),
+                "I wrote this on the morning of November 4, 2026, the day the American people showed up to kick evil in the face—to put it as mildly as I can.",
+            ),
+            _section(
+                "SQL is part of the problem",
+                Markup("Here’s what many executives—and even data professionals—miss: <strong>SQL is part of the problem.</strong> AI is trained on massive datasets, but how do you think those datasets became usable?"),
+                "Cloud platforms like GCP, AWS, and Snowflake have made the compute behind data warehousing easier to access, and easier to overlook. The result is that companies can continue to absorb painfully high data-warehousing costs (& now painfully high AI “usage” costs), while growing demand puts pressure on energy infrastructure and drives calls for more data centers—a band-aid fix and a tragedy-of-the-commons approach, and our earth is suffering because of it.",
+                Markup("What gets me the most: we can reduce some of this unnecessary work by teaching people to write more efficient SQL! Selecting only the columns we need, avoiding repeated work, and examining query plans are places to start. The details depend on the platform and workload; <a href=\"https://docs.cloud.google.com/bigquery/docs/best-practices-performance-compute\">Google’s BigQuery guidance</a> offers examples but is only just the beginning."),
+            ),
+        ], offer='diagnostic',
+    ),
 ]
 
 ARTICLES_BY_SLUG = {article['slug']: article for article in ARTICLES}
 _ARTICLES_BY_ID = {article['id']: article for article in ARTICLES}
 # Feature the campaign reading path without moving the cube's existing points.
-FEATURED_ARTICLES = [_ARTICLES_BY_ID[identifier] for identifier in (25, 4, 2)]
+FEATURED_ARTICLES = [_ARTICLES_BY_ID[identifier] for identifier in (30, 25, 4)]

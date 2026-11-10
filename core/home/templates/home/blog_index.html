@@ -48,7 +48,7 @@
             <noscript><p class="cube-fallback">Explore the articles in the list below.</p></noscript>
         </section>
         <section class="blog-writing" aria-labelledby="writing-heading">
-            <h2 class="blog-kicker" id="writing-heading">Start with<br>warehouse efficiency</h2>
+            <h2 class="blog-kicker" id="writing-heading">Latest and<br>featured writing</h2>
             <div class="writing-list">
                 {% for article in featured_articles %}
                 <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}">

@@ -122,9 +122,9 @@ def test_featured_reading_path_preserves_all_article_destinations(app_factory):
         response = app.test_client().get('/blog/')
     context = rendered[-1][1]
     assert [article['slug'] for article in context['featured_articles']] == [
+        'nothing-wasted',
         'measure-the-whole-path',
         'a-dashboard-needs-a-decision',
-        'the-work-after-the-demo',
     ]
     links = collect_elements(response.get_data(as_text=True), 'a')
     reading_links = [link['href'] for link in links if 'writing-row' in link.get('class', '')]
