@@ -24,19 +24,21 @@ class ContactSubmission:
     submission_id: str
     name: str
     email: str
-    engagement_type: str
+    engagement_type: str | None
     message: str
     spam_context: dict | None = None
 
 
 def _canonical_payload(submission):
-    payload = {
-        'email': submission.email,
-        'engagementType': submission.engagement_type,
+    # Construct fields in the broker's signing order, omitting unscoped types.
+    payload = {'email': submission.email}
+    if submission.engagement_type is not None:
+        payload['engagementType'] = submission.engagement_type
+    payload.update({
         'message': submission.message,
         'name': submission.name,
         'submissionId': submission.submission_id,
-    }
+    })
     if submission.spam_context is not None:
         payload['spamContext'] = submission.spam_context
     canonical = json.dumps(

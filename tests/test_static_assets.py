@@ -15,9 +15,9 @@ def test_webp_assets_have_image_content_type_without_system_support(
     )
     client = app_factory().test_client()
 
-    for width in (768, 1440, 2172):
+    for width in (640, 960, 1536):
         response = client.get(
-            f'/static/assets/images/nothing-wasted-landscape-{width}.webp',
+            f'/static/assets/images/cross-section-hero-{width}.webp',
         )
         assert response.status_code == 200
         assert response.mimetype == 'image/webp'
@@ -86,13 +86,17 @@ def test_brand_art_and_social_preview_are_local_and_available(app_factory):
     client = app_factory(SITE_URL='https://www.teraearlywine.com').test_client()
     document = client.get('/').get_data(as_text=True)
     images = collect_elements(document, 'img')
-    hero = next(image for image in images if image.get('class') == 'hero-art')
-    assert hero['alt'] == ''
-    assert 'nothing-wasted-landscape-' in hero['src']
+    hero = next(image for image in images if image.get('class') == 'cs-hero-art')
+    assert 'orange cube' in hero['alt']
+    assert hero['fetchpriority'] == 'high'
+    assert 'cross-section-hero-' in hero['src']
+    for candidate in hero['srcset'].split(','):
+        image_url, _width = candidate.strip().split()
+        assert client.get(image_url).mimetype == 'image/webp'
     assert 'figma.com' not in document
-    assert document.index('id="hero-heading"') < document.index('class="hero-art"')
+    assert document.index('id="hero-heading"') < document.index('class="cs-hero-art"')
     for image in images:
-        if 'nothing-wasted' in image.get('src', ''):
+        if 'cross-section' in image.get('src', ''):
             assert client.get(image['src']).status_code == 200
     metadata = {item.get('property'): item.get('content')
                 for item in collect_elements(document, 'meta')}

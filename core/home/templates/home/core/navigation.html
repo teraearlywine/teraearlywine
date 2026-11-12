@@ -1,12 +1,14 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <nav class="navbar" id="navbar" aria-label="Main navigation">
-    <a href="{{ url_for('index.index') }}" class="nav-brand" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="home">TERA EARLYWINE CONSULTING</a>
-    <span class="nav-descriptor">INDEPENDENT DATA &amp; AI CONSULTING</span>
+    <a href="{{ url_for('index.index') }}" class="nav-brand" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="home">
+        <img src="{{ url_for('index.static', filename='images/cross-section-lockup.svg') }}" alt="Tera Earlywine Consulting" width="388" height="112">
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">
-        <li><a href="{{ url_for('index.blog') }}" {% if is_blog %}class="active" aria-current="page"{% endif %}>Blog</a></li>
-        <li><a href="{{ '' if is_homepage else url_for('index.index') }}#services" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Expertise</a></li>
-        <li><a href="{{ '' if is_homepage else url_for('index.index') }}#method" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Approach</a></li>
-        <li><a class="nav-contact" href="{{ '' if is_homepage else url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Contact <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="18" height="18"></a></li>
+        {% set home = '' if is_homepage else url_for('index.index') %}
+        <li><a href="{{ home }}#projects" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Selected work</a></li>
+        <li><a href="{{ home }}#services" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Services</a></li>
+        <li><a href="{{ url_for('index.blog') }}"{% if is_blog %} aria-current="{{ 'page' if request.endpoint == 'index.blog' else 'true' }}"{% endif %}>Writing</a></li>
+        <li><a class="nav-contact" href="{{ home }}#contact" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Contact</a></li>
     </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">Menu</button>
 </nav>

@@ -39,6 +39,17 @@ def submit(app, **changes):
     return _post_contact(client, form)
 
 
+def test_unscoped_inquiry_is_delivered_once_on_retry(e2e):
+    client = e2e.test_client()
+    form, _ = _contact_form(client)
+    form['engagement_type'] = 'Help me scope it'
+    for _ in range(2):
+        response = _post_contact(client, form)
+        assert response.status_code == 200
+        assert response.json['ok'] is True
+    assert counts() == dict(requests=1, reservations=1, emails=1, linear=1, completions=1)
+
+
 @pytest.mark.parametrize('message', TEMPLATES)
 @pytest.mark.parametrize('email', ['hsilojhonaisy@gmail.com', 'gregoryj8tl2g@gmail.com', 'changed@example.com'])
 def test_known_spam_has_zero_downstream_effects(e2e, message, email):

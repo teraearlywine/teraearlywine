@@ -37,7 +37,7 @@ def structured_graph(document):
     return json.loads(payload.group(1))['@graph']
 
 
-def test_blog_cube_has_distinct_destinations_and_safe_data(app_factory):
+def test_stack_has_one_sheet_per_article_with_newest_initial_preview(app_factory):
     app = app_factory()
     with captured_templates(app) as rendered:
         response = app.test_client().get('/blog/')
@@ -45,17 +45,24 @@ def test_blog_cube_has_distinct_destinations_and_safe_data(app_factory):
     name, context = rendered[-1]
     assert name == 'home/blog_index.html'
     assert context['is_blog'] is True
-    cube_articles = context['cube_articles']
-    assert len(cube_articles) == len(ARTICLES)
-    assert len({article['id'] for article in cube_articles}) == len(ARTICLES)
-    assert len({article['url'] for article in cube_articles}) == len(ARTICLES)
-    assert len({article['title'] for article in cube_articles}) == len(ARTICLES)
-    assert json.loads(json.dumps(cube_articles)) == cube_articles
-    assert all(article['url'] == f"/blog/{article['slug']}/" for article in cube_articles)
+    stack_articles = context['stack_articles']
+    assert len(stack_articles) == len(ARTICLES)
+    assert len({article['id'] for article in stack_articles}) == len(ARTICLES)
+    assert len({article['url'] for article in stack_articles}) == len(ARTICLES)
+    assert len({article['title'] for article in stack_articles}) == len(ARTICLES)
+    assert json.loads(json.dumps(stack_articles)) == stack_articles
+    assert all(article['url'] == f"/blog/{article['slug']}/" for article in stack_articles)
+
+    markup = response.get_data(as_text=True)
+    assert markup.count('data-sheet class=') == len(ARTICLES)
+    latest = ARTICLES[-1]
+    assert f'id="previewTitle">{latest["title"]}</h2>' in unescape(markup)
+    assert f'id="previewLink" href="/blog/{latest["slug"]}/"' in markup
+    assert 'id="stackNavigation" hidden' in markup
 
 
 @pytest.mark.parametrize('article', ARTICLES, ids=lambda article: article['slug'])
-def test_each_cube_destination_renders_its_article_and_metadata(app_factory, article):
+def test_each_writing_destination_renders_its_article_and_metadata(app_factory, article):
     app = app_factory(env='production', SITE_URL=SITE_URL)
     app.config.update(TESTING=False, DEBUG=False)
     with captured_templates(app) as rendered:
@@ -74,6 +81,12 @@ def test_each_cube_destination_renders_its_article_and_metadata(app_factory, art
         for source in section['sources']:
             assert {'href': source['url']} in collect_elements(document, 'a')
             assert source['title'] in document
+    assert document.index('class="essay-prose"') < document.index('data-essay-signoff') < document.index('id="essay-offer-heading"')
+    video = collect_elements(document, 'video')[0]
+    assert video['preload'] == 'none' and 'src' not in video and 'loop' not in video
+    assert video['data-src'].split('?')[0].endswith('nothing-wasted-signoff.mp4')
+    assert any(img.get('alt') == 'Nothing Wasted — Tera Earlywine' and img.get('loading') == 'lazy'
+               for img in collect_elements(document, 'img'))
     assert article['offer']['name'] in document
     assert article['offer']['description'] in document
     assert article['offer']['cta'] in document
@@ -127,7 +140,7 @@ def test_featured_reading_path_preserves_all_article_destinations(app_factory):
         'a-dashboard-needs-a-decision',
     ]
     links = collect_elements(response.get_data(as_text=True), 'a')
-    reading_links = [link['href'] for link in links if 'writing-row' in link.get('class', '')]
+    reading_links = [link['href'] for link in links if 'writing-row--archive' in link.get('class', '').split()]
     assert len(reading_links) == len(set(reading_links)) == len(ARTICLES)
     assert set(reading_links) == {f"/blog/{article['slug']}/" for article in ARTICLES}
     assert {'class': 'blog-text-link', 'href': '/#contact'} in links
@@ -141,13 +154,13 @@ def test_production_publishes_blog_without_debug_or_testing(app_factory, path):
     assert app.test_client().get(path).status_code == 200
 
 
-def test_production_navigation_places_blog_before_expertise(app_factory):
+def test_production_navigation_links_to_writing_and_services(app_factory):
     app = app_factory(env='production')
     app.config.update(TESTING=False, DEBUG=False)
     document = app.test_client().get('/').get_data(as_text=True)
     links = collect_elements(document, 'a')
     destinations = [link.get('href') for link in links]
-    assert destinations.index('/blog/') < destinations.index('#services')
+    assert '/blog/' in destinations and '#services' in destinations
     assert 'css/blog.css' not in document
     assert 'js/blog.js' not in document
 

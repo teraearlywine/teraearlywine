@@ -1,6 +1,6 @@
 """Articles on warehouse efficiency, reliable data, and production AI.
 
-Stable article IDs, slugs, and ordering preserve public links and cube positions.
+Stable article IDs, slugs, and ordering preserve public links and publication order.
 Examples are illustrative; client outcomes and environmental savings are not implied.
 """
 
@@ -716,5 +716,5 @@ ARTICLES = [
 
 ARTICLES_BY_SLUG = {article['slug']: article for article in ARTICLES}
 _ARTICLES_BY_ID = {article['id']: article for article in ARTICLES}
-# Feature the campaign reading path without moving the cube's existing points.
+# Feature the campaign reading path without changing publication order.
 FEATURED_ARTICLES = [_ARTICLES_BY_ID[identifier] for identifier in (30, 25, 4)]

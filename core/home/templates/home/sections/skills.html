@@ -1,27 +1,12 @@
-<section id="services" class="section engagements" aria-labelledby="services-heading">
-    <div class="container">
-        <h2 class="section-title" id="services-heading">Data &amp; AI consulting engagements.</h2>
-        <div class="engagement-list">
-            {% set offers = [
-                ('Data platform assessment', 'Value / Risk Diagnostic', 'Readiness scorecard, prioritized use cases, risk register, and 90-day roadmap.', 'Tera assesses business priorities, existing systems, production risks, and ownership to identify where investment is most useful. The output is a decision memo and an actionable roadmap with clear dependencies.'),
-                ('AI-ready data foundations', 'Data Foundation Blueprint', 'Target architecture, ownership model, controls, and migration plan.', 'Tera defines the data contracts, quality controls, access model, and operating responsibilities required for trusted analytics and AI. She works with the client team to map migration steps, validation, cutover, and rollback.'),
-                ('Production AI delivery', 'Production AI Lighthouse', 'Integrated workflow, evaluation report, runbook, and operational handoff.', 'Tera builds one scoped workflow with evaluation for accuracy, latency, and cost. The work establishes access controls, human escalation, monitoring, and the evidence needed for a production-readiness decision.')
-            ] %}
-            {% for question, name, description, detail in offers %}
-            <details class="engagement">
-                <summary>
-                    <span class="engagement-number">0{{ loop.index }}</span>
-                    <h3>{{ question }}</h3>
-                    <span class="engagement-overview"><span class="engagement-name">{{ name }}</span><span>{{ description }}</span></span>
-                    <img class="engagement-arrow" src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="30" height="30">
-                </summary>
-                <div class="engagement-detail"><p>{{ detail }}</p><a href="#contact" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">Discuss this engagement <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="18" height="18"></a></div>
-            </details>
-            {% endfor %}
+<section id="services" class="section cs-services" aria-labelledby="services-heading">
+    <div class="cs-frame">
+        <p class="cs-eyebrow">Services</p>
+        <h2 class="cs-section-title" id="services-heading">Where do you want to start?</h2>
+        <div class="cs-offer-list">
+            <article><h3>Your warehouse bill keeps climbing.</h3><p>Start with one warehouse and an agreed set of workloads. The paid Data Waste &amp; Efficiency Diagnostic gives you a baseline, ranked improvements, and a way to measure the result.</p><a class="cs-text-link" href="{{ url_for('index.blog') }}#blog-offer-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">Explore the diagnostic <span aria-hidden="true">↗</span></a></article>
+            <article><h3>Your migration is stuck.</h3><p>Trace one failing workflow from source to report. Your team gets a dependency map, reconciliation checks, and clear criteria for the next cutover or rollback.</p><a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Plan a migration <span aria-hidden="true">↗</span></a></article>
+            <article><h3>Your AI pilot is up for production review.</h3><p>Evaluate one workflow for accuracy, access, cost, and escalation. Bring an evaluation report, release criteria, and an operating runbook to the review.</p><a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Scope production AI <span aria-hidden="true">↗</span></a></article>
         </div>
-        <div class="service-directory" aria-labelledby="expertise-heading">
-            <h3 id="expertise-heading">Explore Tera's consulting expertise</h3>
-            {% include 'home/includes/service_links.html' %}
-        </div>
+        <div class="cs-directory"><h3>Consulting expertise</h3>{% include 'home/includes/service_links.html' %}</div>
     </div>
 </section>

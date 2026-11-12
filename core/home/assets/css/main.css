@@ -1,35 +1,36 @@
 /* ============================================
-   Nothing Wasted — shared brand foundations
+   Cross Section — shared brand foundations
    ============================================ */
 
 :root {
-  --ivory: #f8f6ef;
-  --graphite: #303438;
-  --moss: #526247;
-  --sage: #dde3d5;
-  --stone: #d8d6ce;
-  --color-bg: var(--ivory);
-  --color-bg-alt: var(--sage);
-  --color-text: var(--graphite);
-  --color-text-secondary: #50574f;
-  --color-text-tertiary: var(--moss);
-  --color-text-accessible-muted: var(--moss);
-  --color-border: var(--stone);
-  --color-control-border: var(--moss);
-  --color-accent: var(--moss);
-  --color-accent-hover: #3f4d36;
-  --color-card-bg: var(--ivory);
+  --white: #ffffff;
+  --ink: #131625;
+  --blue: #263cf2;
+  --ember: #ff6b3d;
+  --cool-gray: #f3f6fa;
+  --color-bg: var(--white);
+  --color-bg-alt: var(--cool-gray);
+  --color-text: var(--ink);
+  --color-text-secondary: #53596b;
+  --color-text-tertiary: #53596b;
+  --color-text-accessible-muted: #53596b;
+  --color-border: #d8dde5;
+  --color-control-border: #747c90;
+  --color-accent: var(--blue);
+  --color-accent-hover: #192ac9;
+  --color-card-bg: var(--white);
   --color-card-shadow: transparent;
   --color-card-shadow-hover: transparent;
-  --color-nav-bg: rgba(248, 246, 239, .97);
-  --color-tag-bg: var(--sage);
-  --color-tag-text: var(--graphite);
-  --color-timeline-line: var(--stone);
-  --color-timeline-dot: var(--moss);
+  --color-nav-bg: var(--white);
+  --color-tag-bg: var(--cool-gray);
+  --color-tag-text: var(--ink);
+  --color-timeline-line: var(--color-border);
+  --color-timeline-dot: var(--blue);
   --color-error: #b42318;
   --color-success: #087a4b;
   --font-family: Inter, Arial, sans-serif;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-display: var(--font-family);
+  --font-editorial: 'PT Serif', Georgia, serif;
   --font-size-hero: clamp(3.25rem, 6.12vw, 5.5rem);
   --font-size-h2: 2.5rem;
   --font-size-h3: 1.75rem;
@@ -127,28 +128,28 @@ body {
 }
 
 .section--soft {
-  background: var(--sage);
+  background: var(--cool-gray);
 }
 
 .section--ink {
-  background: var(--graphite);
-  color: var(--ivory);
+  background: var(--ink);
+  color: var(--white);
 }
 
 .section--ink .section-title,
 .section--ink .skill-group h3 {
-  color: var(--ivory);
+  color: var(--white);
 }
 
 .section--ink .section-subtitle,
 .section--ink .skill-group > p:last-child,
 .section--ink .tool-line {
-  color: var(--stone);
+  color: var(--color-border);
 }
 
 .section--ink .section-kicker,
 .section--ink .service-number {
-  color: var(--sage);
+  color: var(--cool-gray);
 }
 
 /* ============================================
@@ -177,7 +178,7 @@ body {
 .button--primary {
   border-color: var(--color-accent);
   background: var(--color-accent);
-  color: var(--ivory);
+  color: var(--white);
 }
 
 .button--primary:hover {
@@ -186,7 +187,7 @@ body {
 
 .button--secondary:hover {
   background: var(--color-text);
-  color: var(--ivory);
+  color: var(--white);
 }
 
 /* ============================================
@@ -266,7 +267,7 @@ body {
 
 .skill-group {
   padding: 2rem 0;
-  border-top: 1px solid var(--stone);
+  border-top: 1px solid var(--color-border);
 }
 
 .skill-group > p:last-child {
@@ -282,7 +283,7 @@ body {
 .tool-line {
   margin-top: 3.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--stone);
+  border-top: 1px solid var(--color-border);
   font-size: 0.92rem;
   letter-spacing: 0.03em;
 }
@@ -342,11 +343,11 @@ body {
 }
 
 .faq-list {
-  border-top: 1px solid var(--stone);
+  border-top: 1px solid var(--color-border);
 }
 
 .faq-item {
-  border-bottom: 1px solid var(--stone);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .faq-item summary {
@@ -680,7 +681,7 @@ body {
 
 .contact-cta--primary {
   background: var(--color-accent);
-  color: var(--ivory);
+  color: var(--white);
 }
 
 .contact-cta--primary:hover {
@@ -840,7 +841,7 @@ body {
 .consent-button--primary {
   border-color: var(--color-accent);
   background: var(--color-accent);
-  color: var(--ivory);
+  color: var(--white);
 }
 
 .consent-button--primary:hover {

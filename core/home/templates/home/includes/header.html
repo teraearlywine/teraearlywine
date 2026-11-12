@@ -1,11 +1,11 @@
 <head>
-    {% set page_title = page_title|default('Tera Earlywine | Enterprise Data & AI Consultant') %}
-    {% set page_description = page_description|default('Tera Earlywine builds production-grade data and AI systems for regulated, high-consequence operations—specializing in reliability, modernization, governance, and production AI.') %}
+    {% set page_title = page_title|default('Tera Earlywine Consulting | Data & AI Engineering') %}
+    {% set page_description = page_description|default('Work with Tera Earlywine to fix unreliable data pipelines, get migrations moving, and put AI workflows into production.') %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ page_description }}">
     {% if rss_url %}
-    <link rel="alternate" type="application/rss+xml" title="Tera Earlywine — Blog" href="{{ rss_url }}">
+    <link rel="alternate" type="application/rss+xml" title="Writing by Tera Earlywine" href="{{ rss_url }}">
     {% endif %}
     {% if robots_meta is defined %}
     <meta name="robots" content="{{ robots_meta }}">
@@ -18,14 +18,14 @@
     {% endif %}
 
     <meta property="og:type" content="{{ page_og_type|default('website') }}">
-    <meta property="og:site_name" content="Tera Earlywine">
+    <meta property="og:site_name" content="Tera Earlywine Consulting">
     <meta property="og:title" content="{{ page_title }}">
     <meta property="og:description" content="{{ page_description }}">
     {% if social_image_url %}
     <meta property="og:image" content="{{ social_image_url }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Tera Earlywine Consulting — Modernize your data. Put AI into production.">
+    <meta property="og:image:alt" content="Tera Earlywine Consulting. Data systems your team can run.">
     {% endif %}
     {% if canonical_url %}
     <meta property="og:url" content="{{ canonical_url }}">
@@ -34,18 +34,18 @@
     <meta name="twitter:card" content="summary_large_image">
     {% if social_image_url %}
     <meta name="twitter:image" content="{{ social_image_url }}">
-    <meta name="twitter:image:alt" content="Tera Earlywine Consulting — Modernize your data. Put AI into production.">
+    <meta name="twitter:image:alt" content="Tera Earlywine Consulting. Data systems your team can run.">
     {% endif %}
     <meta name="twitter:title" content="{{ page_title }}">
     <meta name="twitter:description" content="{{ page_description }}">
 
     <title>{{ page_title }}</title>
-    <link rel="icon" href="{{ url_for('index.static', filename='images/favicon.png') }}" type="image/png">
+    <link rel="icon" href="{{ url_for('index.static', filename='images/cross-section.svg') }}" type="image/svg+xml">
     {% if seo_structured_data %}
     <script type="application/ld+json">{{ seo_structured_data|tojson }}</script>
     {% endif %}
     {% include 'home/includes/google_analytics.html' %}
     <link rel="preload" href="{{ url_for('index.static', filename='fonts/inter-regular.2b416f85f934.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ url_for('index.static', filename='fonts/cormorant-garamond-regular.982538ce9654.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ url_for('index.static', filename='fonts/inter-bold.af63a20a4c9a.woff2') }}" as="font" type="font/woff2" crossorigin>
     {% include 'home/includes/themes.html' %}
 </head>

@@ -1,0 +1,7 @@
+{% macro layer_selector(name, label) -%}
+<fieldset class="cs-layer-control" aria-label="{{ label }}" data-demo-control hidden>
+    {% for value in ('source', 'rule', 'check') %}
+    <label><input type="radio" name="{{ name }}" value="{{ value }}"{% if value == 'rule' %} checked{% endif %}><span>{{ value|title }}</span></label>
+    {% endfor %}
+</fieldset>
+{%- endmacro %}

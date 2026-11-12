@@ -1,0 +1,34 @@
+<svg class="paper-stack" viewBox="0 0 580 390" aria-hidden="true" focusable="false">
+    <defs>
+        <pattern id="paperTexture" patternUnits="userSpaceOnUse" width="92" height="92">
+            <image href="{{ url_for('index.static', filename='images/writing-paper-grain.webp') }}" width="92" height="92"/>
+        </pattern>
+        <linearGradient id="paperLight" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+            <stop stop-color="#ffffff" stop-opacity=".09"/><stop offset=".67" stop-color="#051451" stop-opacity="0"/><stop offset="1" stop-color="#051451" stop-opacity=".18"/>
+        </linearGradient>
+        <filter id="paperShadow" x="-20%" y="-40%" width="150%" height="190%">
+            <feGaussianBlur stdDeviation="10"/>
+        </filter>
+        <path id="paperTop" d="M61 147 295 43 519 149 283 258Z"/>
+        <g id="blueSheet">
+            <use href="#paperTop" fill="#263cf2"/>
+            <use href="#paperTop" fill="url(#paperTexture)"/>
+            <use href="#paperTop" fill="url(#paperLight)"/>
+            <path class="sheet-front" d="m61 147 222 111v3.7L61 150.7Z"/>
+            <path class="sheet-side" d="m283 258 236-109v3.7L283 261.7Z"/>
+            <path d="m61 149.8 222 111 236-109" fill="none" stroke="#aebdff" stroke-opacity=".52" stroke-width=".9"/>
+        </g>
+    </defs>
+    <path d="m62 242 236-108 235 109-236 111z" fill="#14172a" opacity=".19" filter="url(#paperShadow)"/>
+    {% set spacing = [2.7, 80 / stack_articles|length]|min %}
+    {% for article in stack_articles %}
+    <g transform="translate(0,{{ (loop.revindex0 * spacing)|round(3) }})">
+        <g data-sheet class="paper-layer{% if loop.last %} selected-sheet{% endif %}">
+            <use href="#blueSheet"/>
+            {% if loop.last %}
+            <path class="paper-imprint" transform="matrix(.87 -.39 .85 .41 212 145)" d="M8 18H61V28H50V38H40V48H31V40H8Z M69 18H88V40H59V74L48 85H38V51H47V41H57V31H69Z"/>
+            {% endif %}
+        </g>
+    </g>
+    {% endfor %}
+</svg>

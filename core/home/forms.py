@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import HiddenField, RadioField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
+UNSCOPED_ENGAGEMENT = 'Help me scope it'
 ENGAGEMENT_TYPES = (
     'Value / Risk Diagnostic',
     'Data Foundation Blueprint',
@@ -37,9 +38,7 @@ class ContactForm(FlaskForm):
     )
     engagement_type = RadioField(
         'Potential engagement',
-        choices=[
-            *((engagement_type, engagement_type) for engagement_type in ENGAGEMENT_TYPES),
-        ],
+        choices=[(value, value) for value in (*ENGAGEMENT_TYPES, UNSCOPED_ENGAGEMENT)],
         validators=[
             DataRequired(message='Select an engagement type.'),
         ],

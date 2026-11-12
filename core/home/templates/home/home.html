@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+{% set use_cross_section_home = true %}
 {% include 'home/includes/header.html' %}
-
-<body>
+<body class="consulting-home">
     {% include 'home/core/navigation.html' %}
-
     <main id="main">
         {% include 'home/sections/hero.html' %}
+        {% include 'home/sections/net_sales.html' %}
+        {% include 'home/sections/projects.html' %}
         {% include 'home/sections/skills.html' %}
         {% include 'home/sections/method.html' %}
-        {% include 'home/sections/projects.html' %}
         {% include 'home/sections/timeline.html' %}
         {% include 'home/sections/faq.html' %}
         {% include 'home/sections/contact.html' %}
     </main>
-
     {% include 'home/includes/footer.html' %}
     {% include 'home/includes/scripts.html' %}
+    <script type="module" src="{{ url_for('index.static', filename='js/net-sales.js') }}"></script>
 </body>
 </html>

@@ -1,24 +1,26 @@
-# Glass-cube blog
+# Writing and the paper-stack explorer
 
-The blog at `/blog/` uses the website's graphite, ivory, stone, and Inter visual language. Each article adds one point to the interactive sculpture. The first nine articles form a square, and 27 complete a 3 × 3 × 3 cube. Later articles extend the next outer shell while retaining the existing point coordinates.
+The Writing index at `/blog/` renders one ultramarine paper sheet per essay. The newest essay is selected first. Older and Newer expose the orange edge of the selected sheet and update the article link and summary. The featured links and complete newest-first archive also work without JavaScript.
+
+Each essay ends with the 3.3-second “Nothing Wasted” sign-off before its related offer. The final still is the default. The muted video loads when that signature enters view, plays once, and returns to its still frame. Reduced motion and unavailable playback use the same still.
 
 ## GTM-aligned collection
 
-`core/home/blog_content.py` contains 29 articles for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
+`core/home/blog_content.py` contains the published articles for enterprise data and platform leaders, with financial services and fintech as the initial audience. The collection follows the Consulting GTM Strategy reviewed on September 10, 2026: lead with avoidable warehouse processing, then connect reliability, data foundations, production AI, and delivery ownership to the next investment decision.
 
-The featured reading path contains three practical pieces: cloud bills versus carbon evidence, dashboard refresh frequency, and repeated processing before AI scales. Existing IDs, slugs, and article order remain stable, preserving published URLs and cube positions. Other articles retain their underlying topic while replacing personal reflections with a recognizable problem, an investigation, and a useful first step.
+The featured reading path includes “Nothing Wasted,” cloud bills versus carbon evidence, and dashboard refresh frequency. Existing IDs, slugs, and article order remain stable, preserving published URLs and publication order. Other articles retain their underlying topic while replacing personal reflections with a recognizable problem, an investigation, and a useful first step.
 
 The index and each article include a relevant offer and a link to the existing contact section. The primary offer is the paid Data Waste & Efficiency Diagnostic; follow-on articles connect to the AI-Ready Data Foundation Blueprint, Production AI Lighthouse, or Data & AI Reliability Office. Copy describes scope and deliverables without inventing prices, available capacity, client results, affiliations, or guaranteed savings.
 
 The refresh-frequency calculation is explicitly illustrative. Cost, resource use, and provider-reported emissions remain separate measurements. Environmental claims retain reporting boundaries and uncertainty; implementation and formal carbon assurance are separately scoped. Technical and measurement sections link to the Google Cloud and FinOps sources that support them. The internal strategy and acquisition operating details are not public article content.
 
-The user approved generating and publishing this collection. The blog routes are public in production without enabling debug or testing. Blog appears before Expertise in the shared navigation. Every article is also available through the HTML article list, including when the interactive cube cannot run.
+The user approved generating and publishing this collection. The blog routes are public in production without enabling debug or testing. The shared navigation calls the collection Writing.
 
 Canonical URLs follow the configured `SITE_URL`. The index uses Blog structured data, articles use BlogPosting structured data, and both include breadcrumbs. All article URLs are included in the public sitemap. Publication dates remain unset until they can be grounded in an actual release record. Unknown article URLs return an unindexed 404.
 
 The older abandoned journal content and documentation are not used by these routes. This change does not create a content calendar or release schedule.
 
-The original collection uses third person. At Tera's request, article 28, `pomodoro-for-ai-agents`, uses a casual first-person voice to develop her timer-and-agent tweet into a practical launch, focus, and review rhythm. It appends the first node of the next cube shell, preserving the original 27 positions, and appears first in RSS when deployed.
+The original collection uses third person. At Tera's request, article 28, `pomodoro-for-ai-agents`, uses a casual first-person voice to develop her timer-and-agent tweet into a practical launch, focus, and review rhythm. It retains its place after the original 27 articles.
 
 ## Article contract
 
@@ -37,15 +39,13 @@ Each article has:
 - `sections`: a list of `{title, paragraphs, sources}` objects; `sources` contains optional reference links with `title` and `url`.
 - `offer`: the relevant offer's `name`, `description`, and `cta`, selected from `OFFERS`.
 
-Cube coordinates follow the order of `ARTICLES`. Append new entries to preserve existing points; do not prepend or reorder this list. `FEATURED_ARTICLES` selects entries 25, 4, and 2 independently of cube order and publication scheduling. The archive lists all remaining articles.
+Append new entries to `ARTICLES` so publication order and RSS identities remain stable. `FEATURED_ARTICLES` is independent of the stack and the archive.
 
-The index template receives `articles`, `featured_articles`, `diagnostic_offer`, and `cube_articles`. The latter is a JSON-safe list with `id`, `slug`, `title`, `category`, `dek`, `read_minutes`, and a server-generated `url`, rendered through Jinja's `tojson` filter. `BLOG_DESCRIPTION` keeps the index metadata and structured-data description consistent.
-
-The article template receives `article`, `next_article`, and `articles`. Both routes pass `is_blog=True` so shared templates load the blog styles and identify the current navigation item.
+The index receives `articles`, `featured_articles`, `diagnostic_offer`, and `stack_articles`. The last holds the ID, slug, title, category, summary, reading time, and server-generated URL for each sheet. The JSON goes through Jinja’s `tojson` filter. Article pages still receive their article and next article.
 
 ## RSS subscriptions
 
-`/rss.xml` publishes an RSS 2.0 feed from the same article collection, with titles, summaries, categories, and canonical article links. Appended articles appear first without changing cube order. Article URLs serve as stable GUIDs, so edits do not create new subscriptions entries. Publication dates are omitted until actual release dates are recorded. The shared page header advertises the feed to readers, and the blog introduction includes a visible subscription link.
+`/rss.xml` publishes an RSS 2.0 feed from the same article collection, with titles, summaries, categories, and canonical article links. Appended articles appear first in the feed. Article URLs serve as stable GUIDs, so edits do not create new subscription entries. Publication dates are omitted until actual release dates are recorded. The shared page header advertises the feed to readers, and the blog introduction includes a visible subscription link.
 
 The visible subscription link opens `/blog/subscribe/`, a styled HTML page explaining how to add the feed to a reader. It offers the canonical address in a selectable field and a copy button that confirms a successful copy or selects the address for manual copying if clipboard access is unavailable. The field and instructions work without JavaScript. A separate, explicitly labeled link opens the raw XML. The shared discovery link still points directly to `/rss.xml` for feed readers.
 

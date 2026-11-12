@@ -1,0 +1,22 @@
+{% from 'home/includes/sales_layers.html' import layer_selector %}
+<section id="sample" class="cs-example" aria-labelledby="sample-heading">
+    <div class="cs-frame cs-example-grid">
+        <div>
+            <p class="cs-eyebrow">Illustrative data example</p>
+            <h2 id="sample-heading">What goes into<br>net sales?</h2>
+            <p class="cs-example-intro">Two sales total $600. Post a $40 refund and follow the number from the source records to the reconciliation check.</p>
+            <label class="cs-refund" data-demo-control hidden><input id="sales-refund" type="checkbox" checked>Apply $40 refund</label>
+        </div>
+        <div class="cs-readout">
+            <div class="cs-metric"><span>Reported net sales</span><output id="sales-total">$560</output></div>
+            <div class="cs-readout-controls" data-demo-control hidden>
+                <strong>Inspect the layers</strong>
+                {{ layer_selector('sales-detail-layer', 'Inspect the net sales layers') }}
+            </div>
+            <div class="cs-layer-title"><h3 id="sales-layer-title">Business rule</h3><button id="next-sales-layer" type="button" data-demo-control hidden>Next layer <span aria-hidden="true">→</span></button></div>
+            <p class="cs-formula" id="sales-formula">$600 − $40 = $560</p>
+            <p class="cs-explanation" id="sales-explanation">Both sales are complete. The posted refund reduces net sales by $40.</p>
+            <details class="cs-note"><summary>Engineering note</summary><p>Use the refund’s posting date and count each refund ID once. Both sales and the optional refund post in the same reporting period here. Reconcile the result to the ledger for that period.</p></details>
+        </div>
+    </div>
+</section>

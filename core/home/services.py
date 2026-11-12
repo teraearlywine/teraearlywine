@@ -5,71 +5,46 @@ SERVICES = {
         'name': 'Data platform modernization',
         'title': 'Data Platform Modernization Consultant | Tera Earlywine',
         'description': (
-            'Modernize enterprise data platforms with clear architecture, ownership, '
-            'quality controls, and a practical migration plan. Work with Tera '
-            'Earlywine.'
+            'Modernize the data behind reporting, compliance, and AI. Work with Tera '
+            'Earlywine to map critical workflows, define ownership, and plan migration.'
         ),
-        'headline': 'Build a foundation your team can trust.',
+        'headline': 'Make the warehouse easier to run.',
         'intro': (
-            'Tera Earlywine helps enterprise data leaders modernize the systems their reporting, '
-            'compliance, and AI depend on. The work starts with the decisions your '
-            'platform needs to support and the production constraints it has to '
-            'respect.'
+            'A report changes when you switch dashboards. The same transformations '
+            'run over and over. I help your engineers trace what the business depends '
+            'on and decide where a platform change will pay off.'
         ),
-        'problem_title': 'When the platform becomes the constraint.',
+        'problem_title': 'The same question returns two numbers.',
         'problem': (
-            'A growing stack can leave your team with inconsistent business '
-            'definitions, fragile dependencies, rising costs, and unclear ownership. '
-            'Replacing tools alone does not resolve those problems. Tera works through the'
-            ' architecture and operating model together, so a new platform has a clear'
-            ' purpose and a team that can run it.'
+            'Competing definitions, expensive refreshes, and unknown downstream '
+            'consumers make even simple changes hard to release. I work with the '
+            'people who build and use the data to identify the first useful repair.'
         ),
         'signals': [
             'Teams reconcile competing versions of the same metric.',
-            'New analytics or AI work stalls on data quality and access.',
-            'Platform cost and maintenance grow faster than business value.',
+            'Warehouse costs are rising faster than the workloads they support.',
+            'Quality or access issues are blocking analytics and AI work.',
         ],
         'deliverables': [
-            (
-                'Current-state assessment',
-                (
-                    'A map of critical workflows, consumers, dependencies, and the '
-                    'risks that constrain delivery.'
-                ),
-            ),
-            (
-                'Data Foundation Blueprint',
-                (
-                    'Target architecture, data contracts, quality checks, access '
-                    'controls, and explicit ownership.'
-                ),
-            ),
-            (
-                'Sequenced migration plan',
-                (
-                    'A practical order of work with validation, cutover, rollback, and'
-                    ' operating responsibilities.'
-                ),
-            ),
+            ('Workload assessment', 'A map of critical jobs, consumers, operating costs, and ownership gaps.'),
+            ('Data Foundation Blueprint', 'The target architecture, data contracts, access model, and tests.'),
+            ('Migration sequence', 'An order of work with decision owners, cutover checks, and a rollback path.'),
         ],
         'approach': (
-            'Tera begins with a bounded assessment of the workloads that matter most. '
-            'She works with the client team to identify what should stay, what needs to change, and what '
-            'evidence will justify each step. A blueprint then connects technical '
-            'decisions to business priorities and gives the delivery team a sequence '
-            'it can execute.'
+            'We start with one decision the platform has to support. We follow the '
+            'data into the report or application, identify redundant work, and agree '
+            'which checks will tell us the change is safe.'
         ),
         'experience': (
-            'Tera’s experience spans enterprise migration programs, data-platform '
-            'leadership at Block and Mercari, and hands-on work with SQL, Python, dbt,'
-            ' Airflow, Snowflake, BigQuery, and GCP. She brings that operating context to'
-            ' architecture decisions, including the handoff and maintenance work that '
-            'follows a launch.'
+            'My work includes enterprise migrations, platform engineering at Block '
+            'and Mercari, and infrastructure optimization that contributed to $500K+ '
+            'in Snowflake savings.'
         ),
         'starting_point': (
-            'Bring the business priorities, the current platform constraints, and one '
-            'workflow that illustrates the problem. A fit call helps establish whether'
-            ' a diagnostic or a Data Foundation Blueprint is the right starting point.'
+            'For a smaller team, the paid Data Waste & Efficiency Diagnostic reviews '
+            'one warehouse and a defined set of workloads. Bring query history, billing '
+            'context, and a workload owner. You leave with a baseline, ranked improvements, '
+            'explicit assumptions, and a measurement plan.'
         ),
     },
     'data-migration-rescue': {
@@ -80,67 +55,40 @@ SERVICES = {
             'reconciliation, cutover planning, and rollback criteria. Independent '
             'consulting by Tera Earlywine.'
         ),
-        'headline': 'Give a stalled migration a credible path forward.',
+        'headline': 'Get the next cutover ready.',
         'intro': (
-            'Tera Earlywine helps teams recover data migrations when the deadline is approaching, '
-            'the results do not reconcile, or production continuity is at risk. The '
-            'first task is to make the failure modes visible and agree on what a safe '
-            'next step looks like.'
+            'When a growing platform has two versions of the truth, the next release '
+            'needs more than a date. I trace the failing workflow with your team, '
+            'identify what depends on it, and document when to switch over or roll back.'
         ),
-        'problem_title': 'When moving the data is only part of the problem.',
+        'problem_title': 'The deadline keeps moving.',
         'problem': (
-            'A migration can look nearly complete while downstream reports still '
-            'disagree, undocumented dependencies keep appearing, and no one owns the '
-            'cutover decision. Tera traces the gap between the old and new systems, '
-            'separates blockers from follow-up work, and helps the client team establish a '
-            'realistic release boundary.'
+            'Downstream reports disagree and new dependencies appear each time the team '
+            'rehearses a cutover. I help your engineers separate release blockers from '
+            'follow-up work and give each blocker an owner.'
         ),
         'signals': [
-            'Validation results disagree and the cause is unclear.',
-            'Cutover dates move because dependencies keep surfacing.',
-            'The team needs a recovery plan while keeping production running.',
+            'Source and target totals diverge.',
+            'Consumer dependencies surface late.',
+            'The team needs a recovery path while production keeps running.',
         ],
         'deliverables': [
-            (
-                'Migration risk review',
-                (
-                    'A dependency map, blocker inventory, and prioritized recovery '
-                    'plan tied to affected business workflows.'
-                ),
-            ),
-            (
-                'Reconciliation strategy',
-                (
-                    'Source-to-target checks for business logic, completeness, '
-                    'freshness, and the exceptions that require review.'
-                ),
-            ),
-            (
-                'Cutover and recovery plan',
-                (
-                    'Readiness criteria, named decision owners, rollback triggers, and'
-                    ' a runbook for the transition.'
-                ),
-            ),
+            ('Dependency map', 'The jobs, people, reports, and applications affected by the first cutover.'),
+            ('Reconciliation checks', 'Tests for completeness, freshness, and the business rules behind the numbers.'),
+            ('Cutover runbook', 'Acceptance criteria, decision owners, rollback triggers, and a rehearsed path back.'),
         ],
         'approach': (
-            'Tera starts with a representative failing workflow and follows it through the '
-            'source, transformation, and consuming system to establish a concrete '
-            'basis for diagnosis. She works with the client team to agree on acceptance '
-            'criteria, sequence fixes, and rehearse the transition with the people who will own it in '
-            'production.'
+            'We choose one representative discrepancy, reproduce it in both systems, '
+            'and test the fix against the downstream result. Then we rehearse the '
+            'transition with the people who will own it in production.'
         ),
         'experience': (
-            'Tera’s work has included enterprise migration programs spanning 500+ '
-            'workflows. That experience informs her approach to dependencies, business-'
-            'logic validation, and production continuity. She combines hands-on data '
-            'engineering with the coordination needed to make release decisions '
-            'understandable to both engineering and business owners.'
+            'I’ve worked on migration programs spanning 500+ workflows. That experience '
+            'informs how I trace dependencies and verify the reports that need to stay available.'
         ),
         'starting_point': (
-            'Bring the current migration plan, the most important unresolved '
-            'discrepancy, and the deadline or operational constraint driving urgency. '
-            'The fit call helps identify the smallest useful diagnostic scope.'
+            'Bring one unresolved discrepancy, the current cutover plan, and the deadline '
+            'driving the work. We can use those to scope a recovery review.'
         ),
     },
     'production-ai-systems': {
@@ -148,71 +96,41 @@ SERVICES = {
         'title': 'Production AI Systems Consultant | Tera Earlywine',
         'description': (
             'Move an AI workflow toward production with evaluation, permissions, '
-            'recovery, monitoring, and human escalation. Work with independent '
-            'consultant Tera Earlywine.'
+            'recovery, monitoring, and human escalation. Work with Tera Earlywine.'
         ),
-        'headline': 'Make an AI workflow ready for real operations.',
+        'headline': 'Give the production reviewer evidence.',
         'intro': (
-            'Tera Earlywine helps enterprise teams turn a promising AI workflow into a system they '
-            'can evaluate, control, and operate. The focus is a bounded business use '
-            'case with clear ownership and evidence for a production-readiness '
-            'decision.'
+            'When a pilot is ready for review, I work alongside your platform, data, and '
+            'risk teams to test one workflow under real operating constraints.'
         ),
-        'problem_title': 'When a successful demo still leaves unanswered questions.',
+        'problem_title': 'The demo works. The operating questions are open.',
         'problem': (
-            'An AI pilot may work in a demonstration while leaving accuracy, '
-            'permissions, failure recovery, and ongoing cost unresolved. In regulated '
-            'and critical operations, those questions shape the system. Tera works through'
-            ' the data foundation and operational controls alongside the workflow '
-            'itself.'
+            'A production reviewer needs to know which actions the workflow can take, '
+            'where a human intervenes, and how operators recover from a partial failure. '
+            'Those answers shape the release.'
         ),
         'signals': [
-            'A pilot has value, but no agreed evaluation or release criteria.',
-            'An agent needs access to business systems with clear limits.',
-            'The team needs to recover from failures and explain what happened.',
+            'The team has a promising pilot and needs evaluation criteria.',
+            'An agent needs controlled access to business systems.',
+            'Operators need to explain or recover from a failed run.',
         ],
         'deliverables': [
-            (
-                'Scoped workflow and controls',
-                (
-                    'An integrated workflow with defined inputs, state, permissions, '
-                    'and human escalation points.'
-                ),
-            ),
-            (
-                'Evaluation report',
-                (
-                    'An assessment of accuracy, latency, cost, and failure cases '
-                    'against agreed acceptance criteria.'
-                ),
-            ),
-            (
-                'Operational handoff',
-                (
-                    'Monitoring, recovery procedures, a runbook, and explicit '
-                    'responsibilities for ongoing operation.'
-                ),
-            ),
+            ('Scoped workflow', 'Defined inputs, permissions, state, and human escalation points.'),
+            ('Evaluation report', 'Results for accuracy, latency, cost, and agreed failure scenarios.'),
+            ('Operational handoff', 'Monitoring, a recovery runbook, and explicit responsibilities for operating the workflow.'),
         ],
         'approach': (
-            'The Production AI Lighthouse starts with one use case and the evidence '
-            'needed to judge it. Tera establishes a baseline, builds the smallest useful '
-            'workflow, and tests its behavior under realistic failure conditions. The '
-            'results support a decision to release, revise, or stop before '
-            'expanding the scope.'
+            'The Production AI Lighthouse starts with one use case. We establish a '
+            'baseline, integrate the workflow, and test it against agreed launch criteria. '
+            'Your team gets the evidence to release, revise, or stop.'
         ),
         'experience': (
-            'Tera brings enterprise data engineering experience across fintech, '
-            'marketplaces, and regulated operations. She is designing a governed multi-'
-            'agent system for compliance data engineering, with attention to '
-            'auditability, security, and reliability. That ongoing work informs her '
-            'approach to state, permissions, recovery, and operational ownership.'
+            'I’m designing a governed multi-agent system for Block’s compliance data '
+            'engineering team, with a focus on access, auditability, and operational reliability.'
         ),
         'starting_point': (
-            'Bring one workflow, the decision it supports, and the consequences of an '
-            'incorrect or incomplete result. The fit call helps establish whether the '
-            'data foundation is ready and whether a scoped lighthouse engagement makes'
-            ' sense.'
+            'Bring one workflow, a person who owns its outcome, and an example of a '
+            'wrong or incomplete result. We can use those to scope the evaluation.'
         ),
     },
     'fractional-data-leadership': {
@@ -220,71 +138,40 @@ SERVICES = {
         'title': 'Fractional Data Platform Leadership | Tera Earlywine',
         'description': (
             'Get independent data-platform leadership for architecture decisions, '
-            'delivery priorities, governance, and production operations. Consulting by'
-            ' Tera Earlywine.'
+            'delivery priorities, governance, and production operations. Consulting by Tera Earlywine.'
         ),
-        'headline': 'Give critical data work clear direction.',
+        'headline': 'Put a senior data engineer alongside your team.',
         'intro': (
-            'Tera Earlywine works with enterprise leaders who need experienced data-platform '
-            'judgment and hands-on delivery support. Fractional leadership connects '
-            'business priorities, technical decisions, and the operating '
-            'responsibilities that keep a platform reliable.'
+            'When platform decisions are waiting for an owner, I help your engineering '
+            'leadership agree on priorities and work through the technical decisions with your team.'
         ),
-        'problem_title': 'When the team needs decisions as much as delivery.',
+        'problem_title': 'The team has more commitments than capacity.',
         'problem': (
-            'A capable team can still be pulled between urgent incidents, a migration '
-            'backlog, cost pressure, and new AI requests. Without an agreed direction,'
-            ' every decision becomes a separate negotiation. Tera helps establish '
-            'priorities, clarify ownership, and make the tradeoffs visible enough to '
-            'act on.'
+            'A migration, recurring incidents, and new AI requests can compete for the '
+            'same engineers. I help make the tradeoffs explicit and identify what needs a decision first.'
         ),
         'signals': [
             'Architecture and investment decisions lack a clear owner.',
-            'Operational work repeatedly displaces strategic priorities.',
-            'The team needs senior guidance during a transition or delivery push.',
+            'Operational work keeps displacing planned improvements.',
+            'The team needs experienced support during a transition.',
         ],
         'deliverables': [
-            (
-                'Prioritized platform roadmap',
-                (
-                    'A sequence of decisions and delivery milestones grounded in '
-                    'business value, production risk, and team capacity.'
-                ),
-            ),
-            (
-                'Architecture and delivery guidance',
-                (
-                    'Decision records, design reviews, and hands-on support for the '
-                    'highest-priority platform work.'
-                ),
-            ),
-            (
-                'Operating model',
-                (
-                    'Clear ownership, review practices, escalation paths, and a '
-                    'handoff plan that supports the internal team.'
-                ),
-            ),
+            ('Platform roadmap', 'Priorities tied to business decisions, production risk, and team capacity.'),
+            ('Decision record', 'Documented design choices, dependencies, and the evidence behind them.'),
+            ('Operating model', 'Owners, review practices, escalation paths, and a handoff your internal team can use.'),
         ],
         'approach': (
-            'Tera begins by understanding the team, the commitments already in flight, and'
-            ' the decisions that are blocked. She works with the client to agree on a bounded remit and a '
-            'working cadence, then connects architecture review and delivery support to'
-            ' that remit. The aim is to strengthen the team’s ability to make and '
-            'carry out decisions.'
+            'We map the decisions waiting on your team and agree on a bounded remit, '
+            'working cadence, and handoff. I join design reviews and contribute directly '
+            'to the platform work that needs senior engineering attention.'
         ),
         'experience': (
-            'Tera’s background includes staff-level data engineering at Block, data '
-            'engineering at Mercari, and independent consulting. She has worked across '
-            'platform modernization, reliability, governance, and business-facing data'
-            ' products. That experience helps her connect detailed implementation questions to'
-            ' the wider delivery and operating context.'
+            'My background includes staff data engineering at Block, warehouse and data '
+            'engineering at Mercari, and independent consulting across data reliability and production AI.'
         ),
         'starting_point': (
-            'Bring the decisions that are waiting, the team structure, and the '
-            'outcomes that need protection. A fit call helps determine the '
-            'leadership scope, where hands-on support would help, and how ownership '
-            'should transition over time.'
+            'Bring the decisions that are waiting, your team structure, and the outcomes '
+            'you need to protect. We can agree on which responsibilities I can take on.'
         ),
     },
 }

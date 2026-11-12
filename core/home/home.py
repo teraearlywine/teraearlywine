@@ -28,7 +28,7 @@ from core.home.contact_delivery import (
     ContactSubmission,
     deliver_contact_submission,
 )
-from core.home.forms import ContactForm
+from core.home.forms import ContactForm, UNSCOPED_ENGAGEMENT
 from core.home.services import SERVICES
 
 
@@ -56,7 +56,7 @@ FAQ_ITEMS = (
     {
         'question': 'What does Tera Earlywine do?',
         'answer': (
-            'She helps enterprise teams stabilize data platforms, rescue '
+            'She helps engineering teams stabilize data platforms, rescue '
             'migrations, build AI-ready data foundations, and move agentic AI '
             'workflows into reliable production services.'
         ),
@@ -64,9 +64,8 @@ FAQ_ITEMS = (
     {
         'question': 'Who does Tera work with?',
         'answer': (
-            'Tera works with data, engineering, compliance, risk, and '
-            'operations leaders—especially in fintech, B2B software, '
-            'marketplaces, and other high-consequence environments.'
+            'Tera works with startup founders, growing data teams, and enterprise '
+            'platform and risk leaders across fintech, B2B software, and marketplaces.'
         ),
     },
     {
@@ -193,7 +192,7 @@ def _contact_submission_fingerprint(submission):
         (
             submission.name,
             submission.email,
-            submission.engagement_type,
+            submission.engagement_type or '',
             submission.message,
         )
     )
@@ -277,9 +276,8 @@ def seo_metadata():
                     'url': homepage_url,
                     'jobTitle': 'Independent Data & AI Consultant',
                     'description': (
-                        'Enterprise data and AI consultant focused on '
-                        'production-grade systems for regulated, '
-                        'high-consequence operations.'
+                        'Independent data and AI consultant helping engineering teams '
+                        'build data systems they can run.'
                     ),
                     'knowsAbout': [
                         'Production-grade data and AI for regulated, high-consequence operations',
@@ -300,8 +298,8 @@ def seo_metadata():
                     'name': 'Tera Earlywine Consulting',
                     'url': homepage_url,
                     'description': (
-                        'Production-grade data and AI consulting for regulated, '
-                        'high-consequence operations.'
+                        'Hands-on consulting for data reliability, platform migrations, '
+                        'and production AI workflows.'
                     ),
                     'founder': {'@id': person_id},
                     'serviceType': [
@@ -377,7 +375,7 @@ def seo_metadata():
             {'@type': 'ListItem', 'position': 1,
              'name': 'Home', 'item': homepage_url},
             {'@type': 'ListItem', 'position': 2,
-             'name': 'Blog', 'item': blog_url},
+             'name': 'Writing', 'item': blog_url},
         ]
         if article:
             entity = {
@@ -405,7 +403,7 @@ def seo_metadata():
                 '@type': 'Blog',
                 '@id': f'{blog_url}#blog',
                 'url': blog_url,
-                'name': 'Blog | Tera Earlywine',
+                'name': 'Writing | Tera Earlywine',
                 'description': BLOG_DESCRIPTION,
                 'author': author,
                 'blogPost': [
@@ -431,7 +429,7 @@ def seo_metadata():
         'is_blog': is_blog,
         'services': SERVICES,
         'social_image_url': (
-            f"{site_url}{url_for('index.static', filename='images/nothing-wasted-social.jpg')}"
+            f"{site_url}{url_for('index.static', filename='images/cross-section-social.jpg')}"
             if site_url else ''
         ),
         'search_console_verification': str(
@@ -496,7 +494,10 @@ def contact():
         submission_id=submission_id,
         name=form.name.data,
         email=''.join(form.email.data.split()).lower(),
-        engagement_type=form.engagement_type.data,
+        engagement_type=(
+            None if form.engagement_type.data == UNSCOPED_ENGAGEMENT
+            else form.engagement_type.data
+        ),
         message=form.message.data,
         spam_context={
             'honeypot': form.website.data or '',
@@ -614,7 +615,7 @@ def rss():
     root = ElementTree.Element('rss', version='2.0')
     channel = ElementTree.SubElement(root, 'channel')
     for name, value in (
-        ('title', 'Tera Earlywine — Blog'),
+        ('title', 'Writing by Tera Earlywine'),
         ('link', f'{site_url}/blog/'),
         ('description', BLOG_DESCRIPTION),
         ('language', 'en-us'),
@@ -624,7 +625,7 @@ def rss():
         'href': f'{site_url}/rss.xml', 'rel': 'self',
         'type': 'application/rss+xml',
     })
-    # New articles are appended to preserve cube positions; show those first.
+    # Articles are appended to the collection. Publish newest first.
     for article in reversed(ARTICLES):
         item = ElementTree.SubElement(channel, 'item')
         article_url = f"{site_url}/blog/{article['slug']}/"
@@ -661,7 +662,7 @@ def rss_subscription():
 @index_bp.route('/blog/')
 def blog():
     """Explore the growing collection of essays and notes."""
-    cube_articles = [
+    stack_articles = [
         {
             **{key: article[key] for key in (
                 'id', 'slug', 'title', 'category', 'dek', 'read_minutes',
@@ -675,9 +676,9 @@ def blog():
         articles=ARTICLES,
         featured_articles=FEATURED_ARTICLES,
         diagnostic_offer=OFFERS['diagnostic'],
-        cube_articles=cube_articles,
+        stack_articles=stack_articles,
         is_blog=True,
-        page_title='Blog | Tera Earlywine',
+        page_title='Writing | Tera Earlywine',
         page_description=BLOG_DESCRIPTION,
     )
 

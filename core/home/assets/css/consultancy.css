@@ -1,12 +1,12 @@
 @font-face {
-  font-family: "Cormorant Garamond";
-  src: url("../fonts/cormorant-garamond-regular.982538ce9654.woff2") format("woff2");
+  font-family: "PT Serif";
+  src: url("../fonts/pt-serif-regular.4271064a37f3.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* Nothing Wasted: editorial layout, local type, original Figma artwork. */
+/* Locally served brand typefaces. */
 @font-face {
   font-family: Inter;
   src: url("../fonts/inter-regular.2b416f85f934.woff2") format("woff2");
@@ -50,80 +50,13 @@ li[id] {
   left: 12px;
   transform: translateY(-180%);
   z-index: 2000;
-  background: var(--ivory);
+  background: var(--white);
   padding: 12px;
-  color: var(--graphite);
+  color: var(--ink);
 }
 
 .skip-link:focus {
   transform: none;
-}
-
-.navbar.scrolled {
-  position: fixed;
-  min-height: 76px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  box-shadow: none;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.nav-brand {
-  position: static;
-  font-weight: 400;
-  font-size: 18px;
-  letter-spacing: 0;
-  color: var(--color-text);
-  white-space: nowrap;
-}
-
-.nav-descriptor {
-  font-family: monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-}
-
-.nav-links {
-  gap: 25px;
-  align-items: center;
-}
-
-.nav-links li a {
-  padding: 0;
-  font-size: 16px;
-  color: var(--color-text);
-  border-radius: 4px;
-}
-
-.nav-links li a:hover,
-.nav-links li a.active {
-  color: var(--color-accent);
-  background: none;
-  font-weight: 400;
-}
-
-.nav-links li a.nav-contact {
-  background: var(--color-accent);
-  color: var(--color-bg);
-  padding: 8px 15px;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-
-.nav-contact img,
-.button img {
-  opacity: 0.8;
-}
-
-.nav-toggle {
-  border-radius: 4px;
-  min-height: 44px;
-  color: var(--color-text);
-  font: inherit;
-  border: 1px solid var(--color-control-border);
-  padding: 8px 14px;
-  position: static;
 }
 
 .button {
@@ -150,7 +83,7 @@ li[id] {
 
 .button--primary:hover {
   background: var(--color-accent-hover);
-  color: var(--ivory);
+  color: var(--white);
   transform: translateY(-2px);
 }
 
@@ -242,7 +175,7 @@ li[id] {
 }
 
 .engagement summary:hover h3 {
-  color: var(--moss);
+  color: var(--blue);
 }
 
 .engagement-detail {
@@ -263,7 +196,7 @@ li[id] {
 }
 
 #method {
-  background: var(--sage);
+  background: var(--cool-gray);
   color: var(--color-text);
 }
 
@@ -343,7 +276,7 @@ li[id] {
 }
 
 #projects {
-  background: var(--sage);
+  background: var(--cool-gray);
 }
 
 .projects-grid {
@@ -465,7 +398,7 @@ li[id] {
 .contact {
   text-align: left;
   border-top: 1px solid var(--color-border);
-  background: var(--sage);
+  background: var(--cool-gray);
 }
 
 .contact .container {
@@ -524,12 +457,12 @@ li[id] {
 
 .contact-engagement__choices {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
 .contact-engagement__choice:hover {
-  background: var(--sage);
+  background: var(--cool-gray);
   border-color: var(--color-accent);
 }
 
@@ -547,12 +480,6 @@ li[id] {
   cursor: pointer;
 }
 
-.contact-engagement__number {
-  font: 12px monospace;
-  color: var(--color-text-accessible-muted);
-  margin-bottom: 8px;
-}
-
 .contact-engagement__title {
   max-width: 190px;
   font-size: 17px;
@@ -568,17 +495,16 @@ li[id] {
 }
 
 .contact-form .contact-engagement__choice:has(input:checked) {
-  border-color: var(--moss);
-  background: var(--moss);
-  color: var(--ivory);
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--white);
 }
 
-.contact-engagement__choice:has(input:checked) .contact-engagement__number,
 .contact-engagement__choice:has(input:checked) .contact-engagement__note {
-  color: var(--ivory);
+  color: var(--white);
 }
 
-.contact-form .contact-engagement__choice input:checked { border-color: var(--ivory); background: var(--ivory); box-shadow: inset 0 0 0 4px var(--moss); }
+.contact-form .contact-engagement__choice input:checked { border-color: var(--white); background: var(--white); box-shadow: inset 0 0 0 4px var(--blue); }
 
 .contact-engagement__choice:has(input:focus-visible) {
   outline: 2px solid var(--color-accent);
@@ -621,7 +547,7 @@ li[id] {
 }
 
 .consent-banner {
-  background: var(--sage);
+  background: var(--cool-gray);
   border-radius: 4px;
   color: var(--color-text);
 }
@@ -850,21 +776,11 @@ li[id] {
 
 h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -.015em;
+  font-weight: 700;
+  letter-spacing: -.045em;
 }
 
-.navbar {
-  position: absolute;
-  padding: 24px max(24px, calc((100vw - 1280px) / 2));
-  justify-content: space-between;
-  gap: 30px;
-  min-height: 90px;
-  color: var(--color-text);
-  background: var(--ivory);
-}
-
-.nav-brand, .nav-links li a, .privacy-choices-button, .hero-booking,
+.privacy-choices-button, .hero-booking,
 .hero-journey a, .service-contact-link, .service-breadcrumb a {
   display: inline-flex;
   align-items: center;
@@ -872,35 +788,35 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
 }
 
 .nav-links li a.nav-contact, .button--primary, .btn-primary {
-  background: var(--moss);
-  color: var(--ivory);
+  background: var(--blue);
+  color: var(--white);
 }
 
 .nav-contact img, .button--primary img { filter: brightness(0) invert(1); }
 
-.button--primary:hover, .nav-links li a.nav-contact:hover { background: var(--color-accent-hover); color: var(--ivory); }
+.button--primary:hover, .nav-links li a.nav-contact:hover { background: var(--color-accent-hover); color: var(--white); }
 
 .site-footer {
-  background: var(--ivory);
+  background: var(--white);
   color: var(--color-text);
   border: 0;
-  border-top: 1px solid var(--stone);
+  border-top: 1px solid var(--color-border);
 }
 
 .site-footer__content { justify-content: space-between; }
 
-.footer-identity { padding: 32px; flex-basis: 100%; }
+.footer-identity { margin-right: auto; }
 
-.footer-logo { width: min(400px, 100%); height: auto; display: block; margin: auto; }
+.footer-logo { width: 170px; max-width: 100%; height: auto; display: block; }
 
 .section-title {
-  line-height: 1.2;
-  font-weight: 400;
-  letter-spacing: -.015em;
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -.045em;
   font-size: 40px;
 }
 
-.engagement h3, .project-card h3, .timeline-role { font-weight: 400; }
+.engagement h3, .project-card h3, .timeline-role { font-weight: 700; }
 
 .consent-banner h2 { font: 700 16px/1.5 var(--font-family); }
 
@@ -917,39 +833,39 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   margin: 0;
   padding: 20px;
   border: 1px solid var(--color-border);
-  background: var(--ivory);
+  background: var(--white);
   font: inherit;
   letter-spacing: normal;
   text-transform: none;
   cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease;
-  border-color: var(--moss);
+  border-color: var(--blue);
 }
 
 .error-page .navbar {
-  background: var(--ivory);
+  background: var(--white);
 }
 
 /* Live copy and artwork share a desktop row; narrow screens retain reading order. */
-.hero { display: flex; flex-direction: column; min-height: 0; padding: 0; background: var(--ivory); color: var(--graphite); text-align: left; }
+.hero { display: flex; flex-direction: column; min-height: 0; padding: 0; background: var(--white); color: var(--ink); text-align: left; }
 
 .hero-content { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 160px 24px 48px; }
 
-.hero-eyebrow { color: var(--moss); font: 400 14px/1.5 var(--font-family); letter-spacing: .14em; margin-bottom: 24px; }
+.hero-eyebrow { color: var(--blue); font: 400 14px/1.5 var(--font-family); letter-spacing: .14em; margin-bottom: 24px; }
 
-.hero-name { max-width: 1100px; margin: 0; color: var(--graphite); font: 400 var(--font-size-hero)/1.05 var(--font-display); letter-spacing: -.02em; }
+.hero-name { max-width: 1100px; margin: 0; color: var(--ink); font: 400 var(--font-size-hero)/1.05 var(--font-display); letter-spacing: -.02em; }
 
-.hero-name em { display: block; font: inherit; color: var(--moss); }
+.hero-name em { display: block; font: inherit; color: var(--blue); }
 
 .hero-tagline { width: 100%; max-width: 760px; margin: 24px 0 32px; font-size: 20px; line-height: 1.56; color: var(--color-text); }
 
 .hero-actions { display: flex; width: 100%; gap: 24px; align-items: center; flex-wrap: wrap; }
 
-.hero-booking { font-size: 14px; color: var(--moss); text-underline-offset: 5px; }
+.hero-booking { font-size: 14px; color: var(--blue); text-underline-offset: 5px; }
 
 .hero-art { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: cover; }
 
-.hero-journey { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 32px 24px 48px; color: var(--moss); }
+.hero-journey { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 32px 24px 48px; color: var(--blue); }
 
 .hero-journey > p { font-size: 14px; margin-bottom: 16px; }
 
@@ -957,13 +873,13 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
 
 .hero-journey li { display: flex; align-items: center; gap: 24px; }
 
-.hero-journey a { color: var(--graphite); font-size: 18px; text-decoration: none; }
+.hero-journey a { color: var(--ink); font-size: 18px; text-decoration: none; }
 
 .hero-journey a:hover { text-decoration: underline; text-underline-offset: 5px; }
 
 /* Error pages use the same readable type and contrast as the content pages. */
-.error-content { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; padding: 140px 24px 64px; text-align: center; }
-.error-content h1 { font-size: 96px; line-height: 1; color: var(--moss); }
+.error-content { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; padding: 72px 24px; text-align: center; }
+.error-content h1 { font-size: 96px; line-height: 1; color: var(--blue); }
 .error-content h2 { font-size: 32px; margin: 24px 0 16px; }
 .error-content p { color: var(--color-text-secondary); margin-bottom: 32px; }
 
@@ -975,103 +891,6 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   .nav-links {
     gap: 20px;
   }
-  .navbar {
-    gap: 15px;
-  }
-  .nav-links li a {
-    font-size: 14px;
-  }
-
-  .engagement summary {
-    gap: 20px;
-  }
-  .engagement-overview {
-    padding-left: 20px;
-  }
-  .engagement-number {
-    font-size: 48px;
-  }
-  .engagement h3 {
-    font-size: 25px;
-  }
-  .method-list strong {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 900px) {
-  .nav-descriptor {
-    display: none;
-  }
-
-  .engagement summary {
-    grid-template-columns: 60px 1fr 1fr 25px;
-    gap: 15px;
-  }
-  .engagement h3 {
-    font-size: 22px;
-  }
-  .engagement-overview {
-    font-size: 14px;
-  }
-  .method-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .method-list li,
-  .method-list li + li {
-    padding: 22px 18px 22px 0;
-    border: 0;
-    border-top: 1px solid var(--color-border);
-  }
-  .reliability-note {
-    gap: 25px;
-  }
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-  .faq-layout {
-    gap: 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 20px 24px;
-    min-height: 78px;
-  }
-  .navbar.scrolled {
-    padding: 16px 24px;
-  }
-  .nav-brand {
-    font-size: 14px;
-    z-index: 1001;
-    white-space: normal;
-    line-height: 1.2;
-  }
-  .nav-toggle {
-    display: block;
-    z-index: 1001;
-  }
-  .nav-links {
-    position: absolute;
-    top: 100%;
-    bottom: auto;
-    background: var(--ivory);
-    padding: 24px;
-    gap: 24px;
-    align-items: flex-start;
-    box-shadow: none;
-    border-bottom: 1px solid var(--stone);
-    backdrop-filter: none;
-    z-index: 999;
-  }
-  .nav-links li a {
-    font-size: 20px;
-  }
-  .nav-links li a.nav-contact {
-    font-size: 17px;
-  }
-
   .section {
     padding: 65px 0;
   }
@@ -1137,9 +956,6 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   .contact-form .contact-engagement__choice {
     padding: 18px 52px 18px 18px;
     gap: 6px;
-  }
-  .contact-engagement__number {
-    display: none;
   }
   .contact-engagement__title {
     max-width: none;
@@ -1224,7 +1040,6 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   }
 }
 
-@media (max-width: 1100px) { .nav-descriptor { display: none; } }
 
 @media (max-width: 768px) {
   .hero-content { padding-top: 128px; padding-bottom: 32px; }
@@ -1237,7 +1052,7 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   .hero-journey ol, .hero-journey li { gap: 16px; }
   .hero-journey img { width: 20px; }
   .method-list { grid-template-columns: 1fr; }
-  .footer-identity { padding: 24px; }
+  .site-footer__content { gap: 12px 22px; }
 }
 
 @media (min-width: 1024px) {

@@ -3,81 +3,73 @@
 {% include 'home/includes/header.html' %}
 <body class="blog-page">
     {% include 'home/core/navigation.html' %}
-    <main id="main">
-        <section class="blog-hero" aria-labelledby="blog-heading">
-            <header class="blog-intro">
-                <h1 id="blog-heading">More useful work.<br>Less wasted compute.</h1>
-                <p>Warehouse efficiency, reliable data, and production AI.</p>
-                {% if rss_url %}
-                <a class="blog-text-link" href="{{ url_for('index.rss_subscription') }}">Subscribe via RSS</a>
-                {% endif %}
-            </header>
-            <div class="cube-explorer" id="cubeExplorer">
-                <div class="cube-visual">
-                    <div class="cube-stage" id="cubeStage">
-                        <canvas id="blogCube" aria-hidden="true" data-environment="{{ url_for('index.static', filename='images/blog-studio-environment.png') }}"></canvas>
-                        <div class="cube-points" id="cubePoints" role="group" aria-label="Explore articles in the cube"></div>
-                        <p class="cube-loading" id="cubeStatus" role="status">Bringing ideas into focus…</p>
-                    </div>
-                    <p class="cube-caption">Every article adds a point. Explore to see what takes shape.</p>
-                    <div class="cube-tools" id="cubeTools" hidden>
-                        <button type="button" class="blog-quiet-button" id="resetCube">Reset view</button>
-                        <span aria-hidden="true">/</span>
-                        <button type="button" class="blog-quiet-button" id="growthToggle" aria-expanded="false" aria-controls="growthControls">Watch it grow</button>
-                    </div>
-                    <div class="growth-controls" id="growthControls" hidden>
-                        <label for="growthRange">Articles in the cube <output id="growthCount" for="growthRange">{{ articles|length }}</output></label>
-                        <input type="range" id="growthRange" min="1" max="{{ articles|length }}" value="{{ articles|length }}" aria-describedby="growthExplanation">
-                        <div class="growth-milestones">
-                            <button type="button" data-count="9">9 · A square</button>
-                            <button type="button" data-count="10">10 · A new layer</button>
-                            <button type="button" data-count="27">27 · A cube</button>
-                        </div>
-                        <p id="growthExplanation">One point per article. Earlier points keep their place.</p>
-                    </div>
-                </div>
-                <span class="cube-connector" id="cubeConnector" aria-hidden="true" hidden></span>
-                <aside class="article-preview" id="articlePreview" aria-labelledby="previewTitle">
-                    <p class="blog-kicker" id="previewMeta">{{ articles[0].category }} / {{ articles[0].read_minutes }} min read</p>
-                    <h2 id="previewTitle">{{ articles[0].title }}</h2>
-                    <p class="preview-dek" id="previewDek">{{ articles[0].dek }}</p>
-                    <a id="previewLink" class="blog-text-link" href="{{ url_for('index.blog_article', slug=articles[0].slug) }}">Read article <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
-                </aside>
-                <span class="sr-only" id="selectionStatus" aria-live="polite"></span>
+    <main id="main" class="writing-page">
+        <header class="writing-intro">
+            <div>
+                <h1 id="blog-heading">Writing</h1>
+                <p>Essays on the cost of compute, reliable data, and the work of getting AI into production.</p>
             </div>
-            <noscript><p class="cube-fallback">Explore the articles in the list below.</p></noscript>
+            <div class="writing-links">
+                <a class="blog-text-link" id="archiveLink" href="#archive">Browse the archive</a>
+                {% if rss_url %}<a class="blog-text-link" href="{{ url_for('index.rss_subscription') }}">Subscribe via RSS</a>{% endif %}
+            </div>
+        </header>
+
+        {% if stack_articles %}
+        {% set latest = stack_articles[-1] %}
+        <section class="stack-explorer" aria-label="Explore the writing collection" data-paper-stack>
+            <div class="stack-art">
+                {% include 'home/includes/paper_stack.html' %}
+            </div>
+            <div class="stack-reading" id="articlePreview">
+                <p class="blog-kicker" id="previewMeta">{{ latest.category }} / {{ latest.read_minutes }} min read</p>
+                <h2 id="previewTitle">{{ latest.title }}</h2>
+                <p class="stack-dek" id="previewDek">{{ latest.dek }}</p>
+                <a class="stack-read" id="previewLink" href="{{ latest.url }}">Read essay <span aria-hidden="true">↗</span></a>
+                <div class="stack-navigation" id="stackNavigation" hidden>
+                    <button id="olderSheet" type="button"><span aria-hidden="true">←</span> Older</button>
+                    <span id="sheetCount" class="sheet-count">Sheet {{ stack_articles|length }} of {{ stack_articles|length }}</span>
+                    <button id="newerSheet" type="button">Newer <span aria-hidden="true">→</span></button>
+                </div>
+                <p class="sr-only" id="sheetStatus" role="status"></p>
+            </div>
         </section>
+        {% endif %}
+
         <section class="blog-writing" aria-labelledby="writing-heading">
-            <h2 class="blog-kicker" id="writing-heading">Latest and<br>featured writing</h2>
+            <h2 id="writing-heading">Featured reading</h2>
             <div class="writing-list">
                 {% for article in featured_articles %}
                 <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}">
-                    <span>{{ article.title }}</span>
-                    <img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="30" height="30">
+                    <span><small>{{ article.category }}</small>{{ article.title }}</span>
+                    <span class="row-arrow" aria-hidden="true">↗</span>
                 </a>
                 {% endfor %}
-                <details class="writing-archive">
-                    <summary>Explore all {{ articles|length }} articles</summary>
-                    {% for article in articles if article not in featured_articles %}
-                    <a class="writing-row writing-row--archive" href="{{ url_for('index.blog_article', slug=article.slug) }}">
-                        <span><small>{{ article.category }}</small>{{ article.title }}</span>
-                        <img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="24" height="24">
-                    </a>
-                    {% endfor %}
-                </details>
             </div>
         </section>
+        <section class="blog-writing" id="archive" aria-labelledby="archive-heading">
+            <h2 id="archive-heading">Archive</h2>
+            <details class="writing-archive" id="allEssays">
+                <summary>All {{ articles|length }} essays</summary>
+                {% for article in articles|reverse %}
+                <a class="writing-row writing-row--archive" href="{{ url_for('index.blog_article', slug=article.slug) }}">
+                    <span><small>{{ article.category }} / {{ article.read_minutes }} min read</small>{{ article.title }}</span>
+                    <span class="row-arrow" aria-hidden="true">↗</span>
+                </a>
+                {% endfor %}
+            </details>
+        </section>
         <section class="blog-offer" aria-labelledby="blog-offer-heading">
-            <p class="blog-kicker">A focused starting point</p>
             <h2 id="blog-offer-heading">{{ diagnostic_offer.name }}</h2>
-            <p>For financial-services and fintech data leaders investigating unnecessary processing or delayed critical outputs.</p>
             <p>{{ diagnostic_offer.description }}</p>
-            <a class="blog-text-link" href="{{ url_for('index.index') }}#contact">{{ diagnostic_offer.cta }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
+            <a class="blog-text-link" href="{{ url_for('index.index') }}#contact">{{ diagnostic_offer.cta }}</a>
         </section>
     </main>
     {% include 'home/includes/footer.html' %}
     {% include 'home/includes/scripts.html' %}
-    <script type="application/json" id="cubeArticles">{{ cube_articles|tojson }}</script>
+    {% if stack_articles %}
+    <script type="application/json" id="stackArticles">{{ stack_articles|tojson }}</script>
     <script type="module" src="{{ url_for('index.static', filename='js/blog.js') }}"></script>
+    {% endif %}
 </body>
 </html>

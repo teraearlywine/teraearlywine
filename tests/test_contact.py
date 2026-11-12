@@ -102,7 +102,7 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
         '<legend>Potential engagement</legend>'
         in document
     )
-    assert document.count('type="radio"') == 3
+    assert document.count('name="engagement_type"') == 4
     assert '<select' not in document
     assert '<label for="message">Message</label>' in document
     assert 'autocomplete="name"' in document
@@ -115,6 +115,7 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
         'Value / Risk Diagnostic',
         'Data Foundation Blueprint',
         'Production AI Lighthouse',
+        'Help me scope it',
     ):
         assert engagement_type in document
     assert 'href="https://calendar.example/book"' in document
@@ -229,12 +230,15 @@ def test_contact_rejects_honeypot_without_echoing_or_delivery(
     assert upstream_calls == []
 
 
+@pytest.mark.parametrize('choice', [TEST_ENGAGEMENT, 'Help me scope it'])
 def test_success_sends_exact_signed_broker_payload(
     contact_app,
     monkeypatch,
+    choice,
 ):
     client = contact_app.test_client()
     form_data, _ = _contact_form(client)
+    form_data['engagement_type'] = choice
     submission_id = form_data['submission_id']
     calls = []
 
@@ -256,14 +260,16 @@ def test_success_sends_exact_signed_broker_payload(
     broker_url, broker_request = calls[0]
     assert broker_url == BROKER_URL
     assert 0 <= broker_request['json']['spamContext']['elapsedSeconds'] <= 2
-    assert broker_request['json'] == {
+    expected_payload = {
         'email': TEST_EMAIL,
-        'engagementType': TEST_ENGAGEMENT,
         'message': TEST_MESSAGE,
         'name': TEST_NAME,
         'submissionId': submission_id,
         'spamContext': {'honeypot': '', 'elapsedSeconds': broker_request['json']['spamContext']['elapsedSeconds'], 'challengeToken': ''},
     }
+    if choice == TEST_ENGAGEMENT:
+        expected_payload['engagementType'] = TEST_ENGAGEMENT
+    assert broker_request['json'] == expected_payload
     assert broker_request['timeout'] == 15.0
     timestamp = broker_request['headers']['X-Contact-Timestamp']
     canonical = json.dumps(

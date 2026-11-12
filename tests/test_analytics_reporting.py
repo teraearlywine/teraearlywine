@@ -202,25 +202,19 @@ def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
         assert 'button--primary' in hero_booking.get('class', '').split()
 
 
-def test_homepage_answers_enterprise_buyer_questions_and_leads_to_fit_call(
+def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     app_factory,
 ):
     document = render_home(
         app_factory(BOOKING_URL='https://calendar.example/book')
     )
 
-    assert (
-        'Tera strengthens the data systems that reporting, compliance, and AI depend on.'
-        in document
-    )
-    assert (
-        'Tera Earlywine helps leaders in regulated and critical operations'
-        in document
-    )
-    assert 'Value / Risk Diagnostic' in document
-    assert 'Data Foundation Blueprint' in document
-    assert 'Production AI Lighthouse' in document
-    assert 'Modernize your data.' in document
+    text = ' '.join(re.sub(r'<[^>]+>', ' ', document).split())
+    assert 'Data systems your team can run.' in text
+    assert 'I work alongside your engineers' in text
+    assert 'Data Waste &amp; Efficiency Diagnostic' in document
+    assert 'Help me scope it' in document
+    assert 'In design' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document
@@ -616,12 +610,12 @@ def test_small_text_colors_meet_wcag_aa():
         return (lighter + 0.05) / (darker + 0.05)
 
     # Resolve the shared tokens rather than pinning a superseded palette.
-    for background in ('var(--ivory)', 'var(--sage)'):
+    for background in ('var(--white)', 'var(--cool-gray)'):
         for foreground in ('var(--color-text)', 'var(--color-text-secondary)',
                            'var(--color-text-accessible-muted)', 'var(--color-error)'):
             assert contrast_ratio(resolve_color(foreground), resolve_color(background)) >= 4.5
     for background in ('var(--color-accent)', 'var(--color-accent-hover)'):
-        assert contrast_ratio(resolve_color('var(--ivory)'), resolve_color(background)) >= 4.5
+        assert contrast_ratio(resolve_color('var(--white)'), resolve_color(background)) >= 4.5
     assert '.consent-banner p {' in main_source
     assert 'color: var(--color-text-accessible-muted);' in main_source
 

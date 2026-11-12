@@ -6,7 +6,7 @@
             <h2 class="section-title">A conversation about what is expensive, fragile, or stuck.</h2>
         </div>
         <p class="contact-text fade-up fade-up-delay-1">
-            A 20–30 minute fit call helps establish whether Tera's expertise matches the problem and which next step would be useful.
+            Tell me what your team is trying to fix. A 20–30 minute fit call gives us time to talk through the problem and agree on a useful next step.
         </p>
         <form
             class="contact-form fade-up fade-up-delay-2"
@@ -54,7 +54,7 @@
             </div>
             <fieldset class="contact-form__field contact-form__field--full contact-engagement">
                 <legend>Potential engagement</legend>
-                {% set engagement_notes = ['Find the right starting point.', 'Map the path forward.', 'Prove a workflow in production.'] %}
+                {% set engagement_notes = ['Find the right starting point.', 'Map the path forward.', 'Evaluate a workflow for production.', 'Describe the problem in your own words.'] %}
                 <div class="contact-engagement__choices">
                     {% for option in contact_form.engagement_type %}
                     <label class="contact-engagement__choice" for="{{ option.id }}">
@@ -62,7 +62,6 @@
                             aria_describedby='contact-engagement-type-error',
                             aria_invalid='true' if contact_form.engagement_type.errors else 'false',
                         ) }}
-                        <span class="contact-engagement__number" aria-hidden="true">0{{ loop.index }}</span>
                         <span class="contact-engagement__title">{{ option.label.text }}</span>
                         <span class="contact-engagement__note">{{ engagement_notes[loop.index0] }}</span>
                     </label>

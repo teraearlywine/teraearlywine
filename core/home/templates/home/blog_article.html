@@ -5,7 +5,7 @@
     {% include 'home/core/navigation.html' %}
     <main id="main">
         <article class="blog-essay">
-            <a class="blog-back" href="{{ url_for('index.blog') }}">Back to the cube</a>
+            <a class="blog-back" href="{{ url_for('index.blog') }}">← All writing</a>
             <header class="essay-header">
                 <p class="blog-kicker">{{ article.category }} / {{ article.read_minutes }} min read</p>
                 <h1>{{ article.title }}</h1>
@@ -23,6 +23,10 @@
                 </section>
                 {% endfor %}
             </div>
+            <figure class="essay-signoff" data-essay-signoff>
+                <img src="{{ url_for('index.static', filename='images/nothing-wasted-signoff.webp') }}" alt="Nothing Wasted — Tera Earlywine" width="1080" height="600" loading="lazy">
+                <video data-src="{{ url_for('index.static', filename='media/nothing-wasted-signoff.mp4') }}" muted playsinline preload="none" width="1080" height="600" hidden aria-hidden="true"></video>
+            </figure>
             <section class="blog-offer essay-offer" aria-labelledby="essay-offer-heading">
                 <p class="blog-kicker">A relevant next step</p>
                 <h2 id="essay-offer-heading">{{ article.offer.name }}</h2>
@@ -38,5 +42,6 @@
     </main>
     {% include 'home/includes/footer.html' %}
     {% include 'home/includes/scripts.html' %}
+    <script type="module" src="{{ url_for('index.static', filename='js/essay-signoff.js') }}"></script>
 </body>
 </html>
