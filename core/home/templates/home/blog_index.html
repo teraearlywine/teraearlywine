@@ -20,6 +20,9 @@
         <section class="stack-explorer" aria-label="Explore the writing collection" data-paper-stack>
             <div class="stack-art">
                 {% include 'home/includes/paper_stack.html' %}
+                {% if stack_articles|length > 1 %}
+                <p class="stack-hover-hint" id="stackHoverHint" aria-hidden="true" hidden>Hover over the stack to turn a sheet.</p>
+                {% endif %}
             </div>
             <div class="stack-reading" id="articlePreview">
                 <p class="blog-kicker" id="previewMeta">{{ latest.category }} / {{ latest.read_minutes }} min read</p>

@@ -16,7 +16,7 @@ function element() {
     setAttribute(key, value) { this[key] = value; },
     addEventListener(name, handle) { events.set(name, handle); },
     removeEventListener(name) { events.delete(name); },
-    emit(name) { events.get(name)?.(); },
+    emit(name, event) { events.get(name)?.(event); },
   };
 }
 
@@ -26,7 +26,8 @@ function stack(count) {
     read_minutes: i + 1, url: '/blog/essay-' + i + '/',
   }));
   const elements = Object.fromEntries(['stackArticles', 'olderSheet', 'newerSheet', 'sheetCount',
-    'sheetStatus', 'previewTitle', 'previewMeta', 'previewDek', 'previewLink', 'stackNavigation', 'archiveLink', 'allEssays'].map(id => [id, element()]));
+    'sheetStatus', 'previewTitle', 'previewMeta', 'previewDek', 'previewLink', 'stackNavigation', 'stackHoverSurface',
+    'stackHoverHint', 'archiveLink', 'allEssays'].map(id => [id, element()]));
   const layers = articles.map(element);
   elements.stackArticles.textContent = JSON.stringify(articles);
   elements.stackNavigation.hidden = true;
@@ -57,6 +58,27 @@ test('newest sheet first; older/newer move by one, update the link and cannot le
 test('browse the archive opens every title with one activation', () => {
   const p = stack(3); p.archiveLink.emit('click');
   assert.equal(p.allEssays.open, true);
+});
+
+test('each mouse entry turns one sheet and preserves its preview on the way to the essay', () => {
+  const p = stack(3);
+  const mouse = { pointerType: 'mouse' };
+  p.stackHoverSurface.emit('pointerenter', { pointerType: 'touch' });
+  assert.equal(p.previewTitle.textContent, 'Essay 2');
+  p.stackHoverSurface.emit('pointerenter', mouse);
+  p.stackHoverSurface.emit('pointermove', mouse);
+  p.stackHoverSurface.emit('pointerleave', mouse);
+  assert.equal(p.previewTitle.textContent, 'Essay 1');
+  assert.equal(p.previewDek.textContent, 'Summary 1');
+  assert.equal(p.previewMeta.textContent, 'Topic 1 / 2 min read');
+  assert.equal(p.previewLink.href, '/blog/essay-1/');
+  assert(p.layers[1].classList.contains('selected-sheet'));
+  p.stackHoverSurface.emit('pointerenter', mouse);
+  p.stackHoverSurface.emit('pointerenter', mouse);
+  assert.equal(p.olderSheet['aria-disabled'], 'true');
+  assert.equal(p.previewTitle.textContent, 'Essay 0');
+  p.newerSheet.emit('click');
+  assert.equal(p.previewTitle.textContent, 'Essay 1');
 });
 
 test('a single sheet has a readable article and no unnecessary controls', () => {

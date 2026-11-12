@@ -284,7 +284,42 @@ async function testMissingChallengeConfigurationFailsClearly() {
   assert.deepEqual(harness.dispatchedEvents, []);
 }
 
+function testHeaderMarkEntryAndReplay() {
+  const origin = 'https://www.teraearlywine.com';
+  const motion = { matches: false };
+  const document = { referrer: '', addEventListener() {} };
+  const context = vm.createContext({
+    document, window: { location: { origin }, matchMedia: () => motion },
+  });
+  vm.runInContext(mainSource, context);
+  const brand = new FakeElement();
+  const classes = new Set();
+  brand.classList = { add: value => classes.add(value), remove: value => classes.delete(value) };
+  brand.matches = selector => selector === ':focus-visible';
+  const isMoving = () => classes.has('is-assembling');
+  context.enableHeaderMarkMotion(brand);
+  assert.equal(isMoving(), true);
+  brand.listeners.get('animationend')();
+  document.referrer = origin + '/blog/';
+  context.enableHeaderMarkMotion(brand);
+  assert.equal(isMoving(), false);
+  brand.listeners.get('pointerenter')({ pointerType: 'touch' });
+  assert.equal(isMoving(), false);
+  brand.listeners.get('pointerenter')({ pointerType: 'mouse' });
+  assert.equal(isMoving(), true);
+  brand.listeners.get('animationend')();
+  brand.listeners.get('focus')();
+  assert.equal(isMoving(), true);
+  brand.listeners.get('animationcancel')();
+  motion.matches = true;
+  document.referrer = '';
+  context.enableHeaderMarkMotion(brand);
+  brand.listeners.get('focus')();
+  assert.equal(isMoving(), false);
+}
+
 Promise.resolve()
+  .then(testHeaderMarkEntryAndReplay)
   .then(testSuccessfulSubmissionRestoresTheForm)
   .then(testTimedOutSubmissionRestoresTheForm)
   .then(testInvalidFormDoesNotRequestOrEmitSuccess)

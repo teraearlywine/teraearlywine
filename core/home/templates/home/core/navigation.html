@@ -1,7 +1,18 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <nav class="navbar" id="navbar" aria-label="Main navigation">
-    <a href="{{ url_for('index.index') }}" class="nav-brand" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="home">
-        <img src="{{ url_for('index.static', filename='images/cross-section-lockup.svg') }}" alt="Tera Earlywine Consulting" width="388" height="112">
+    <a href="{{ url_for('index.index') }}" class="nav-brand" aria-label="Tera Earlywine Consulting" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="home">
+        {% set lockup = url_for('index.static', filename='images/cross-section-lockup.svg') %}
+        <svg width="388" height="112" viewBox="0 0 388 112" aria-hidden="true" focusable="false">
+            <g transform="translate(1 5)" fill="#263CF2">
+                <path d="M8 18H61V28H50V38H40V48H31V40H8Z M69 18H88V40H59V58H47V64H38V51H47V41H57V31H69Z"/>
+                <g class="nav-brand__offcut">
+                    <path d="M38 64H47V58H59V74L48 85H38Z"/>
+                    <path d="M38 64H47V58H59V60H49V66H38Z" fill="#FF6B3D"/>
+                </g>
+            </g>
+            <use href="{{ lockup }}#name"/>
+            <use href="{{ lockup }}#descriptor"/>
+        </svg>
     </a>
     <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">

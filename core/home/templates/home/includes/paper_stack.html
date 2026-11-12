@@ -31,4 +31,10 @@
         </g>
     </g>
     {% endfor %}
+    {% if stack_articles|length > 1 %}
+    {# A fixed silhouette keeps the hit area in place while individual sheets slide. #}
+    {% set depth = (stack_articles|length - 1) * spacing + 3.7 %}
+    <path id="stackHoverSurface" fill="transparent" stroke="transparent" stroke-width="32" stroke-linejoin="round"
+          d="M61 147 295 43 519 149v{{ depth|round(2) }}L283 {{ (258 + depth)|round(2) }} 61 {{ (147 + depth)|round(2) }}Z"/>
+    {% endif %}
 </svg>

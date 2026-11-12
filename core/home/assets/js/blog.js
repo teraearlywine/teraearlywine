@@ -30,6 +30,10 @@ if (articles.length) {
     document.getElementById('stackNavigation').hidden = false;
     older.addEventListener('click', () => showSheet(selected - 1));
     newer.addEventListener('click', () => showSheet(selected + 1));
+    document.getElementById('stackHoverSurface').addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') showSheet(selected - 1);
+    });
+    document.getElementById('stackHoverHint').hidden = false;
   }
 }
 

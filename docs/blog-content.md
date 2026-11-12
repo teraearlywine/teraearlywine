@@ -1,6 +1,6 @@
 # Writing and the paper-stack explorer
 
-The Writing index at `/blog/` renders one ultramarine paper sheet per essay. The newest essay is selected first. Older and Newer expose the orange edge of the selected sheet and update the article link and summary. The featured links and complete newest-first archive also work without JavaScript.
+The Writing index at `/blog/` renders one ultramarine paper sheet per essay. The newest essay is selected first. Moving the mouse onto the stack turns one sheet older. The selected essay stays in place while the pointer moves to its link. Older and Newer give keyboard and touch visitors the same controls. Each selection updates the orange edge, title, category, reading time, summary and article link. The featured links and complete newest-first archive also work without JavaScript.
 
 Each essay ends with the 3.3-second “Nothing Wasted” sign-off before its related offer. The final still is the default. The muted video loads when that signature enters view, plays once, and returns to its still frame. Reduced motion and unavailable playback use the same still.
 

@@ -58,8 +58,12 @@
   gap: clamp(24px, 5vw, 82px);
   padding-block: clamp(20px, 3vw, 48px);
 }
-.stack-art { min-width: 0; }
+.stack-art { min-width: 0; align-self: start; }
 .paper-stack { display: block; width: 100%; height: auto; max-height: 420px; }
+.stack-hover-hint { display: none; }
+@media (any-hover: hover) {
+  .stack-hover-hint { display: block; margin: 0; text-align: center; color: var(--color-text-secondary); font-size: 13px; }
+}
 .paper-layer { transition: transform .28s cubic-bezier(.2,.75,.24,1); }
 .sheet-front { fill: var(--paper-edge, #233bd0); }
 .sheet-side { fill: var(--paper-edge, #172a9f); }

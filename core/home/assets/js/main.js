@@ -1,7 +1,28 @@
 // main.js — Portfolio navigation and scroll behavior
 
+function enableHeaderMarkMotion(brand) {
+  if (!brand) return;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function assemble() {
+    if (!motion.matches) brand.classList.add('is-assembling');
+  }
+  function settle() {
+    brand.classList.remove('is-assembling');
+  }
+  brand.addEventListener('animationend', settle);
+  brand.addEventListener('animationcancel', settle);
+  brand.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'mouse') assemble();
+  });
+  brand.addEventListener('focus', () => {
+    if (brand.matches(':focus-visible')) assemble();
+  });
+  if (!document.referrer.startsWith(window.location.origin + '/')) assemble();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
+  enableHeaderMarkMotion(document.querySelector('.nav-brand'));
   const navToggle = document.getElementById('navToggle');
   const navLinksEl = document.getElementById('navLinks');
   document.getElementById('navbar').classList.add('nav-ready');
