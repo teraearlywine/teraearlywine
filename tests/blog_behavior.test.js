@@ -12,7 +12,13 @@ function element() {
   const classes = new Set();
   return {
     hidden: false, dataset: {}, textContent: '',
-    classList: { toggle(name, on) { if (on) classes.add(name); else classes.delete(name); }, contains(name) { return classes.has(name); } },
+    classList: {
+      toggle(name, on) { if (on) classes.add(name); else classes.delete(name); },
+      contains(name) { return classes.has(name); },
+      add(name) { classes.add(name); },
+      remove(name) { classes.delete(name); },
+    },
+    append(child) { child.parentElement = this; },
     setAttribute(key, value) { this[key] = value; },
     addEventListener(name, handle) { events.set(name, handle); },
     removeEventListener(name) { events.delete(name); },
@@ -20,7 +26,7 @@ function element() {
   };
 }
 
-function stack(count) {
+function stack(count, setup) {
   const articles = Array.from({ length: count }, (_, i) => ({
     title: 'Essay ' + i, dek: 'Summary ' + i, category: 'Topic ' + i,
     read_minutes: i + 1, url: '/blog/essay-' + i + '/',
@@ -32,7 +38,9 @@ function stack(count) {
   elements.stackArticles.textContent = JSON.stringify(articles);
   elements.stackNavigation.hidden = true;
   const document = { getElementById: id => elements[id], querySelectorAll: () => layers };
-  vm.runInNewContext(fs.readFileSync(path.join(scripts, 'blog.js'), 'utf8'), { document, window: { location: { hash: '' } } });
+  const context = { document, window: { location: { hash: '' } } };
+  setup?.(elements, context);
+  vm.runInNewContext(fs.readFileSync(path.join(scripts, 'blog.js'), 'utf8'), context);
   return { ...elements, layers };
 }
 
@@ -85,6 +93,89 @@ test('a single sheet has a readable article and no unnecessary controls', () => 
   const p = stack(1);
   assert.equal(p.stackNavigation.hidden, true);
   assert.equal(p.previewLink.href, '/blog/essay-0/');
+});
+
+function movingStack() {
+  let now = 0, frameId = 0;
+  const frames = new Map();
+  const preference = element();
+  preference.matches = false;
+  const p = stack(3, (elements, context) => {
+    for (const id of ['turningPaper', 'turnFace', 'turnEdge', 'turnRim', 'turnMarker', 'turnLight', 'turnShadow', 'turnImprint']) {
+      elements[id] = element();
+    }
+    elements.turningPaper.display = 'none';
+    context.window.matchMedia = () => preference;
+    context.performance = { now: () => now };
+    context.requestAnimationFrame = callback => {
+      frames.set(++frameId, callback);
+      return frameId;
+    };
+    context.cancelAnimationFrame = id => frames.delete(id);
+  });
+  function advance(milliseconds) {
+    now += milliseconds;
+    const pending = [...frames.values()];
+    frames.clear();
+    pending.forEach(callback => callback(now));
+  }
+  return { ...p, advance, preference, frames };
+}
+
+function checkTurningLayer(p, expected) {
+  const turning = p.layers.filter(layer => layer.classList.contains('turning-sheet'));
+  if (expected) {
+    assert.deepEqual(turning, [expected]);
+    assert.equal(p.turningPaper.parentElement, expected);
+    assert.equal(p.turningPaper.display, 'inline');
+    assert.equal(p.frames.size, 1);
+  } else {
+    assert.deepEqual(turning, []);
+    // SVG descendants can override visibility, so suppress the entire subtree, stamp included.
+    assert.equal(p.turningPaper.display, 'none');
+    assert.equal(p.frames.size, 0);
+  }
+}
+
+test('an interrupted turn hands off one flexible face and reverses from its current bend', () => {
+  const p = movingStack();
+  p.olderSheet.emit('click');
+  p.advance(120);
+  checkTurningLayer(p, p.layers[2]);
+  assert.equal(p.turnImprint.visibility, 'visible');
+  p.olderSheet.emit('click');
+  checkTurningLayer(p, p.layers[1]);
+  assert.equal(p.turnImprint.visibility, 'hidden');
+
+  const flat = p.turnFace.d;
+  p.advance(150);
+  const bent = p.turnFace.d;
+  assert.notEqual(bent, flat);
+  const marker = p.turnMarker.opacity;
+  p.newerSheet.emit('click');
+  assert.equal(p.turnFace.d, bent);
+  checkTurningLayer(p, p.layers[1]);
+  p.advance(60);
+  assert.ok(p.turnMarker.opacity > marker, 'the corner retraces toward the selected position');
+  p.advance(120);
+  checkTurningLayer(p);
+  assert.equal(p.sheetStatus.textContent, 'Sheet 2 of 3. Essay 1');
+});
+
+test('enabling reduced motion during the stamped turn immediately settles the selected sheet', () => {
+  const p = movingStack();
+  p.olderSheet.emit('click');
+  p.advance(110);
+  checkTurningLayer(p, p.layers[2]);
+  assert.equal(p.turnImprint.visibility, 'visible');
+  p.preference.matches = true;
+  p.preference.emit('change');
+  checkTurningLayer(p);
+  assert.equal(p.previewLink.href, '/blog/essay-1/');
+  p.newerSheet.emit('click');
+  p.advance(800);
+  checkTurningLayer(p);
+  assert.equal(p.sheetStatus.textContent, 'Sheet 3 of 3. Essay 2');
 });
 
 function essay(reduced = false, fails = false) {

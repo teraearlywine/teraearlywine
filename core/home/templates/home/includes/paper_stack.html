@@ -1,40 +1,70 @@
+{% set spacing = [2.7, 80 / stack_articles|length]|min %}
+{% set depth = (stack_articles|length - 1) * spacing %}
 <svg class="paper-stack" viewBox="0 0 580 390" aria-hidden="true" focusable="false">
     <defs>
         <pattern id="paperTexture" patternUnits="userSpaceOnUse" width="92" height="92">
             <image href="{{ url_for('index.static', filename='images/writing-paper-grain.webp') }}" width="92" height="92"/>
         </pattern>
-        <linearGradient id="paperLight" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-            <stop stop-color="#ffffff" stop-opacity=".09"/><stop offset=".67" stop-color="#051451" stop-opacity="0"/><stop offset="1" stop-color="#051451" stop-opacity=".18"/>
+        <linearGradient id="paperStock" x2=".78" y2="1">
+            <stop stop-color="#5265fa"/><stop offset=".48" stop-color="#3449ec"/><stop offset="1" stop-color="#2034ca"/>
         </linearGradient>
-        <filter id="paperShadow" x="-20%" y="-40%" width="150%" height="190%">
-            <feGaussianBlur stdDeviation="10"/>
+        <linearGradient id="paperBendLight" x1="0" y1="1" x2=".72" y2="0">
+            <stop stop-color="#0c1885" stop-opacity=".4"/>
+            <stop offset=".26" stop-color="#93a7ff" stop-opacity=".74"/>
+            <stop offset=".55" stop-color="#cbd5ff" stop-opacity=".08"/>
+            <stop offset="1" stop-color="#cbd5ff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="cutEdge">
+            <stop stop-color="#1c2a99"/><stop offset=".49" stop-color="#3347c1"/><stop offset=".5" stop-color="#182787"/><stop offset="1" stop-color="#2b3dac"/>
+        </linearGradient>
+        <linearGradient id="selectedEdge">
+            <stop stop-color="#ff7549"/><stop offset=".49" stop-color="#ffab72"/><stop offset=".5" stop-color="#ee572a"/><stop offset="1" stop-color="#ff8047"/>
+        </linearGradient>
+        <filter id="groundShadow" x="-25%" y="-40%" width="150%" height="190%">
+            <feGaussianBlur stdDeviation="8"/>
         </filter>
-        <path id="paperTop" d="M61 147 295 43 519 149 283 258Z"/>
-        <g id="blueSheet">
-            <use href="#paperTop" fill="#263cf2"/>
-            <use href="#paperTop" fill="url(#paperTexture)"/>
-            <use href="#paperTop" fill="url(#paperLight)"/>
-            <path class="sheet-front" d="m61 147 222 111v3.7L61 150.7Z"/>
-            <path class="sheet-side" d="m283 258 236-109v3.7L283 261.7Z"/>
-            <path d="m61 149.8 222 111 236-109" fill="none" stroke="#aebdff" stroke-opacity=".52" stroke-width=".9"/>
+        <filter id="sheetShadow" x="-20%" y="-30%" width="140%" height="165%">
+            <feGaussianBlur stdDeviation="3"/>
+        </filter>
+        <path id="paperFace" d="M61 147Q178 95 295 43L519 149Q401 203.5 283 258Q172 202.5 61 147Z"/>
+        <path id="paperEdge" d="M61 147Q172 202.5 283 258Q401 203.5 519 149L519 151.8Q401 206.3 283 260.8Q172 205.3 61 149.8Z"/>
+        <path id="paperRim" d="M61 149.4Q172 204.9 283 260.4Q401 205.9 519 151.4"/>
+        <path id="pressMark" transform="matrix(.87 -.39 .85 .41 212 145)" d="M8 18H61V28H50V38H40V48H31V40H8Z M69 18H88V40H59V74L48 85H38V51H47V41H57V31H69Z"/>
+        <g id="flatSheet">
+            <use href="#paperFace" fill="url(#paperStock)"/>
+            <use href="#paperFace" fill="url(#paperTexture)" opacity=".24"/>
+            <use href="#paperEdge" fill="url(#cutEdge)"/>
+            <use href="#paperRim" fill="none" stroke="#adbaff" stroke-opacity=".56" stroke-width=".72"/>
         </g>
     </defs>
-    <path d="m62 242 236-108 235 109-236 111z" fill="#14172a" opacity=".19" filter="url(#paperShadow)"/>
-    {% set spacing = [2.7, 80 / stack_articles|length]|min %}
+    <g transform="translate(0,{{ depth|round(3) }})">
+        <use href="#paperFace" transform="translate(3,10)" fill="#131932" opacity=".19" filter="url(#groundShadow)"/>
+    </g>
     {% for article in stack_articles %}
     <g transform="translate(0,{{ (loop.revindex0 * spacing)|round(3) }})">
         <g data-sheet class="paper-layer{% if loop.last %} selected-sheet{% endif %}">
-            <use href="#blueSheet"/>
-            {% if loop.last %}
-            <path class="paper-imprint" transform="matrix(.87 -.39 .85 .41 212 145)" d="M8 18H61V28H50V38H40V48H31V40H8Z M69 18H88V40H59V74L48 85H38V51H47V41H57V31H69Z"/>
-            {% endif %}
+            <g class="sheet-body">
+                <use href="#flatSheet"/>
+                <use class="sheet-marker" href="#paperEdge" fill="url(#selectedEdge)"/>
+                {% if loop.last %}<use class="paper-imprint" href="#pressMark"/>{% endif %}
+            </g>
         </g>
     </g>
     {% endfor %}
     {% if stack_articles|length > 1 %}
-    {# A fixed silhouette keeps the hit area in place while individual sheets slide. #}
-    {% set depth = (stack_articles|length - 1) * spacing + 3.7 %}
-    <path id="stackHoverSurface" fill="transparent" stroke="transparent" stroke-width="32" stroke-linejoin="round"
-          d="M61 147 295 43 519 149v{{ depth|round(2) }}L283 {{ (258 + depth)|round(2) }} 61 {{ (147 + depth)|round(2) }}Z"/>
+    {# One flexible face replaces the rigid sheet in its own paint order during a turn. #}
+    <g id="turningPaper" display="none" pointer-events="none">
+        <use id="turnShadow" href="#paperFace" fill="#080f55" filter="url(#sheetShadow)"/>
+        <path id="turnFace" fill="url(#paperStock)"/>
+        <use href="#turnFace" fill="url(#paperTexture)" opacity=".24"/>
+        <use id="turnLight" href="#turnFace" fill="url(#paperBendLight)"/>
+        <path id="turnEdge" fill="url(#cutEdge)"/>
+        <use id="turnMarker" href="#turnEdge" fill="url(#selectedEdge)"/>
+        <g id="turnImprint" visibility="hidden"><use class="paper-imprint" href="#pressMark"/></g>
+        <path id="turnRim" fill="none" stroke="#c2ceff" stroke-opacity=".56" stroke-width=".72"/>
+    </g>
+    {# Only the stationary outline handles pointer entry, even while the artwork moves. #}
+    <path id="stackHoverSurface" fill="transparent" stroke="transparent" stroke-width="38" stroke-linejoin="round"
+          d="M50 144 295 18 535 144v{{ (depth + 8)|round(2) }}L283 {{ (270 + depth)|round(2) }} 50 {{ (150 + depth)|round(2) }}Z"/>
     {% endif %}
 </svg>

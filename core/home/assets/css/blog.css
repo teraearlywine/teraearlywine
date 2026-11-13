@@ -64,14 +64,27 @@
 @media (any-hover: hover) {
   .stack-hover-hint { display: block; margin: 0; text-align: center; color: var(--color-text-secondary); font-size: 13px; }
 }
-.paper-layer { transition: transform .28s cubic-bezier(.2,.75,.24,1); }
-.sheet-front { fill: var(--paper-edge, #233bd0); }
-.sheet-side { fill: var(--paper-edge, #172a9f); }
-.paper-imprint { fill: #12269d; opacity: .72; }
-.selected-sheet { transform: translate(-18px, -5px); --paper-edge: var(--ember); }
-.lifted-sheet { transform: translate(13px, -24px); }
-.stack-reading { min-width: 0; max-width: 540px; padding-block: 18px; }
-.stack-reading h2 {
+.paper-layer {
+  pointer-events: none;
+  transition: transform 420ms cubic-bezier(.22,.72,.22,1);
+}
+.sheet-marker { opacity: 0; transition: opacity 230ms ease; }
+.paper-imprint { fill: #142395; opacity: .76; }
+.selected-sheet { transform: translate(-20px, 0); }
+.selected-sheet .sheet-marker { opacity: 1; }
+.lifted-sheet { transform: translate(22px, -25px); }
+.turning-sheet {
+  transition-duration: 650ms;
+  transition-timing-function: cubic-bezier(.42,0,.4,1);
+}
+.turning-sheet .sheet-body { visibility: hidden; }
+.stack-reading {
+  min-width: 0;
+  max-width: 540px;
+  align-self: start;
+  padding-block: clamp(20px, 4.2vw, 68px) 18px;
+}
+.stack-title {
   margin-block: 14px 16px;
   font: 700 clamp(34px, 3.9vw, 64px)/1.04 var(--font-family);
   letter-spacing: -.055em;
@@ -79,7 +92,7 @@
 }
 .stack-dek {
   max-width: 490px;
-  margin: 0 0 22px;
+  margin: 0;
   font: 400 clamp(19px, 1.6vw, 24px)/1.42 var(--font-editorial, Georgia, serif);
 }
 .stack-read,
@@ -99,18 +112,31 @@
 }
 .stack-read:hover,
 .rss-copy-button:hover { background: var(--color-accent-hover); color: white; }
-.stack-navigation {
-  margin-top: 27px;
+.stack-toolbar {
+  container-type: inline-size;
+  width: min(100%, 545px);
+  margin: 12px auto 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  max-width: 365px;
+  gap: 8px;
   border-top: 1px solid var(--color-border);
-  padding-top: 9px;
+  padding-top: 8px;
+}
+.stack-toolbar .stack-read {
+  flex: none;
+  min-height: 44px;
+  margin-inline-start: auto;
+  gap: 10px;
+  padding-inline: 14px;
+}
+.stack-navigation {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 2cqi, 16px);
 }
 .stack-navigation button {
   min-height: 44px;
+  min-width: 44px;
   background: none;
   color: var(--ink);
   border: 0;
@@ -118,8 +144,18 @@
   cursor: pointer;
 }
 .stack-navigation button:hover { color: var(--blue); }
-.stack-navigation button[aria-disabled="true"] { color: var(--color-text-secondary); font-weight: 400; cursor: default; }
-.sheet-count { font-variant-numeric: tabular-nums; }
+.stack-navigation button[aria-disabled="true"] { color: var(--color-text-secondary); cursor: default; }
+.sheet-count { min-inline-size: 14ch; text-align: center; font-variant-numeric: tabular-nums; }
+@container (max-width: 355px) {
+  .sheet-direction { display: none; }
+  .stack-navigation { gap: 0; }
+  .stack-navigation button { font-size: 18px; }
+}
+@container (max-width: 305px) {
+  .stack-navigation button { min-width: 34px; }
+  .stack-toolbar .stack-read { gap: 4px; padding-inline: 8px; font-size: 14px; }
+  .sheet-count { font-size: 11px; }
+}
 .blog-writing {
   display: grid;
   grid-template-columns: minmax(150px, .57fr) minmax(0, 1.43fr);
@@ -208,12 +244,11 @@
   .writing-intro { align-items: start; flex-direction: column; gap: 16px; padding-bottom: 23px; }
   .stack-explorer { grid-template-columns: 1fr; gap: 0; padding: 12px 0 30px; }
   .paper-stack { max-height: 245px; }
-  .stack-reading { max-width: none; padding: 6px 0 0; }
-  .stack-navigation { max-width: none; }
+  .stack-reading { max-width: none; padding: 28px 0 0; }
   .blog-writing { grid-template-columns: 1fr; gap: 20px; padding: 26px 0; }
   .essay-prose p, .rss-setup p, .rss-about p { font-size: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .paper-layer { transition: none; }
+  .paper-layer, .sheet-marker { transition: none; }
   .essay-signoff video { display: none !important; }
 }

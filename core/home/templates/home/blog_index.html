@@ -23,18 +23,22 @@
                 {% if stack_articles|length > 1 %}
                 <p class="stack-hover-hint" id="stackHoverHint" aria-hidden="true" hidden>Hover over the stack to turn a sheet.</p>
                 {% endif %}
-            </div>
-            <div class="stack-reading" id="articlePreview">
-                <p class="blog-kicker" id="previewMeta">{{ latest.category }} / {{ latest.read_minutes }} min read</p>
-                <h2 id="previewTitle">{{ latest.title }}</h2>
-                <p class="stack-dek" id="previewDek">{{ latest.dek }}</p>
-                <a class="stack-read" id="previewLink" href="{{ latest.url }}">Read essay <span aria-hidden="true">↗</span></a>
-                <div class="stack-navigation" id="stackNavigation" hidden>
-                    <button id="olderSheet" type="button"><span aria-hidden="true">←</span> Older</button>
-                    <span id="sheetCount" class="sheet-count">Sheet {{ stack_articles|length }} of {{ stack_articles|length }}</span>
-                    <button id="newerSheet" type="button">Newer <span aria-hidden="true">→</span></button>
+                <div class="stack-toolbar">
+                    <div class="stack-navigation" id="stackNavigation" hidden>
+                        <button id="olderSheet" type="button" aria-label="Older"><span aria-hidden="true">←</span> <span class="sheet-direction">Older</span></button>
+                        <span id="sheetCount" class="sheet-count">Sheet {{ stack_articles|length }} of {{ stack_articles|length }}</span>
+                        <button id="newerSheet" type="button" aria-label="Newer"><span class="sheet-direction">Newer</span> <span aria-hidden="true">→</span></button>
+                    </div>
+                    <a class="stack-read" id="previewLink" href="{{ latest.url }}" aria-describedby="previewTitle">Read essay <span aria-hidden="true">↗</span></a>
                 </div>
                 <p class="sr-only" id="sheetStatus" role="status"></p>
+            </div>
+            <div class="stack-reading" id="articlePreview">
+                <div id="previewCopy">
+                    <p class="blog-kicker" id="previewMeta">{{ latest.category }} / {{ latest.read_minutes }} min read</p>
+                    <h2 class="stack-title" id="previewTitle">{{ latest.title }}</h2>
+                    <p class="stack-dek" id="previewDek">{{ latest.dek }}</p>
+                </div>
             </div>
         </section>
         {% endif %}
