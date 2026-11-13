@@ -1,3 +1,4 @@
+import html
 import json
 import re
 from xml.etree import ElementTree
@@ -98,8 +99,8 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
     canonical = f'https://www.teraearlywine.com/services/{slug}'
     assert len(collect_elements(document, 'h1')) == 1
     assert len(collect_elements(document, 'title')) == 1
-    assert service['name'] in document
-    assert service['title'] in document
+    assert html.escape(service['name']) in document
+    assert html.escape(service['title']) in document
     assert service['problem'] in document
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
     metas = collect_elements(document, 'meta')

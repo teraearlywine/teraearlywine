@@ -210,11 +210,19 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     )
 
     text = ' '.join(re.sub(r'<[^>]+>', ' ', document).split())
-    assert 'Data systems your team can run.' in text
-    assert 'I work alongside your engineers' in text
+    assert 'AI workflows built around real work.' in text
+    assert 'I design agent-enabled tools' in text
     assert 'Data Waste &amp; Efficiency Diagnostic' in document
     assert 'Help me scope it' in document
-    assert 'In design' in document
+    assert 'Staging proof of concept' in document
+    assert 'not a production deployment' in document
+    assert 'Engine Sandbox' in document
+    assert 'AI-assisted implementation' in document
+    assert 'projected Snowflake savings' in document
+    assert 'concluded on November 4, 2026' in document
+    assert document.index('id="projects"') < document.index('id="services"')
+    assert 'Open to Applied AI Engineering' not in document
+    assert 'AI Engineering and Applied AI Engineering roles' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document

@@ -57,8 +57,8 @@ FAQ_ITEMS = (
         'question': 'What does Tera Earlywine do?',
         'answer': (
             'She helps engineering teams stabilize data platforms, rescue '
-            'migrations, build AI-ready data foundations, and move agentic AI '
-            'workflows into reliable production services.'
+            'migrations, build AI-ready data foundations, and design agent workflows '
+            'with explicit state, human controls, and operational evidence.'
         ),
     },
     {
@@ -277,14 +277,14 @@ def seo_metadata():
                     'jobTitle': 'Independent Data & AI Consultant',
                     'description': (
                         'Independent data and AI consultant helping engineering teams '
-                        'build data systems they can run.'
+                        'design applied AI workflows grounded in reliable data systems.'
                     ),
                     'knowsAbout': [
                         'Production-grade data and AI for regulated, high-consequence operations',
                         'Data platform modernization',
                         'Data reliability',
                         'AI-ready data foundations',
-                        'Agentic AI productionization',
+                        'Agent orchestration and operational controls',
                         'Data governance',
                     ],
                     'sameAs': [

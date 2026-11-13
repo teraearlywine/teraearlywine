@@ -37,8 +37,8 @@ SERVICES = {
         ),
         'experience': (
             'My work includes enterprise migrations, platform engineering at Block '
-            'and Mercari, and infrastructure optimization that contributed to $500K+ '
-            'in Snowflake savings.'
+            'and Mercari, and infrastructure optimization that identified $500K+ '
+            'in projected Snowflake savings.'
         ),
         'starting_point': (
             'For a smaller team, the paid Data Waste & Efficiency Diagnostic reviews '
@@ -92,8 +92,8 @@ SERVICES = {
         ),
     },
     'production-ai-systems': {
-        'name': 'Production AI systems',
-        'title': 'Production AI Systems Consultant | Tera Earlywine',
+        'name': 'Applied AI workflows & reliability',
+        'title': 'Applied AI Workflows & Reliability | Tera Earlywine',
         'description': (
             'Move an AI workflow toward production with evaluation, permissions, '
             'recovery, monitoring, and human escalation. Work with Tera Earlywine.'
@@ -125,8 +125,10 @@ SERVICES = {
             'Your team gets the evidence to release, revise, or stop.'
         ),
         'experience': (
-            'I’m designing a governed multi-agent system for Block’s compliance data '
-            'engineering team, with a focus on access, auditability, and operational reliability.'
+            'During my Block engagement through Qbiz, I designed an audit-agent proof of '
+            'concept with stateless orchestration and stateful audit context. Three '
+            'end-to-end staging runs demonstrated traceability; I documented gaps and '
+            'the handoff. This was not a production deployment.'
         ),
         'starting_point': (
             'Bring one workflow, a person who owns its outcome, and an example of a '
