@@ -7,6 +7,14 @@
             <article><h3>Your migration is stuck.</h3><p>Trace one failing workflow from source to report. Your team gets a dependency map, reconciliation checks, and clear criteria for the next cutover or rollback.</p><a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Plan a migration <span aria-hidden="true">↗</span></a></article>
             <article><h3>Your AI pilot is up for production review.</h3><p>Evaluate one workflow for accuracy, access, cost, and escalation. Bring an evaluation report, release criteria, and an operating runbook to the review.</p><a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Explore applied AI workflows <span aria-hidden="true">↗</span></a></article>
         </div>
+        <aside class="cs-resource" aria-labelledby="readiness-heading">
+            <div>
+                <p class="cs-eyebrow">Free practical worksheet</p>
+                <h3 id="readiness-heading">Is your workflow ready for production?</h3>
+                <p>Review one data or AI workflow for ownership, controls, reliability, and operating gaps. Leave with a short list of next actions.</p>
+            </div>
+            <a class="button button--primary" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the scorecard <span aria-hidden="true">↓</span></a>
+        </aside>
         <div class="cs-directory"><h3>Consulting expertise</h3>{% include 'home/includes/service_links.html' %}</div>
     </div>
 </section>

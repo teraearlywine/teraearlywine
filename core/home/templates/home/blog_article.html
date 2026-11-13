@@ -23,6 +23,24 @@
                 </section>
                 {% endfor %}
             </div>
+            {% if article.slug == 'ai-workflow-production-evidence' %}
+            <section class="blog-offer" aria-labelledby="readiness-resource-heading">
+                <p class="blog-kicker">Free practical worksheet</p>
+                <h2 id="readiness-resource-heading">Review your own workflow</h2>
+                <p>The Data &amp; AI Production Readiness Scorecard helps you identify ownership, data, access, evaluation, operating, and cost gaps, then assign a next action. No email required.</p>
+                <p><a class="blog-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="article" data-destination-type="resource">Download the readiness scorecard ↓</a></p>
+                <p><a class="blog-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}">Explore applied AI workflows ↗</a></p>
+                <p><a class="blog-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}">Read the audit-agent case study ↗</a></p>
+                <p>Keep reading: <a href="{{ url_for('index.blog_article', slug='an-agent-needs-an-edge') }}">operating boundaries</a>, <a href="{{ url_for('index.blog_article', slug='show-the-work-that-matters') }}">reviewable evidence</a>, and <a href="{{ url_for('index.blog_article', slug='a-useful-stopping-point') }}">a definition of completion</a>.</p>
+            </section>
+            {% elif article.slug == 'audit-agent-proof-of-concept' %}
+            <section class="blog-offer" aria-labelledby="case-study-next-heading">
+                <p class="blog-kicker">Put the approach to work</p>
+                <h2 id="case-study-next-heading">What does your workflow need?</h2>
+                <p><a class="blog-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}">Read the production evidence guide ↗</a></p>
+                <p><a class="blog-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}">Explore applied AI workflows ↗</a></p>
+            </section>
+            {% endif %}
             <figure class="essay-signoff" data-essay-signoff>
                 <img src="{{ url_for('index.static', filename='images/nothing-wasted-signoff.webp') }}" alt="Nothing Wasted — Tera Earlywine" width="1080" height="600" loading="lazy">
                 <video data-src="{{ url_for('index.static', filename='media/nothing-wasted-signoff.mp4') }}" muted playsinline preload="none" width="1080" height="600" hidden aria-hidden="true"></video>

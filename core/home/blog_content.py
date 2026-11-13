@@ -712,6 +712,59 @@ ARTICLES = [
             ),
         ], offer='diagnostic',
     ),
+    _article(
+        31, 'audit-agent-proof-of-concept', 'Designing an audit agent for reviewable work',
+        'Case study',
+        'How I approached an audit-agent proof of concept for a client, with clear steps, context, and a handoff for further work.',
+        [
+            _section(
+                'The problem',
+                'An on-call workflow needs more than an stateless agentic system that triaged and investigated the issues before reporting the answer in slack. The people reviewing it need to understand what happened, what information informed a decision, and where the work goes next. An AI-assisted workflow has to make that context available instead of leaving it inside a transient conversation.',
+                'To solve for this during an engagement, I designed an audit-agent proof of concept to explore how an agent-enabled workflow could make decisions, evidence, and handoffs easier to trace.',
+            ),
+            _section(
+                'The design',
+                'I separated the coordination of workflow steps from the audit context those steps need. The orchestration could direct the work while the context preserved information for later review. That separation made the responsibility of each part easier to describe and gave the handoff a defined place in the design. Agents logged idempotent events from start-to-finish in a snowflake table; and a great side-effect of this is it also exposed operational gaps in the initial process helping self-heal while we were developing the proof of concept.',
+                'The practical question was not just whether an agent could complete a task. It was whether someone could follow the work and understand the evidence and decisions associated with it without getting stuck.',
+            ),
+            _section(
+                'What this work shows',
+                'This was a proof of concept, not a production deployment. It is an example of a hybrid agentic system and how I approach developing an AI workflow: start with the work a person needs to review, make the relevant context explicit, and identify what still needs to be resolved before an operating team takes responsibility.',
+            ),
+        ], offer='lighthouse',
+    ),
+    _article(
+        32, 'ai-workflow-production-evidence', 'What evidence does an AI workflow need before production?',
+        'Production AI',
+        'A practical way to review an AI workflow for ownership, evaluation, access, recovery, and operational readiness.',
+        [
+            _section(
+                'The answer starts with one workflow',
+                'Before an AI workflow goes into production, its owner needs evidence that it performs its intended work within agreed limits, that its access and actions are controlled, and that people can detect, understand, and recover from failures. A successful demo is useful, but it does not answer those operating questions by itself.',
+                'Start with one workflow and the decision it supports. Name the owner, the people affected, the expected output, and what a wrong or missing result would cost. The evidence should help those people decide whether to release, revise, or stop.',
+            ),
+            _section(
+                'Use a concrete example',
+                'Consider an illustrative assistant that prepares a draft for an operations reviewer. It reads approved records, summarizes relevant evidence, and proposes a next step. A person reviews the draft before any external action. This is an example, not a description of a client system.',
+                'Agree on which records the assistant can read and whether it can write, send, or change anything. Define what requires human approval. Then identify where its inputs come from, how fresh they must be, and who owns corrections when source data is incomplete.',
+            ),
+            _section(
+                'Show the evaluation and its limits',
+                'Build a representative set of cases with expected outcomes, including missing records, conflicting information, unusual inputs, and cases where the right answer is to stop. A domain owner should review the outputs. Record the test set, results, known gaps, and acceptance criteria; a single accuracy percentage will not explain which errors matter.',
+                'Measure latency and cost against the needs of the workflow as well. Set explicit limits for what is acceptable, and revisit the evaluation when the inputs, model, instructions, or permitted actions change.',
+            ),
+            _section(
+                'Make the work recoverable',
+                'An operator needs to see the status of a run, the relevant inputs and outputs, the decisions made, and any human handoff. Decide which context must persist and how long it should be retained, within the organization’s access and retention rules. Avoid storing sensitive material just because it might be useful later.',
+                'Test what happens when a dependency fails, a response arrives late, or a run stops halfway through. Define whether to retry, resume, escalate, or stop, and who makes that decision. Repeated actions must not silently create duplicate effects. A runbook should give an operator a practical way to recognize and handle each consequential failure.',
+            ),
+            _section(
+                'Make a release decision',
+                'Bring the business owner, engineering owner, and relevant risk or operations reviewers together around the evidence. For each gap, record the consequence, an owner, and the next action. Some gaps must be addressed before release; others need investigation or may be acceptable for a limited use. The decision and its conditions should be explicit.',
+                'The goal is not to make a checklist produce a universal readiness score. It is to make the remaining risks visible to the people who can decide what to do with them, and to leave the team with an operating responsibility after launch.',
+            ),
+        ], offer='lighthouse',
+    ),
 ]
 
 ARTICLES_BY_SLUG = {article['slug']: article for article in ARTICLES}

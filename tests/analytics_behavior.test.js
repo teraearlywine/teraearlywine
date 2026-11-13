@@ -403,6 +403,25 @@ assert.equal(serviceEvents[0][1], 'navigation_click');
 assert.equal(serviceEvents[0][2].destination_type, 'service');
 assert.equal(serviceEvents[0][2].placement, 'services');
 
+for (const consent of ['accepted', 'rejected']) {
+  const visitor = createHarness(consent);
+  dispatchTrackedClick(visitor, {
+    analyticsEvent: 'resource_download',
+    destinationType: 'resource',
+    placement: 'article',
+    href: 'https://example.com/scorecard.pdf?email=private@example.com',
+  });
+  const events = commands(visitor).filter(([name]) => name === 'event');
+  assert.equal(events.length, consent === 'accepted' ? 1 : 0);
+  if (events.length) {
+    assert.equal(events[0][1], 'resource_download');
+    assert.deepEqual(JSON.parse(JSON.stringify(events[0][2])), {
+      placement: 'article', destination_type: 'resource', page_referrer: '',
+    });
+    assert.equal(JSON.stringify(events).includes('private@example.com'), false);
+  }
+}
+
 // Production routing must fail closed before a tag, config, or custom event exists.
 for (const host of ['localhost', '127.0.0.1', 'preview.example', 'teraearlywine.com.attacker.example', 'preview.teraearlywine.com']) {
   const blocked = createHarness('accepted', true, {measurementId: 'G-NF6SVCGZDF', debugMode: false, href: `https://${host}/`});

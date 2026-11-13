@@ -9,6 +9,7 @@ const ALLOWED_VALUES = Object.freeze({
     'hero',
     'services',
     'projects',
+    'article',
     'contact',
     'footer',
     'error',
@@ -23,6 +24,7 @@ const ALLOWED_VALUES = Object.freeze({
     'email',
     'booking',
     'home',
+    'resource',
   ]),
 });
 
@@ -32,6 +34,7 @@ const EVENT_PARAMETERS = Object.freeze({
   contact_view: ['placement'],
   contact_click: ['contact_method', 'placement', 'destination_type'],
   contact_submit: [],
+  resource_download: ['placement', 'destination_type'],
 });
 
 const PRODUCTION_MEASUREMENT_ID = 'G-NF6SVCGZDF';

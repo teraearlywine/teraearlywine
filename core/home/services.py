@@ -125,10 +125,9 @@ SERVICES = {
             'Your team gets the evidence to release, revise, or stop.'
         ),
         'experience': (
-            'During my Block engagement through Qbiz, I designed an audit-agent proof of '
-            'concept with stateless orchestration and stateful audit context. Three '
-            'end-to-end staging runs demonstrated traceability; I documented gaps and '
-            'the handoff. This was not a production deployment.'
+            'For a client, I designed an audit-agent proof of concept that separated '
+            'workflow orchestration from the context needed to review a decision. '
+            'I documented gaps and the handoff. This was not a production deployment.'
         ),
         'starting_point': (
             'Bring one workflow, a person who owns its outcome, and an example of a '

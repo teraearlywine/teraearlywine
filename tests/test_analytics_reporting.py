@@ -19,6 +19,7 @@ EVENT_PARAMETERS = {
     'navigation_click': ('placement', 'destination_type'),
     'outbound_click': ('placement', 'destination_type'),
     'contact_submit': (),
+    'resource_download': ('placement', 'destination_type'),
     'contact_click': ('contact_method', 'placement', 'destination_type'),
 }
 ALLOWED_VALUES = {
@@ -42,6 +43,7 @@ ALLOWED_VALUES = {
         'email',
         'booking',
         'home',
+        'resource',
     },
 }
 
@@ -219,7 +221,7 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     assert 'Engine Sandbox' in document
     assert 'AI-assisted implementation' in document
     assert 'projected Snowflake savings' in document
-    assert 'concluded on November 4, 2026' in document
+    assert 'Block compliance data engineering engagement through Qbiz' not in document
     assert document.index('id="projects"') < document.index('id="services"')
     assert 'Open to Applied AI Engineering' not in document
     assert 'AI Engineering and Applied AI Engineering roles' in document

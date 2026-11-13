@@ -270,3 +270,9 @@
 @media (prefers-reduced-motion: reduce) {
   .cs-pin-line, .cs-pin-label { transition: none; }
 }
+
+.cs-resource { display: flex; align-items: center; justify-content: space-between; gap: 32px; margin: 32px 0; padding: clamp(24px, 4vw, 44px); background: var(--cool-gray); }
+.cs-resource h3 { max-width: 620px; margin: 10px 0; font: 700 clamp(24px, 2.4vw, 34px)/1.15 var(--font-family); letter-spacing: -.04em; }
+.cs-resource p:not(.cs-eyebrow) { max-width: 620px; color: var(--color-text-secondary); line-height: 1.6; }
+.cs-resource .button { flex-shrink: 0; }
+@media (max-width: 740px) { .cs-resource { align-items: flex-start; flex-direction: column; gap: 20px; } }
