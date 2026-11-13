@@ -21,7 +21,7 @@
             <div class="stack-art">
                 {% include 'home/includes/paper_stack.html' %}
                 {% if stack_articles|length > 1 %}
-                <p class="stack-hover-hint" id="stackHoverHint" aria-hidden="true" hidden>Hover over the stack to turn a sheet.</p>
+                <p class="stack-hover-hint" id="stackHoverHint" aria-hidden="true" hidden><span class="stack-mouse-hint">Hover over the stack to turn a sheet.</span><span class="stack-touch-hint">Swipe left for older essays, right for newer.</span></p>
                 {% endif %}
                 <div class="stack-toolbar">
                     <div class="stack-navigation" id="stackNavigation" hidden>

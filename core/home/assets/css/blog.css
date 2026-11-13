@@ -60,9 +60,16 @@
 }
 .stack-art { min-width: 0; align-self: start; }
 .paper-stack { display: block; width: 100%; height: auto; max-height: 420px; }
-.stack-hover-hint { display: none; }
-@media (any-hover: hover) {
-  .stack-hover-hint { display: block; margin: 0; text-align: center; color: var(--color-text-secondary); font-size: 13px; }
+.paper-stack:has(#stackHoverSurface) {
+  touch-action: pan-y pinch-zoom;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.stack-hover-hint { margin: 0; text-align: center; color: var(--color-text-secondary); font-size: 13px; }
+.stack-touch-hint { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .stack-mouse-hint { display: none; }
+  .stack-touch-hint { display: inline; }
 }
 .paper-layer {
   pointer-events: none;
@@ -73,10 +80,7 @@
 .selected-sheet { transform: translate(-20px, 0); }
 .selected-sheet .sheet-marker { opacity: 1; }
 .lifted-sheet { transform: translate(22px, -25px); }
-.turning-sheet {
-  transition-duration: 650ms;
-  transition-timing-function: cubic-bezier(.42,0,.4,1);
-}
+.turning-sheet, .under-turn { transition: none; }
 .turning-sheet .sheet-body { visibility: hidden; }
 .stack-reading {
   min-width: 0;

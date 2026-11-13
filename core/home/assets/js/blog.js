@@ -47,58 +47,98 @@ function paperMotion() {
     ['face', 'edge', 'rim', 'marker', 'light', 'shadow', 'imprint'].map(name =>
       [name, document.getElementById('turn' + name[0].toUpperCase() + name.slice(1))])
   );
-  let activeLayer, frame, started, from, to;
+  let activeLayer, underSheet, frame, position = 0, grip = 0;
   let copyAnimation;
-  const duration = 650;
-  function progressAt(now) {
-    const distance = Math.max(0, now - started) / duration;
-    return to > from ? Math.min(to, from + distance) : Math.max(to, from - distance);
-  }
+
   function finish() {
     cancelAnimationFrame(frame);
     surface.setAttribute('display', 'none');
-    if (activeLayer) activeLayer.classList.remove('turning-sheet');
+    if (activeLayer) {
+      activeLayer.classList.remove('turning-sheet');
+      underSheet.classList.remove('under-turn');
+      activeLayer.style.transform = underSheet.style.transform = '';
+    }
     activeLayer = null;
   }
-  function paint(now) {
-    const t = progressAt(now);
-    // Smoothstep gives the same path and zero landing velocity in either direction.
-    drawBend(surface, parts, t * t * (3 - 2 * t), activeLayer === layers[layers.length - 1]);
-    if (t === to) finish();
-    else frame = requestAnimationFrame(paint);
+
+  function pickUp(index, start) {
+    cancelAnimationFrame(frame);
+    if (activeLayer === layers[index]) return;
+    finish();
+    activeLayer = layers[index];
+    underSheet = layers[index - 1];
+    activeLayer.append(surface);
+    activeLayer.classList.add('turning-sheet');
+    underSheet.classList.add('under-turn');
+    surface.setAttribute('display', 'inline');
+    parts.imprint.setAttribute('visibility', index === layers.length - 1 ? 'visible' : 'hidden');
+    position = start;
+    grip = 0;
   }
+
+  function paint(progress, pull) {
+    position = progress;
+    grip = pull;
+    // At rest these are exactly the selected and lifted poses from the stylesheet.
+    activeLayer.style.transform = `translate(${-20 + 42 * progress + pull}px, ${-25 * progress}px)`;
+    underSheet.style.transform = `translateX(${-20 * progress}px)`;
+    drawBend(surface, parts, progress, activeLayer === layers[layers.length - 1]);
+  }
+
+  function settle(destination) {
+    if (!activeLayer) return;
+    cancelAnimationFrame(frame);
+    const from = position;
+    const startPull = grip;
+    const started = performance.now();
+    const duration = Math.max(120, 650 * Math.abs(destination - from));
+    function tick(now) {
+      const t = Math.min(1, Math.max(0, (now - started) / duration));
+      const eased = t * t * (3 - 2 * t);
+      paint(from + (destination - from) * eased, startPull * (1 - eased));
+      if (t === 1) finish();
+      else frame = requestAnimationFrame(tick);
+    }
+    tick(started);
+  }
+
   motion.addEventListener('change', () => {
     if (motion.matches) {
       finish();
       copyAnimation?.cancel();
     }
   });
-  return (previous, next) => {
-    if (motion.matches) return;
-    const olderTurn = next < previous;
-    const layer = layers[Math.max(previous, next)];
-    const now = performance.now();
-    const destination = olderTurn ? 1 : 0;
-    const start = layer === activeLayer ? progressAt(now) : 1 - destination;
-    finish();
-    from = start;
-    to = destination;
-    started = now;
-    activeLayer = layer;
-    layer.append(surface);
-    layer.classList.add('turning-sheet');
-    parts.imprint.setAttribute('visibility', layer === layers[layers.length - 1] ? 'visible' : 'hidden');
-    surface.setAttribute('display', 'inline');
-    paint(now);
-
-    copyAnimation?.cancel();
-    copyAnimation = document.getElementById('previewCopy')?.animate?.([
-      { opacity: .76, transform: `translateY(${olderTurn ? 4 : -4}px)` },
-      { opacity: 1, transform: 'translateY(0)' },
-    ], { duration: 240, easing: 'cubic-bezier(.18,.7,.25,1)' });
+  // Horizontal position of the flexible face on its unassisted path.
+  function offsetAt(progress) {
+    return -20 + 42 * progress - 39 * Math.sin(Math.PI * progress);
+  }
+  return {
+    turn(previous, next) {
+      if (motion.matches) return;
+      const destination = next < previous ? 1 : 0;
+      pickUp(Math.max(previous, next), 1 - destination);
+      settle(destination);
+      copyAnimation?.cancel();
+      copyAnimation = document.getElementById('previewCopy')?.animate?.([
+        { opacity: .76, transform: `translateY(${destination ? 4 : -4}px)` },
+        { opacity: 1, transform: 'translateY(0)' },
+      ], { duration: 240, easing: 'cubic-bezier(.18,.7,.25,1)' });
+    },
+    grab(index, rest) {
+      if (motion.matches) return { progress: rest, x: offsetAt(rest) };
+      pickUp(index, rest);
+      return { progress: position, x: offsetAt(position) + grip };
+    },
+    drag(index, progress, x) {
+      if (motion.matches) return;
+      pickUp(index, progress);
+      paint(progress, x - offsetAt(progress));
+    },
+    settle,
+    finish,
   };
 }
-const turnPaper = paperMotion();
+const paper = paperMotion();
 
 function showSheet(index) {
   if (index < 0 || index >= articles.length) return;
@@ -117,17 +157,101 @@ function showSheet(index) {
   older.setAttribute('aria-disabled', String(index === 0));
   newer.setAttribute('aria-disabled', String(index === articles.length - 1));
   status.textContent = count.textContent + '. ' + article.title;
-  if (previous !== index) turnPaper?.(previous, index);
+  if (previous !== index) paper?.turn(previous, index);
+}
+
+function enableSwipe(hit) {
+  let drag;
+
+  hit.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch' || !event.isPrimary) return;
+    const width = hit.getBoundingClientRect().width;
+    if (!width) return;
+    drag = {
+      id: event.pointerId, x: event.clientX, y: event.clientY, origin: selected,
+      travel: Math.min(170, Math.max(90, width * .5)),
+      // The stationary SVG outline is 485 drawing units wide.
+      scale: 485 / width, samples: [{ x: event.clientX, time: event.timeStamp }],
+    };
+  });
+
+  function track(event) {
+    if (!drag || event.pointerId !== drag.id) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (!drag.horizontal) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < 6) return;
+      if (Math.abs(dx) <= Math.abs(dy)) {
+        drag = null;
+        return;
+      }
+      drag.horizontal = true;
+      hit.setPointerCapture(event.pointerId);
+    }
+
+    // Keep a short release history: stopping the finger also stops a flick.
+    drag.samples = drag.samples.filter(sample => event.timeStamp - sample.time <= 90);
+    drag.samples.push({ x: event.clientX, time: event.timeStamp });
+    const target = drag.origin + Math.sign(dx);
+    if (!dx || target < 0 || target >= layers.length) {
+      if (drag.target != null) paper.finish();
+      drag.target = null;
+      return;
+    }
+    if (target !== drag.target) {
+      drag.startPose = paper.grab(Math.max(drag.origin, target), dx < 0 ? 0 : 1);
+      drag.target = target;
+    }
+    drag.amount = Math.abs(dx) / drag.travel;
+    const progress = Math.max(0, Math.min(1, drag.startPose.progress - dx / drag.travel));
+    const desired = drag.startPose.x + dx * drag.scale;
+    // Give the edge a little resistance near the border of the illustration.
+    const excess = Math.max(0, Math.abs(desired) - 44);
+    const x = Math.sign(desired) * (Math.min(Math.abs(desired), 44) + 12 * (1 - Math.exp(-excess / 12)));
+    paper.drag(Math.max(drag.origin, target), progress, x);
+  }
+
+  function release(commit) {
+    const held = drag;
+    drag = null;
+    if (held?.target == null || held.origin !== selected) return;
+    if (commit) showSheet(held.target);
+    else paper.settle(held.target < held.origin ? 0 : 1);
+  }
+  hit.addEventListener('pointermove', track);
+  hit.addEventListener('pointerup', event => {
+    if (!drag || drag.id !== event.pointerId) return;
+    if (drag.horizontal) track(event);
+    if (drag.target == null) return release(false);
+    const dx = event.clientX - drag.x;
+    const first = drag.samples[0];
+    const velocity = (event.clientX - first.x) / Math.max(1, event.timeStamp - first.time);
+    const forwardSpeed = velocity * Math.sign(dx);
+    const flick = Math.abs(dx) >= 22 && forwardSpeed >= .5;
+    release(flick || (drag.amount >= .5 && forwardSpeed > -.5));
+  });
+  function cancel(event) {
+    if (event.pointerId === drag?.id) release(false);
+  }
+  hit.addEventListener('pointercancel', cancel);
+  hit.addEventListener('lostpointercapture', cancel);
+  return () => release(false);
 }
 
 if (articles.length) {
   showSheet(selected);
   if (articles.length > 1) {
     document.getElementById('stackNavigation').hidden = false;
-    older.addEventListener('click', () => showSheet(selected - 1));
-    newer.addEventListener('click', () => showSheet(selected + 1));
-    document.getElementById('stackHoverSurface').addEventListener('pointerenter', event => {
-      if (event.pointerType === 'mouse') showSheet(selected - 1);
+    const hit = document.getElementById('stackHoverSurface');
+    const cancelSwipe = paper && enableSwipe(hit);
+    function navigate(step) {
+      cancelSwipe?.();
+      showSheet(selected + step);
+    }
+    older.addEventListener('click', () => navigate(-1));
+    newer.addEventListener('click', () => navigate(1));
+    hit.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') navigate(-1);
     });
     document.getElementById('stackHoverHint').hidden = false;
   }
