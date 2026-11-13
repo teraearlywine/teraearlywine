@@ -8,53 +8,51 @@ from markupsafe import Markup
 
 
 BLOG_DESCRIPTION = (
-    'Practical guidance for financial-services and fintech data leaders on '
-    'warehouse efficiency, reliable data, and production AI.'
+    'Field notes from Tera Earlywine on the cost of technology, AI at work, '
+    'and the engineering decisions behind both.'
 )
 
 OFFERS = {
     'diagnostic': {
         'name': 'Data Waste & Efficiency Diagnostic',
         'description': (
-            'Tera Earlywine offers a paid, focused review of one warehouse and a '
-            'defined workload set. The diagnostic produces a baseline, ranked '
-            'improvements, explicit assumptions, and a measurement plan. '
-            'Billing and query history, architecture context, and a workload '
-            'owner establish the starting point; implementation is scoped separately.'
+            'If your warehouse bill keeps climbing, bring the billing history, '
+            'a set of queries, and someone who knows what they support. In this '
+            'paid diagnostic I review one warehouse and rank the changes worth '
+            'testing. You get a cost baseline, the assumptions behind each estimate, '
+            'and a plan to measure the result. We scope implementation separately.'
         ),
-        'cta': 'Discuss a warehouse efficiency decision',
+        'cta': 'Discuss your warehouse bill',
     },
     'blueprint': {
         'name': 'AI-Ready Data Foundation Blueprint',
         'description': (
-            'Tera Earlywine helps platform leaders define architecture, data '
-            'contracts, quality controls, ownership, and a sequenced migration '
-            'plan. The blueprint supports a decision about one bounded build '
-            'or migration phase, with resource requirements and acceptance '
-            'criteria made explicit.'
+            'If competing definitions or unreliable inputs are holding up a '
+            'project, I map the sources, owners, and checks with your platform '
+            'team. You get a plan for one build or migration phase, including '
+            'what it takes to deliver and how to tell when it is ready.'
         ),
-        'cta': 'Discuss a data foundation decision',
+        'cta': 'Plan a data platform change',
     },
     'lighthouse': {
         'name': 'Production AI Lighthouse',
         'description': (
-            'Tera Earlywine helps a business owner and data sponsor bring one '
-            'defined AI workflow into production. Scope includes evaluation, '
-            'permitted actions, human escalation, monitoring, and operational '
-            'handoff, with acceptance criteria for quality, latency, cost, '
-            'and successful outcomes.'
+            'I work with the people funding and running one AI workflow to agree '
+            'what it may do, when a person should step in, and how much each run '
+            'can cost. We test those decisions before release and document what '
+            'the operating team needs to monitor.'
         ),
-        'cta': 'Discuss a production AI decision',
+        'cta': 'Discuss your AI pilot',
     },
     'reliability': {
         'name': 'Data & AI Reliability Office',
         'description': (
-            'Tera Earlywine supports recurring improvement across reliability, '
-            'incidents, data quality, cost, and resource use. A monthly service '
-            'review connects operating evidence to the next priorities, with '
-            'capacity, service levels, and escalation agreed for the engagement.'
+            'When incidents keep stealing time from planned work, I help your '
+            'team trace the recurring failures and choose what to fix first. We '
+            'agree on support capacity and escalation up front, then review cost, '
+            'data quality, and incident history together each month.'
         ),
-        'cta': 'Discuss a reliability decision',
+        'cta': 'Discuss ongoing support',
     },
 }
 

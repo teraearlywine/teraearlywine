@@ -15,6 +15,9 @@ const ALLOWED_VALUES = Object.freeze({
     'error',
   ]),
   destination_type: new Set([
+    'teams',
+    'professionals',
+    'writing',
     'section',
     'service',
     'github',

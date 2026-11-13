@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+{% set use_cross_section_home = true %}
+{% include 'home/includes/header.html' %}
+<body class="service-page">
+    {% include 'home/core/navigation.html' %}
+    <main id="main">
+        <header class="service-hero">
+            <div class="container">
+                <p class="service-eyebrow">{{ audience }}</p>
+                <h1>{{ heading }}</h1>
+                <p class="service-intro">{{ introduction }}</p>
+                <div class="hero-actions">
+                    {% block hero_actions %}{% endblock %}
+                </div>
+            </div>
+        </header>
+        {% block audience_content %}{% endblock %}
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+</body>
+</html>

@@ -160,7 +160,7 @@ def test_production_navigation_links_to_writing_and_services(app_factory):
     document = app.test_client().get('/').get_data(as_text=True)
     links = collect_elements(document, 'a')
     destinations = [link.get('href') for link in links]
-    assert '/blog/' in destinations and '#services' in destinations
+    assert {'/blog/', '/for-teams/', '/for-professionals/'} <= set(destinations)
     assert 'css/blog.css' not in document
     assert 'js/blog.js' not in document
 
@@ -182,7 +182,7 @@ def test_public_sitemap_includes_every_blog_article(app_factory):
     locations = [loc.text for loc in root.findall('.//{*}loc')]
     assert len(locations) == len(set(locations))
     assert set(locations) == {
-        f'{SITE_URL}/',
+        f'{SITE_URL}/', f'{SITE_URL}/for-teams/', f'{SITE_URL}/for-professionals/',
         *[f'{SITE_URL}/services/{slug}' for slug in SERVICES],
         f'{SITE_URL}/blog/',
         *[f"{SITE_URL}/blog/{article['slug']}/" for article in ARTICLES],

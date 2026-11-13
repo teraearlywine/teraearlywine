@@ -6,8 +6,8 @@
     <main id="main" class="writing-page">
         <header class="writing-intro">
             <div>
-                <h1 id="blog-heading">Writing</h1>
-                <p>Essays on the cost of compute, reliable data, and the work of getting AI into production.</p>
+                <h1 id="blog-heading">The business of technology</h1>
+                <p>I write about the decisions behind the tools. When is a cheaper query worth the effort? What happens when an AI agent needs help? These are my field notes from the work.</p>
             </div>
             <div class="writing-links">
                 <a class="blog-text-link" id="archiveLink" href="#archive">Browse the archive</a>
@@ -44,7 +44,7 @@
         {% endif %}
 
         <section class="blog-writing" aria-labelledby="writing-heading">
-            <h2 id="writing-heading">Featured reading</h2>
+            <h2 id="writing-heading">Start with these essays</h2>
             <div class="writing-list">
                 {% for article in featured_articles %}
                 <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}">

@@ -34,6 +34,9 @@ ALLOWED_VALUES = {
         'error',
     },
     'destination_type': {
+        'teams',
+        'professionals',
+        'writing',
         'section',
         'service',
         'github',
@@ -197,11 +200,15 @@ def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
             for link in links
             if link.get('data-contact-method') == 'booking'
         ]
-        assert len(booking_links) >= 2
-        hero_booking = next(
-            link for link in booking_links if link['data-placement'] == 'hero'
+        assert any(link['data-placement'] == 'contact' for link in booking_links)
+        teams_html = app_factory(**configuration).test_client().get(
+            '/for-teams/'
+        ).get_data(as_text=True)
+        assert any(
+            link.get('data-placement') == 'hero'
+            and link.get('href') == configuration['BOOKING_URL']
+            for link in collect_elements(teams_html, 'a')
         )
-        assert 'button--primary' in hero_booking.get('class', '').split()
 
 
 def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
@@ -212,28 +219,29 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     )
 
     text = ' '.join(re.sub(r'<[^>]+>', ' ', document).split())
-    assert 'AI workflows built around real work.' in text
-    assert 'I design agent-enabled tools' in text
-    assert 'Data Waste &amp; Efficiency Diagnostic' in document
+    assert 'What’s worth building?' in text
+    assert 'I’m Tera Earlywine, a data engineer and independent consultant.' in text
     assert 'Help me scope it' in document
     assert 'Staging proof of concept' in document
-    assert 'not a production deployment' in document
+    assert 'Active development' in document
     assert 'Engine Sandbox' in document
     assert 'AI-assisted implementation' in document
     assert 'projected Snowflake savings' in document
     assert 'Block compliance data engineering engagement through Qbiz' not in document
-    assert document.index('id="projects"') < document.index('id="services"')
-    assert 'Open to Applied AI Engineering' not in document
-    assert 'AI Engineering and Applied AI Engineering roles' in document
+    assert document.index('id="services"') < document.index('id="projects"')
+    assert 'open to applied AI engineering and senior data roles' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document
     assert 'Block' in document
     assert 'Mercari' in document
-    assert document.count('href="https://calendar.example/book"') >= 2
     assert 'Who is Tera Earlywine?' in document
-    assert 'What does Tera Earlywine do?' in document
     assert 'When should a company hire Tera?' in document
+    links = collect_elements(document, 'a')
+    for destination, path in [('writing', '/blog/'), ('teams', '/for-teams/'),
+                              ('professionals', '/for-professionals/')]:
+        assert any(link.get('data-destination-type') == destination
+                   and link.get('href') == path for link in links)
 
 
 def test_contact_urls_remain_single_escaped_attributes(app_factory):
@@ -320,7 +328,7 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
         for entity in faq['mainEntity']
     }
     assert questions['Who is Tera Earlywine?'] in document
-    assert questions['What does Tera Earlywine do?'] in document
+    assert questions['What can I learn here?'] in document
 
 
 @pytest.mark.parametrize(
@@ -479,9 +487,9 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
     assert {
         ('navigation_click', 'navigation', 'home'),
         ('navigation_click', 'navigation', 'section'),
-        ('navigation_click', 'hero', 'section'),
-        ('navigation_click', 'services', 'section'),
-        ('contact_click', 'hero', 'booking'),
+        ('navigation_click', 'hero', 'writing'),
+        ('navigation_click', 'hero', 'teams'),
+        ('navigation_click', 'services', 'professionals'),
         ('outbound_click', 'contact', 'github'),
         ('outbound_click', 'contact', 'linkedin'),
         ('contact_click', 'contact', 'booking'),
@@ -699,7 +707,7 @@ def test_unknown_paths_report_fixed_404_without_raw_path(app_factory, path):
 def test_known_content_paths_are_preserved_in_analytics_config(app_factory):
     from core.home.home import ARTICLES, SERVICES
     app = app_factory(GOOGLE_ANALYTICS_MEASUREMENT_ID='G-NF6SVCGZDF')
-    paths = ['/', '/blog/']
+    paths = ['/', '/blog/', '/for-teams/', '/for-professionals/']
     paths += [f'/services/{slug}' for slug in SERVICES]
     paths += [f"/blog/{article['slug']}/" for article in ARTICLES]
     for path in paths:

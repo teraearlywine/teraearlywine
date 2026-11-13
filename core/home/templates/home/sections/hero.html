@@ -2,14 +2,12 @@
 <section class="cs-frame cs-opening" id="hero" aria-labelledby="hero-heading">
     <div class="cs-hero">
         <div class="cs-introduction">
-            <p class="cs-eyebrow">Applied AI systems &amp; data engineering</p>
-            <h1 id="hero-heading"><span>AI workflows</span> <span>built around</span> <span>real work.</span></h1>
-            <p class="cs-lede">I’m Tera Earlywine. I design agent-enabled tools and the data infrastructure behind them, with clear state, human controls, and evidence of what happened. My background spans data platforms, compliance workflows, and AI-assisted application development.</p>
+            <p class="cs-eyebrow">The business of technology</p>
+            <h1 id="hero-heading"><span>What’s worth</span> <span>building?</span></h1>
+            <p class="cs-lede">I’m Tera Earlywine, a data engineer and independent consultant. I write about what a warehouse bill can tell you, where an AI workflow needs a person, and how to decide whether a new tool earns its keep.</p>
             <div class="cs-actions">
-                {% if config.get('BOOKING_URL') %}
-                <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Discuss a role or engagement <span aria-hidden="true">↗</span></a>
-                {% endif %}
-                <a class="cs-text-link" href="#projects" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">View selected projects</a>
+                <a class="button button--primary" href="{{ url_for('index.blog') }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="writing">Read my field notes <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.for_teams') }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="teams">Work with me</a>
             </div>
         </div>
         <figure class="cs-figure" data-layer="rule">
