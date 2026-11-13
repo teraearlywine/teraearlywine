@@ -157,7 +157,8 @@
   .stack-navigation button { font-size: 18px; }
 }
 @container (max-width: 305px) {
-  .stack-toolbar .stack-read { gap: 4px; padding-inline: 8px; font-size: 14px; }
+  .stack-toolbar .stack-read { padding-inline: 4px; letter-spacing: -.015em; }
+  .stack-toolbar .stack-read span { display: none; }
 }
 .blog-writing {
   display: grid;
