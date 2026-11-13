@@ -147,14 +147,17 @@
 .stack-navigation button[aria-disabled="true"] { color: var(--color-text-secondary); cursor: default; }
 .sheet-count { min-inline-size: 14ch; text-align: center; font-variant-numeric: tabular-nums; }
 @container (max-width: 355px) {
+  .stack-navigation { gap: 3px; }
+  .stack-toolbar .stack-read { gap: 6px; padding-inline: 9px; font-size: 14px; }
+  .sheet-count { font-size: 11px; }
+}
+@container (max-width: 330px) {
   .sheet-direction { display: none; }
   .stack-navigation { gap: 0; }
   .stack-navigation button { font-size: 18px; }
 }
 @container (max-width: 305px) {
-  .stack-navigation button { min-width: 34px; }
   .stack-toolbar .stack-read { gap: 4px; padding-inline: 8px; font-size: 14px; }
-  .sheet-count { font-size: 11px; }
 }
 .blog-writing {
   display: grid;
