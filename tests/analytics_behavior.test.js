@@ -38,7 +38,7 @@ class FakeElement {
 }
 
 function createHarness(initialConsent = null, storageAvailable = true, options = {}) {
-  const storage = new Map();
+  const storage = options.localStorageState ?? new Map();
   if (initialConsent) {
     storage.set('analytics_consent', initialConsent);
   }
@@ -70,6 +70,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     head: {
       appendChild(element) {
         loadedScripts.push(element);
+        if (!options.slowTag) element.onload?.();
       },
     },
     getElementById(id) {
@@ -150,11 +151,13 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
       storage.delete(key);
     },
   };
+  const windowListeners = new Map();
   const window = {
     document,
     IntersectionObserver: FakeIntersectionObserver,
     localStorage,
     sessionStorage: options.sessionStorage,
+    addEventListener(type, callback) { windowListeners.set(type, callback); },
     location: new URL(options.href ?? 'https://www.teraearlywine.com/work?email=person%40example.com#private'),
   };
   const context = {
@@ -187,6 +190,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     },
     storage,
     window,
+    windowListeners,
   };
 }
 
@@ -428,8 +432,12 @@ for (const consent of ['accepted', 'rejected']) {
   }
 }
 
-for (const name of ['newsletter_signup', 'newsletter_confirm', 'newsletter_unsubscribe']) {
-  const visitor = createHarness('rejected', true, {receipt: {newsletterReceipt: name, guide: 'teams'}});
+const newsletterPaths = {
+  newsletter_signup: '/newsletter/check-email/', newsletter_confirm: '/newsletter/guides/',
+  newsletter_unsubscribe: '/newsletter/unsubscribed/',
+};
+for (const [name, pagePath] of Object.entries(newsletterPaths)) {
+  const visitor = createHarness('rejected', true, {pagePath, receipt: {newsletterReceipt: name, guide: 'teams'}});
   assert.deepEqual(commands(visitor), []);
   visitor.reopenButton.click();
   visitor.acceptButton.click();
@@ -441,7 +449,7 @@ for (const name of ['newsletter_signup', 'newsletter_confirm', 'newsletter_unsub
 }
 
 for (const consent of ['accepted', 'rejected']) {
-  const visitor = createHarness(consent);
+  const visitor = createHarness(consent, true, {pagePath: '/newsletter/guides/'});
   dispatchTrackedClick(visitor, {analyticsEvent: 'newsletter_cta_click', placement: 'article', guide: 'both'});
   visitor.guideOptions.listeners.get('change')({target: {name: 'guide', value: 'professionals', checked: true}});
   visitor.guideOptions.listeners.get('change')({target: {name: 'guide', value: 'private@example.com', checked: true}});
@@ -461,6 +469,75 @@ function receiptStorage() {
   const state = new Map();
   return {getItem: key => state.get(key), setItem: (key, value) => state.set(key, value),
     removeItem: key => state.delete(key)};
+}
+{
+  // Simulate three rapid navigations where none of the receipt documents
+  // finish loading gtag. Two distinct clicks on the same PDF are intentional.
+  const sessionStorage = receiptStorage();
+  const storageKey = 'pending_newsletter_events';
+  const receiptPage = (name, overrides = {}) => createHarness('accepted', true, {
+    pagePath: newsletterPaths[name], receipt: {newsletterReceipt: name, guide: 'teams'},
+    slowTag: true, sessionStorage, ...overrides,
+  });
+  const names = h => Array.from(commands(h).filter(([cmd]) => cmd === 'event'), ([,name]) => name);
+  const signup = receiptPage('newsletter_signup');
+  assert.deepEqual(names(signup), []);
+  const privateLink = createHarness('accepted', true, {
+    href: 'https://www.teraearlywine.com/newsletter/confirm/private-email-secret', sessionStorage,
+  });
+  assert.equal(privateLink.loadedScripts.length, 0);
+  const confirm = receiptPage('newsletter_confirm');
+  for (let i = 0; i < 2; i++) {
+    dispatchTrackedClick(confirm, {analyticsEvent:'newsletter_guide_download', guide:'teams'});
+  }
+  receiptPage('newsletter_unsubscribe');
+  const pending = JSON.parse(sessionStorage.getItem(storageKey));
+  assert.equal(pending.events.length, 5);
+  assert(!JSON.stringify(pending).includes('private'));
+  const destination = createHarness('accepted', true, {sessionStorage, slowTag:true, referrer:'https://www.linkedin.com/private'});
+  assert.deepEqual(names(destination), []);
+  destination.loadedScripts[0].onload();
+  destination.loadedScripts[0].onload();
+  assert.deepEqual(names(destination), ['newsletter_signup','newsletter_confirm','newsletter_guide_download',
+    'newsletter_guide_download','newsletter_unsubscribe']);
+  const events = commands(destination).filter(([cmd]) => cmd === 'event');
+  for (const [,name,params] of events) {
+    const original = newsletterPaths[name] || '/newsletter/guides/';
+    assert.equal(params.page_path, original);
+    assert.equal(params.page_location, 'https://www.teraearlywine.com' + original);
+    assert.equal(params.page_referrer, '');
+    assert.equal(params.guide, name === 'newsletter_unsubscribe' ? undefined : 'teams');
+  }
+  assert.equal(sessionStorage.getItem(storageKey), undefined);
+  assert.deepEqual(names(createHarness('accepted', true, {sessionStorage})), []);
+
+  const late = receiptPage('newsletter_signup');
+  const expired = JSON.parse(sessionStorage.getItem(storageKey));
+  expired.events[0].at -= 61_000;
+  expired.events.push({name:'newsletter_confirm', guide:'private@example.com', at:Date.now()},
+    {name:'private@example.com', at:Date.now()});
+  sessionStorage.setItem(storageKey, JSON.stringify(expired));
+  late.loadedScripts[0].onload();
+  assert.deepEqual(names(late), []);
+  const memoryOnly = receiptPage('newsletter_confirm', {sessionStorage:undefined});
+  memoryOnly.loadedScripts[0].onload();
+  assert.deepEqual(names(memoryOnly), ['newsletter_confirm']);
+  const revoked = receiptPage('newsletter_confirm');
+  revoked.storage.set('analytics_consent', 'rejected');
+  revoked.windowListeners.get('storage')({key:'analytics_consent', newValue:'rejected'});
+  revoked.loadedScripts[0].onload();
+  revoked.acceptButton.click();
+  assert.deepEqual(names(revoked), []);
+  assert.equal(sessionStorage.getItem(storageKey), undefined);
+
+  // This tab had no analytics script running while another tab withdrew and
+  // later regranted consent. The previous consent period's queue must expire.
+  const sharedConsent = new Map();
+  receiptPage('newsletter_confirm', {localStorageState:sharedConsent});
+  const otherTab = createHarness('accepted', true, {localStorageState:sharedConsent});
+  otherTab.rejectButton.click();
+  otherTab.acceptButton.click();
+  assert.deepEqual(names(createHarness('accepted', true, {sessionStorage, localStorageState:sharedConsent})), []);
 }
 for (const [destination, consent, expected] of [
   ['/newsletter/', 'accepted', 1],

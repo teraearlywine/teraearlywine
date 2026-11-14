@@ -1,4 +1,5 @@
 const CONSENT_STORAGE_KEY = 'analytics_consent';
+const CONSENT_RESET_KEY = 'analytics_consent_reset';
 const CONSENT_CHOICES = new Set(['accepted', 'rejected']);
 const analyticsEnabledCallbacks = new Set();
 
@@ -140,6 +141,7 @@ function readAnalyticsConfig() {
 const analyticsConfig = readAnalyticsConfig();
 let analyticsEnabled = false;
 let googleAnalyticsInitialized = false;
+let googleTagLoaded = false;
 let sessionConsentChoice = null;
 let analyticsPageReferrer = '';
 
@@ -159,6 +161,8 @@ function storeConsentChoice(choice) {
   sessionConsentChoice = choice;
   try {
     window.localStorage.setItem(CONSENT_STORAGE_KEY, choice);
+    sessionConsentChoice = null;
+    if (choice === 'rejected') window.localStorage.setItem(CONSENT_RESET_KEY, String(Date.now()));
   } catch (error) {
     // Consent still applies for this page when persistent storage is unavailable.
   }
@@ -168,6 +172,7 @@ function clearConsentChoice() {
   sessionConsentChoice = null;
   try {
     window.localStorage.removeItem(CONSENT_STORAGE_KEY);
+    window.localStorage.setItem(CONSENT_RESET_KEY, String(Date.now()));
   } catch (error) {
     // Denied consent still applies for this page when storage is unavailable.
   }
@@ -235,12 +240,17 @@ function initializeGoogleAnalytics() {
     'https://www.googletagmanager.com/gtag/js?id='
     + encodeURIComponent(analyticsConfig.measurementId)
   );
+  googleTag.onload = () => {
+    googleTagLoaded = true;
+    flushNewsletterEvents();
+  };
   document.head.appendChild(googleTag);
   notifyAnalyticsEnabled();
 }
 
 function disableGoogleAnalytics() {
   analyticsEnabled = false;
+  clearNewsletterEvents();
   if (analyticsConfig && googleAnalyticsInitialized) {
     window[`ga-disable-${analyticsConfig.measurementId}`] = true;
     clearGoogleAnalyticsCookies();
@@ -303,7 +313,7 @@ function sanitizeEventParameters(eventName, parameters) {
   return sanitized;
 }
 
-function trackEvent(eventName, parameters = {}, sourcePath) {
+function trackEvent(eventName, parameters = {}, sourcePath, referrer = analyticsPageReferrer) {
   const sanitized = sanitizeEventParameters(eventName, parameters);
   if (
     !analyticsEnabled
@@ -316,7 +326,7 @@ function trackEvent(eventName, parameters = {}, sourcePath) {
 
   window.gtag('event', eventName, {
     ...sanitized,
-    page_referrer: analyticsPageReferrer,
+    page_referrer: referrer,
     ...(sourcePath ? {page_location: window.location.origin + sourcePath, page_path: sourcePath} : {}),
   });
   return true;
@@ -375,7 +385,21 @@ function initializeConsentControls() {
 
   if (readConsentChoice() === 'accepted') {
     initializeGoogleAnalytics();
+  } else {
+    clearNewsletterEvents();
   }
+  window.addEventListener('storage', event => {
+    if (event.key !== null && event.key !== CONSENT_STORAGE_KEY) return;
+    sessionConsentChoice = null;
+    if (event.newValue !== 'accepted') {
+      disableGoogleAnalytics();
+      if (event.newValue === 'rejected') hideBanner();
+      else showBanner();
+    } else if (readConsentChoice() === 'accepted') {
+      initializeGoogleAnalytics();
+      hideBanner();
+    }
+  });
 }
 
 function initializeTaggedClickTracking() {
@@ -396,6 +420,10 @@ function initializeTaggedClickTracking() {
       guide: link.dataset.guide,
     };
     const name = link.dataset.analyticsEvent;
+    if (name === 'newsletter_guide_download') {
+      recordNewsletterEvent(name, parameters);
+      return;
+    }
     const destinationHash = link.hash || '';
     if (['navigation_click', 'newsletter_cta_click'].includes(name)
         && analyticsEnabled && readConsentChoice() === 'accepted'
@@ -449,6 +477,75 @@ function finishTrackedNavigation() {
   } catch (_) { /* Browser storage and previously stored data can be unavailable. */ }
 }
 
+// The server renders each transition once. A slow Google tag can outlive a
+// receipt page, so retain consenting actions briefly in this tab until it loads.
+const NEWSLETTER_QUEUE_KEY = 'pending_newsletter_events';
+const NEWSLETTER_EVENT_PATHS = new Map([
+  ['newsletter_signup', '/newsletter/check-email/'],
+  ['newsletter_confirm', '/newsletter/guides/'],
+  ['newsletter_guide_download', '/newsletter/guides/'],
+  ['newsletter_unsubscribe', '/newsletter/unsubscribed/'],
+]);
+const NEWSLETTER_QUEUE_LIMIT = 32;
+let memoryNewsletterEvents = [];
+
+function consentReset() {
+  try {
+    return window.localStorage.getItem(CONSENT_RESET_KEY) || '';
+  } catch (_) {
+    return '';
+  }
+}
+
+function storedNewsletterEvents() {
+  try {
+    const data = JSON.parse(window.sessionStorage.getItem(NEWSLETTER_QUEUE_KEY) || 'null');
+    // A tab on a private link has no analytics script to observe another tab
+    // withdrawing consent. A later opt-in must not revive that earlier batch.
+    if (data && data.reset === consentReset() && Array.isArray(data.events)) {
+      return data.events.slice(-NEWSLETTER_QUEUE_LIMIT);
+    }
+  } catch (_) { /* Tab storage can be blocked. */ }
+  return [];
+}
+
+function clearNewsletterEvents() {
+  memoryNewsletterEvents = [];
+  try { window.sessionStorage.removeItem(NEWSLETTER_QUEUE_KEY); } catch (_) { /* unavailable */ }
+}
+
+function flushNewsletterEvents() {
+  if (!googleTagLoaded || !analyticsEnabled || readConsentChoice() !== 'accepted') return;
+  const events = storedNewsletterEvents();
+  // Claim the stored batch before dispatch. Reloads cannot replay it.
+  try { window.sessionStorage.removeItem(NEWSLETTER_QUEUE_KEY); } catch (_) { events.length = 0; }
+  events.push(...memoryNewsletterEvents);
+  memoryNewsletterEvents = [];
+  for (const event of events) {
+    const path = NEWSLETTER_EVENT_PATHS.get(event?.name);
+    const age = Date.now() - event?.at;
+    if (path && Number.isFinite(event.at) && age >= 0 && age < 60_000) {
+      trackEvent(event.name, {guide: event.guide}, path, '');
+    }
+  }
+}
+
+function recordNewsletterEvent(name, parameters) {
+  const path = NEWSLETTER_EVENT_PATHS.get(name);
+  const sanitized = sanitizeEventParameters(name, parameters);
+  if (!path || path !== analyticsConfig?.pagePath || !sanitized
+      || !analyticsEnabled || readConsentChoice() !== 'accepted') return false;
+  if (googleTagLoaded) return trackEvent(name, sanitized, path, '');
+  const event = {name, ...sanitized, at: Date.now()};
+  try {
+    const events = [...storedNewsletterEvents(), event].slice(-NEWSLETTER_QUEUE_LIMIT);
+    window.sessionStorage.setItem(NEWSLETTER_QUEUE_KEY, JSON.stringify({reset: consentReset(), events}));
+  } catch (_) {
+    memoryNewsletterEvents = [...memoryNewsletterEvents, event].slice(-NEWSLETTER_QUEUE_LIMIT);
+  }
+  return true;
+}
+
 function initializeNewsletterTracking() {
   const choices = document.querySelector('[data-newsletter-guides]');
   choices?.addEventListener('change', event => {
@@ -462,7 +559,7 @@ function initializeNewsletterTracking() {
   const name = receipt.dataset.newsletterReceipt;
   if (!['newsletter_signup', 'newsletter_confirm', 'newsletter_unsubscribe'].includes(name)) return;
   const sendReceipt = () => {
-    if (trackEvent(name, {guide: receipt.dataset.guide})) {
+    if (recordNewsletterEvent(name, {guide: receipt.dataset.guide})) {
       analyticsEnabledCallbacks.delete(sendReceipt);
     }
   };
