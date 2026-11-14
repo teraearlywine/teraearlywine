@@ -473,13 +473,63 @@ for (const [destination, consent, expected] of [
   link.origin = 'https://www.teraearlywine.com';
   link.pathname = '/newsletter/';
   source.documentListeners.get('click')({target: link, button: 0});
-  assert(sessionStorage.getItem('newsletter_navigation'));
-  const arrival = createHarness(consent, true, {pagePath: destination, sessionStorage});
+  assert(sessionStorage.getItem('tracked_navigation'));
+  const arrival = createHarness(consent, true, {pagePath: destination, sessionStorage, href: link.origin + destination});
   const events = commands(arrival).filter(([,name]) => name === 'newsletter_cta_click');
   assert.equal(events.length, expected);
   if (expected) assert.equal(events[0][2].page_path, '/for-teams/');
-  assert.equal(sessionStorage.getItem('newsletter_navigation'), undefined);
+  assert.equal(sessionStorage.getItem('tracked_navigation'), undefined);
 }
+
+const origin = 'https://www.teraearlywine.com';
+function followTrackedLink(from, to, destinationType, {
+  arrival = to, consent = 'accepted', arrivalConsent = consent, modifiers = {},
+} = {}) {
+  const sessionStorage = receiptStorage();
+  const page = (url, choice) => createHarness(choice, true, {
+    href: origin + url, pagePath: new URL(url, origin).pathname, sessionStorage,
+  });
+  const source = page(from, consent);
+  const target = new FakeElement({analyticsEvent: 'navigation_click', placement: 'services', destinationType});
+  const url = new URL(to, origin);
+  Object.assign(target, {origin, pathname: url.pathname, hash: url.hash});
+  source.documentListeners.get('click')({target, button: 0, ...modifiers});
+  const navigationEvents = harness => Array.from(commands(harness)).filter(([,name]) => name === 'navigation_click');
+  return {
+    source: navigationEvents(source),
+    arrival: navigationEvents(page(arrival, arrivalConsent)),
+    reload: navigationEvents(page(arrival, arrivalConsent)),
+  };
+}
+for (const [from, to, type] of [
+  ['/for-professionals/', '/blog/a-dashboard-needs-a-decision/', 'dashboard_example'],
+  ['/for-professionals/', '/?ignore=private#sample', 'net_sales_demo'],
+  ['/for-professionals/', '/blog/a-note-to-my-future-self/', 'decision_note'],
+  ['/for-teams/', '/blog/#blog-offer-heading', 'diagnostic'],
+  ['/for-teams/', '/services/production-ai-systems', 'ai_workflow_review'],
+  ['/for-teams/', '/services/data-migration-rescue', 'migration_cutover'],
+  ['/blog/', '/#contact', 'section'],
+]) {
+  const clicks = followTrackedLink(from, to, type);
+  assert.equal(clicks.source.length, 0);
+  assert.equal(clicks.arrival.length, 1);
+  assert.deepEqual({...clicks.arrival[0][2]}, {
+    placement: 'services', destination_type: type, page_referrer: '',
+    page_path: from, page_location: origin + from,
+  });
+  assert.deepEqual(clicks.reload, []);
+  for (const invalid of [{consent: 'rejected'}, {arrivalConsent: 'rejected'}, {arrival: '/newsletter/'}]) {
+    const blocked = followTrackedLink(from, to, type, invalid);
+    assert.deepEqual([blocked.source, blocked.arrival, blocked.reload], [[], [], []]);
+  }
+}
+assert.deepEqual(followTrackedLink('/for-professionals/', '/#sample', 'net_sales_demo', {arrival: '/#contact'}).arrival, []);
+const exercise = followTrackedLink('/for-professionals/', '/for-professionals/#exercise', 'exercise');
+assert.equal(exercise.source.length, 1);
+assert.deepEqual(exercise.arrival, []);
+const newTab = followTrackedLink('/for-teams/', '/services/production-ai-systems', 'ai_workflow_review', {modifiers: {metaKey: true}});
+assert.equal(newTab.source.length, 1);
+assert.deepEqual(newTab.arrival, []);
 
 // Production routing must fail closed before a tag, config, or custom event exists.
 for (const host of ['localhost', '127.0.0.1', 'preview.example', 'teraearlywine.com.attacker.example', 'preview.teraearlywine.com']) {

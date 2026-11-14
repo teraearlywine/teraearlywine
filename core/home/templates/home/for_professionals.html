@@ -5,7 +5,7 @@
 
 {% block hero_actions %}
     <a class="button button--primary" href="{{ url_for('index.newsletter', guide='professionals') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="professionals">Get the business impact guide <span aria-hidden="true">↗</span></a>
-    <a class="service-contact-link" href="#exercise">Try the exercise below</a>
+    <a class="service-contact-link" href="#exercise" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="exercise">Try the exercise below</a>
 {% endblock %}
 
 {% block audience_content %}
@@ -16,17 +16,17 @@
             <article>
                 <h3>Who acts on the number?</h3>
                 <p>Take a dashboard you maintain. Name the person who uses it, the decision they make, and when they make it. If they act once each morning, ask what an extra refresh buys them.</p>
-                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='a-dashboard-needs-a-decision') }}">Read the dashboard example <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='a-dashboard-needs-a-decision') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="dashboard_example">Read the dashboard example <span aria-hidden="true">↗</span></a>
             </article>
             <article>
                 <h3>What can move the number?</h3>
                 <p>Try the net-sales demo. Two sales add up to $600. Toggle a $40 refund and look at the reporting rule. Which date or definition would you check before explaining the change to finance?</p>
-                <a class="cs-text-link" href="{{ url_for('index.index') }}#sample">Try the net-sales demo <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.index') }}#sample" data-analytics-event="navigation_click" data-placement="services" data-destination-type="net_sales_demo">Try the net-sales demo <span aria-hidden="true">↗</span></a>
             </article>
             <article>
                 <h3>What would you measure?</h3>
                 <p>Finish this note for your own project. “My team needs to decide ___. I recommend ___ because ___. We’ll know it helped when ___.” Give whoever funds the work a result they can check.</p>
-                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='a-note-to-my-future-self') }}">See how to record a decision <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='a-note-to-my-future-self') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="decision_note">See how to record a decision <span aria-hidden="true">↗</span></a>
             </article>
         </div>
         <aside class="cs-resource" aria-labelledby="readiness-heading">

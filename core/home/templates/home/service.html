@@ -65,7 +65,7 @@
                     <p>{{ service.experience }}</p>
                     <a class="service-text-link" href="{{ url_for('index.index') }}#experience">See my experience <span aria-hidden="true">↗</span></a>
                     {% if service_slug == 'production-ai-systems' %}
-                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}">Read the audit-agent case study <span aria-hidden="true">↗</span></a></p>
+                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read the audit-agent case study <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
                 </div>
             </div>
@@ -80,13 +80,13 @@
                 <div class="service-prose">
                     <p>{{ service.starting_point }}</p>
                     {% if service_slug == 'data-platform-modernization' %}
-                    <p><a class="service-text-link" href="{{ url_for('index.blog') }}#blog-offer-heading">Explore the warehouse diagnostic <span aria-hidden="true">↗</span></a></p>
+                    <p><a class="service-text-link" href="{{ url_for('index.blog') }}#blog-offer-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Explore the warehouse diagnostic <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
                     {% if service_slug == 'production-ai-systems' %}
                     <h3>Explore your production-readiness gaps</h3>
                     <p>Review one workflow for ownership, data, access, evaluation, recovery, and operating costs. The free worksheet helps you identify next actions; no email is required.</p>
                     <p><a class="service-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the readiness scorecard <span aria-hidden="true">↓</span></a></p>
-                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}">What evidence does an AI workflow need before production? <span aria-hidden="true">↗</span></a></p>
+                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">What evidence does an AI workflow need before production? <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
                     <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">{% if service_slug == 'production-ai-systems' %}Discuss an AI workflow{% elif service_slug == 'data-migration-rescue' %}Discuss your migration{% elif service_slug == 'data-platform-modernization' %}Discuss your data platform{% else %}Discuss your leadership needs{% endif %} <span aria-hidden="true">↗</span></a>
                 </div>

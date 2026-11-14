@@ -67,11 +67,21 @@ collect page, session/engagement, reviewed enhanced events and these custom even
 | `contact_click` | Email or booking CTA selected | `contact_method`, `placement`, `destination_type` | No; secondary intent |
 | `contact_submit` | Existing contact handler receives accepted successful server response | None | Yes; primary success |
 
+The November newsletter adds guide signup, confirmation, download and unsubscribe events. A confirmed subscription is a separate key event. Guide selection uses the event-scoped `guide` dimension. The newsletter publishing guide documents every trigger and its parameters. [Newsletter measurement](../newsletter.md#newsletter-measurement)
+
 Allowed values:
 
 - `contact_method`: `email`, `booking`.
-- `placement`: `navigation`, `hero`, `services`, `projects`, `contact`, `footer`, `error`.
-- `destination_type`: `section`, `service`, `github`, `linkedin`, `youtube`, `idea_factory`, `email`, `booking`, `home`.
+- `placement` includes `navigation`, `hero`, `services`, `projects`, `article`, `contact`, `footer`, `error`, `signup`, `writing_stack`, `featured` and `archive`.
+- `destination_type` includes `teams`, `professionals`, `writing`, `archive`, `rss`, `section`, `service`, `github`, `linkedin`, `youtube`, `idea_factory`, `email`, `booking`, `home`, `resource`, `exercise`, `dashboard_example`, `net_sales_demo`, `decision_note`, `diagnostic`, `ai_workflow_review`, `migration_cutover` and `readiness_scorecard`.
+- `guide` includes `teams`, `professionals` and `both`.
+
+To compare actions on the two audience pages, filter `navigation_click` by
+Page path and screen class equal to `/for-teams/` or `/for-professionals/`.
+Break down Event count by Destination type and CTA placement. Each of the seven
+featured actions has its own destination type. On the blog, CTA placement
+separates the writing stack, featured list and archive. On the two audience
+pages and the blog, same-tab clicks retain their originating page path.
 
 Drop unknown events, parameters and enum values. Custom events contain no free
 text, link text, email, message, URL or submission identifier. Retain server

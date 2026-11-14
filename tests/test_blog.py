@@ -90,7 +90,8 @@ def test_each_writing_destination_renders_its_article_and_metadata(app_factory, 
     assert article['offer']['name'] in document
     assert article['offer']['description'] in document
     assert article['offer']['cta'] in document
-    assert {'class': 'blog-text-link', 'href': '/#contact'} in collect_elements(document, 'a')
+    offer = next(link for link in collect_elements(document, 'a') if link.get('href') == '/#contact' and link.get('class') == 'blog-text-link')
+    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'article', 'section')
     assert len(collect_elements(document, 'h1')) == 1
     canonical = f"{SITE_URL}/blog/{article['slug']}/"
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
@@ -143,7 +144,8 @@ def test_featured_reading_path_preserves_all_article_destinations(app_factory):
     reading_links = [link['href'] for link in links if 'writing-row--archive' in link.get('class', '').split()]
     assert len(reading_links) == len(set(reading_links)) == len(ARTICLES)
     assert set(reading_links) == {f"/blog/{article['slug']}/" for article in ARTICLES}
-    assert {'class': 'blog-text-link', 'href': '/#contact'} in links
+    offer = next(link for link in links if link.get('href') == '/#contact' and link.get('class') == 'blog-text-link')
+    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'services', 'section')
     assert 'id="contact"' in app.test_client().get('/').get_data(as_text=True)
 
 

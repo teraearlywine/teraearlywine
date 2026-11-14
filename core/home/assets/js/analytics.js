@@ -15,6 +15,9 @@ const ALLOWED_VALUES = Object.freeze({
     'footer',
     'error',
     'signup',
+    'writing_stack',
+    'featured',
+    'archive',
   ]),
   destination_type: new Set([
     'teams',
@@ -32,6 +35,14 @@ const ALLOWED_VALUES = Object.freeze({
     'booking',
     'home',
     'resource',
+    'exercise',
+    'dashboard_example',
+    'net_sales_demo',
+    'decision_note',
+    'diagnostic',
+    'ai_workflow_review',
+    'migration_cutover',
+    'readiness_scorecard',
   ]),
 });
 
@@ -384,52 +395,55 @@ function initializeTaggedClickTracking() {
       destination_type: link.dataset.destinationType,
       guide: link.dataset.guide,
     };
-    const destination = newsletterNavigationDestination(link.dataset.analyticsEvent, parameters);
-    if (destination && analyticsEnabled && readConsentChoice() === 'accepted'
+    const name = link.dataset.analyticsEvent;
+    const destinationHash = link.hash || '';
+    if (['navigation_click', 'newsletter_cta_click'].includes(name)
+        && analyticsEnabled && readConsentChoice() === 'accepted'
         && event.button === 0 && !event.defaultPrevented && !event.ctrlKey && !event.metaKey
         && !event.shiftKey && !event.altKey && !link.target && link.origin === window.location.origin
-        && link.pathname === destination && isNewsletterSource(analyticsConfig.pagePath)) {
+        && isPublicNavigationPage(analyticsConfig.pagePath) && isPublicNavigationPage(link.pathname)
+        && NAVIGATION_HASHES.has(destinationHash)
+        && !(link.pathname === analyticsConfig.pagePath && destinationHash)) {
       // GA can batch a click past the lifetime of this document. Deliver it on
       // the next page, preserving the source and leaving native navigation alone.
       try {
-        const sanitized = sanitizeEventParameters(link.dataset.analyticsEvent, parameters);
+        const sanitized = sanitizeEventParameters(name, parameters);
         if (sanitized) {
-          window.sessionStorage.setItem(NEWSLETTER_CLICK_KEY, JSON.stringify({
-            name: link.dataset.analyticsEvent, parameters: sanitized, from: analyticsConfig.pagePath,
-            at: Date.now(),
+          window.sessionStorage.setItem(NAVIGATION_CLICK_KEY, JSON.stringify({
+            name, parameters: sanitized, from: analyticsConfig.pagePath,
+            to: link.pathname, hash: destinationHash, at: Date.now(),
           }));
           return;
         }
       } catch (_) { /* When tab storage is blocked, try ordinary click tracking. */ }
     }
-    trackEvent(link.dataset.analyticsEvent, parameters);
+    trackEvent(name, parameters);
   });
 }
 
-const NEWSLETTER_CLICK_KEY = 'newsletter_navigation';
+const NAVIGATION_CLICK_KEY = 'tracked_navigation';
+const NAVIGATION_HASHES = new Set([
+  '', '#archive', '#blog-offer-heading', '#contact', '#exercise', '#experience',
+  '#projects', '#readiness-heading', '#sample',
+]);
 
-function newsletterNavigationDestination(name, parameters) {
-  if (name === 'newsletter_cta_click') return '/newsletter/';
-  if (name === 'navigation_click' && parameters.destination_type === 'rss') return '/blog/subscribe/';
-  if (name === 'navigation_click' && parameters.placement === 'signup') return '/blog/nothing-wasted/';
-  return null;
-}
-
-function isNewsletterSource(path) {
+function isPublicNavigationPage(path) {
   return ['/', '/blog/', '/for-teams/', '/for-professionals/', '/newsletter/'].includes(path)
-    || /^\/blog\/[a-z0-9-]+\/$/.test(path);
+    || /^\/blog\/[a-z0-9-]+\/$/.test(path) || /^\/services\/[a-z0-9-]+$/.test(path);
 }
 
-function finishNewsletterNavigation() {
+function finishTrackedNavigation() {
   try {
-    const saved = window.sessionStorage.getItem(NEWSLETTER_CLICK_KEY);
+    const saved = window.sessionStorage.getItem(NAVIGATION_CLICK_KEY);
     if (!saved) return;
-    window.sessionStorage.removeItem(NEWSLETTER_CLICK_KEY);
+    window.sessionStorage.removeItem(NAVIGATION_CLICK_KEY);
     const click = JSON.parse(saved);
     const age = Date.now() - click.at;
     if (readConsentChoice() === 'accepted' && age >= 0 && age < 60_000
-        && isNewsletterSource(click.from)
-        && newsletterNavigationDestination(click.name, click.parameters) === analyticsConfig?.pagePath) {
+        && ['navigation_click', 'newsletter_cta_click'].includes(click.name)
+        && isPublicNavigationPage(click.from) && isPublicNavigationPage(click.to)
+        && click.to === analyticsConfig?.pagePath && NAVIGATION_HASHES.has(click.hash)
+        && click.hash === window.location.hash) {
       trackEvent(click.name, click.parameters, click.from);
     }
   } catch (_) { /* Browser storage and previously stored data can be unavailable. */ }
@@ -496,7 +510,7 @@ function initializeContactSubmitTracking() {
 
 initializeNewsletterTracking();
 initializeConsentControls();
-finishNewsletterNavigation();
+finishTrackedNavigation();
 initializeTaggedClickTracking();
 initializeContactViewTracking();
 initializeContactSubmitTracking();

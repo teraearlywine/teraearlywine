@@ -34,6 +34,11 @@ ALLOWED_VALUES = {
         'contact',
         'footer',
         'error',
+        'article',
+        'signup',
+        'writing_stack',
+        'featured',
+        'archive',
     },
     'destination_type': {
         'teams',
@@ -49,6 +54,16 @@ ALLOWED_VALUES = {
         'booking',
         'home',
         'resource',
+        'archive',
+        'rss',
+        'exercise',
+        'dashboard_example',
+        'net_sales_demo',
+        'decision_note',
+        'diagnostic',
+        'ai_workflow_review',
+        'migration_cutover',
+        'readiness_scorecard',
     },
 }
 
@@ -456,6 +471,38 @@ def test_analytics_client_has_basic_consent_and_sanitization_contracts():
     assert 'observer.disconnect()' in source
     assert 'page_location: window.location.origin + pagePath' in source
     assert 'page_path: pagePath' in source
+
+
+@pytest.mark.parametrize(('path', 'expected'), [
+    ('/for-teams/', [
+        ('/blog/#blog-offer-heading', 'services', 'diagnostic'),
+        ('/services/production-ai-systems', 'services', 'ai_workflow_review'),
+        ('/services/data-migration-rescue', 'services', 'migration_cutover'),
+    ]),
+    ('/for-professionals/', [
+        ('#exercise', 'hero', 'exercise'),
+        ('/blog/a-dashboard-needs-a-decision/', 'services', 'dashboard_example'),
+        ('/#sample', 'services', 'net_sales_demo'),
+        ('/blog/a-note-to-my-future-self/', 'services', 'decision_note'),
+    ]),
+    ('/blog/', [
+        ('/#contact', 'services', 'section'),
+        ('/blog/nothing-wasted/', 'archive', 'writing'),
+    ]),
+    ('/blog/ai-workflow-production-evidence/', [
+        ('/services/production-ai-systems', 'article', 'ai_workflow_review'),
+        ('/blog/audit-agent-proof-of-concept/', 'article', 'writing'),
+        ('/#contact', 'article', 'section'),
+    ]),
+])
+def test_brand_links_emit_navigation_events(app_factory, path, expected):
+    document = app_factory().test_client().get(path).get_data(as_text=True)
+    links = collect_elements(document, 'a')
+    navigation = {
+        (link['href'], link['data-placement'], link['data-destination-type'])
+        for link in links if link.get('data-analytics-event') == 'navigation_click'
+    }
+    assert set(expected) <= navigation
 
 
 def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_factory):

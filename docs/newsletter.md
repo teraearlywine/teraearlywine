@@ -18,7 +18,7 @@ The website sends these GA4 events when the visitor grants analytics consent. Th
 | `newsletter_unsubscribe` | A reader completes a browser unsubscribe and opens its receipt. | None |
 | `navigation_click` | A reader chooses the archive or RSS in the blog header, or reads a sample from signup. | `placement` and `destination_type` |
 
-In a GA4 exploration, use **Event name** and **Event count** to follow requests through confirmation. Break down **Page path** and **placement** to compare homepage, blog, and audience-page invitations. Use the event-scoped **guide** dimension to compare `teams`, `professionals`, and `both`. The signup and confirm events include the submitted guide even when the reader keeps the default. A download counts a click on an individual PDF. Mailbox one-click unsubscribes have no browser event. Use the subscriber database for list totals, including readers who declined analytics.
+In a GA4 exploration, select the Professional Website stream (`15512913765`) and the teraearlywine.com hostnames. Use **Event name** and **Event count** to follow requests through confirmation. GA4 counts `newsletter_confirm` as a key event once per event. Break down **Page path** and **placement** to compare homepage, blog, and audience-page invitations. Use the event-scoped **guide** dimension to compare `teams`, `professionals`, and `both`. The signup and confirm events include the submitted guide even when the reader keeps the default. A download counts a click on an individual PDF. Mailbox one-click unsubscribes have no browser event. Use the subscriber database for list totals, including readers who declined analytics.
 
 Newsletter issue footer links use the fixed campaign `business_of_technology`, source `newsletter`, medium `email`, and content `issue`. In Traffic acquisition, filter by this campaign to see return visits.
 
@@ -27,6 +27,7 @@ Newsletter issue footer links use the fixed campaign `business_of_technology`, s
 From the website repository, install its Python requirements and write the issue body in a UTF-8 text file. Set `NEWSLETTER_FROM` to the verified sender configured for the public site. Supply your current business mailing address for the footer. The following command prints the complete plain-text email with a sample unsubscribe link. Previewing uses no account credentials and sends nothing.
 
 ```sh
+export NEWSLETTER_FROM='Tera Earlywine <tera@idea-factory.io>'
 python -m scripts.send_newsletter \
   --issue 2026-12-workflow-test \
   --subject 'How would we know this workflow helped?' \
