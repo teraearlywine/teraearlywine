@@ -154,6 +154,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     document,
     IntersectionObserver: FakeIntersectionObserver,
     localStorage,
+    sessionStorage: options.sessionStorage,
     location: new URL(options.href ?? 'https://www.teraearlywine.com/work?email=person%40example.com#private'),
   };
   const context = {
@@ -454,6 +455,30 @@ for (const consent of ['accepted', 'rejected']) {
 for (const path of ['/newsletter/confirm/PRIVATE_TOKEN', '/newsletter/unsubscribe/PRIVATE_TOKEN/unexpected']) {
   const visitor = createHarness('accepted', true, {href: 'https://www.teraearlywine.com' + path});
   assert.equal(visitor.loadedScripts.length, 0);
+}
+
+function receiptStorage() {
+  const state = new Map();
+  return {getItem: key => state.get(key), setItem: (key, value) => state.set(key, value),
+    removeItem: key => state.delete(key)};
+}
+for (const [destination, consent, expected] of [
+  ['/newsletter/', 'accepted', 1],
+  ['/newsletter/', 'rejected', 0],
+  ['/blog/', 'accepted', 0],
+]) {
+  const sessionStorage = receiptStorage();
+  const source = createHarness('accepted', true, {pagePath: '/for-teams/', sessionStorage});
+  const link = new FakeElement({analyticsEvent: 'newsletter_cta_click', guide: 'teams', placement: 'services'});
+  link.origin = 'https://www.teraearlywine.com';
+  link.pathname = '/newsletter/';
+  source.documentListeners.get('click')({target: link, button: 0});
+  assert(sessionStorage.getItem('newsletter_navigation'));
+  const arrival = createHarness(consent, true, {pagePath: destination, sessionStorage});
+  const events = commands(arrival).filter(([,name]) => name === 'newsletter_cta_click');
+  assert.equal(events.length, expected);
+  if (expected) assert.equal(events[0][2].page_path, '/for-teams/');
+  assert.equal(sessionStorage.getItem('newsletter_navigation'), undefined);
 }
 
 // Production routing must fail closed before a tag, config, or custom event exists.

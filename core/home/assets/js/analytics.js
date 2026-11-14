@@ -292,7 +292,7 @@ function sanitizeEventParameters(eventName, parameters) {
   return sanitized;
 }
 
-function trackEvent(eventName, parameters = {}) {
+function trackEvent(eventName, parameters = {}, sourcePath) {
   const sanitized = sanitizeEventParameters(eventName, parameters);
   if (
     !analyticsEnabled
@@ -306,6 +306,7 @@ function trackEvent(eventName, parameters = {}) {
   window.gtag('event', eventName, {
     ...sanitized,
     page_referrer: analyticsPageReferrer,
+    ...(sourcePath ? {page_location: window.location.origin + sourcePath, page_path: sourcePath} : {}),
   });
   return true;
 }
@@ -377,13 +378,61 @@ function initializeTaggedClickTracking() {
       return;
     }
 
-    trackEvent(link.dataset.analyticsEvent, {
+    const parameters = {
       contact_method: link.dataset.contactMethod,
       placement: link.dataset.placement,
       destination_type: link.dataset.destinationType,
       guide: link.dataset.guide,
-    });
+    };
+    const destination = newsletterNavigationDestination(link.dataset.analyticsEvent, parameters);
+    if (destination && analyticsEnabled && readConsentChoice() === 'accepted'
+        && event.button === 0 && !event.defaultPrevented && !event.ctrlKey && !event.metaKey
+        && !event.shiftKey && !event.altKey && !link.target && link.origin === window.location.origin
+        && link.pathname === destination && isNewsletterSource(analyticsConfig.pagePath)) {
+      // GA can batch a click past the lifetime of this document. Deliver it on
+      // the next page, preserving the source and leaving native navigation alone.
+      try {
+        const sanitized = sanitizeEventParameters(link.dataset.analyticsEvent, parameters);
+        if (sanitized) {
+          window.sessionStorage.setItem(NEWSLETTER_CLICK_KEY, JSON.stringify({
+            name: link.dataset.analyticsEvent, parameters: sanitized, from: analyticsConfig.pagePath,
+            at: Date.now(),
+          }));
+          return;
+        }
+      } catch (_) { /* When tab storage is blocked, try ordinary click tracking. */ }
+    }
+    trackEvent(link.dataset.analyticsEvent, parameters);
   });
+}
+
+const NEWSLETTER_CLICK_KEY = 'newsletter_navigation';
+
+function newsletterNavigationDestination(name, parameters) {
+  if (name === 'newsletter_cta_click') return '/newsletter/';
+  if (name === 'navigation_click' && parameters.destination_type === 'rss') return '/blog/subscribe/';
+  if (name === 'navigation_click' && parameters.placement === 'signup') return '/blog/nothing-wasted/';
+  return null;
+}
+
+function isNewsletterSource(path) {
+  return ['/', '/blog/', '/for-teams/', '/for-professionals/', '/newsletter/'].includes(path)
+    || /^\/blog\/[a-z0-9-]+\/$/.test(path);
+}
+
+function finishNewsletterNavigation() {
+  try {
+    const saved = window.sessionStorage.getItem(NEWSLETTER_CLICK_KEY);
+    if (!saved) return;
+    window.sessionStorage.removeItem(NEWSLETTER_CLICK_KEY);
+    const click = JSON.parse(saved);
+    const age = Date.now() - click.at;
+    if (readConsentChoice() === 'accepted' && age >= 0 && age < 60_000
+        && isNewsletterSource(click.from)
+        && newsletterNavigationDestination(click.name, click.parameters) === analyticsConfig?.pagePath) {
+      trackEvent(click.name, click.parameters, click.from);
+    }
+  } catch (_) { /* Browser storage and previously stored data can be unavailable. */ }
 }
 
 function initializeNewsletterTracking() {
@@ -447,6 +496,7 @@ function initializeContactSubmitTracking() {
 
 initializeNewsletterTracking();
 initializeConsentControls();
+finishNewsletterNavigation();
 initializeTaggedClickTracking();
 initializeContactViewTracking();
 initializeContactSubmitTracking();
