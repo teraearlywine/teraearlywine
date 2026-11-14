@@ -43,7 +43,7 @@ Use Google Application Default Credentials for the website project. The sending 
 
 ```sh
 export GOOGLE_CLOUD_PROJECT=teraearlywine
-export RESEND_API_KEY_SECRET_ID=RESEND_API_KEY
+export RESEND_API_KEY_SECRET_ID=NEWSLETTER_RESEND_API_KEY
 export SITE_URL=https://www.teraearlywine.com
 ```
 
