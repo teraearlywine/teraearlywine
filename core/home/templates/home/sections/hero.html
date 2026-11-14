@@ -2,14 +2,12 @@
 <section class="cs-frame cs-opening" id="hero" aria-labelledby="hero-heading">
     <div class="cs-hero">
         <div class="cs-introduction">
-            <p class="cs-eyebrow">Independent data &amp; AI consulting</p>
-            <h1 id="hero-heading"><span>Data systems</span> <span>your team</span> <span>can run.</span></h1>
-            <p class="cs-lede">I’m Tera Earlywine. I work alongside your engineers to fix unreliable pipelines, get migrations moving, and put AI workflows into production.</p>
+            <p class="cs-eyebrow">The business of technology</p>
+            <h1 id="hero-heading"><span>What’s worth</span> <span>building?</span></h1>
+            <p class="cs-lede">I’m Tera Earlywine, a data engineer and independent consultant. I write about what a warehouse bill can tell you, where an AI workflow needs a person, and how to decide whether a new tool earns its keep.</p>
             <div class="cs-actions">
-                {% if config.get('BOOKING_URL') %}
-                <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call <span aria-hidden="true">↗</span></a>
-                {% endif %}
-                <a class="cs-text-link" href="#sample" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Try the data example</a>
+                <a class="button button--primary" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="both">Get the newsletter <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.for_teams') }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="teams">Work with me</a>
             </div>
         </div>
         <figure class="cs-figure" data-layer="rule">
@@ -33,6 +31,6 @@
     </div>
     <div class="cs-proof">
         <div><p>Migration programs I’ve worked on spanned</p><strong>500+ workflows</strong></div>
-        <div><p>My optimization work contributed to</p><strong>$500K+ in Snowflake savings</strong></div>
+        <div><p>My optimization work identified</p><strong>$500K+ in projected Snowflake savings</strong></div>
     </div>
 </section>

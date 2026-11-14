@@ -38,7 +38,7 @@ class FakeElement {
 }
 
 function createHarness(initialConsent = null, storageAvailable = true, options = {}) {
-  const storage = new Map();
+  const storage = options.localStorageState ?? new Map();
   if (initialConsent) {
     storage.set('analytics_consent', initialConsent);
   }
@@ -47,6 +47,8 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
   const acceptButton = new FakeElement({ consentChoice: 'accepted' });
   const reopenButton = new FakeElement();
   const contactSection = new FakeElement();
+  const guideOptions = new FakeElement();
+  const receipt = options.receipt ? new FakeElement(options.receipt) : null;
   const configElement = {
     textContent: JSON.stringify({
       measurementId: options.measurementId ?? 'G-TEST123',
@@ -68,6 +70,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     head: {
       appendChild(element) {
         loadedScripts.push(element);
+        if (!options.slowTag) element.onload?.();
       },
     },
     getElementById(id) {
@@ -78,6 +81,8 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     querySelector(selector) {
       if (selector === '[data-consent-reopen]') return reopenButton;
       if (selector === '[data-analytics-contact-view]') return contactSection;
+      if (selector === '[data-newsletter-guides]') return guideOptions;
+      if (selector === '[data-newsletter-receipt]') return receipt;
       return null;
     },
     createElement(tagName) {
@@ -146,10 +151,13 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
       storage.delete(key);
     },
   };
+  const windowListeners = new Map();
   const window = {
     document,
     IntersectionObserver: FakeIntersectionObserver,
     localStorage,
+    sessionStorage: options.sessionStorage,
+    addEventListener(type, callback) { windowListeners.set(type, callback); },
     location: new URL(options.href ?? 'https://www.teraearlywine.com/work?email=person%40example.com#private'),
   };
   const context = {
@@ -172,6 +180,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     cookieWrites,
     document,
     documentListeners,
+    guideOptions,
     loadedScripts,
     observer: FakeIntersectionObserver.instance,
     rejectButton,
@@ -181,6 +190,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     },
     storage,
     window,
+    windowListeners,
   };
 }
 
@@ -402,6 +412,201 @@ assert.equal(serviceEvents.length, 1);
 assert.equal(serviceEvents[0][1], 'navigation_click');
 assert.equal(serviceEvents[0][2].destination_type, 'service');
 assert.equal(serviceEvents[0][2].placement, 'services');
+
+for (const consent of ['accepted', 'rejected']) {
+  const visitor = createHarness(consent);
+  dispatchTrackedClick(visitor, {
+    analyticsEvent: 'resource_download',
+    destinationType: 'resource',
+    placement: 'article',
+    href: 'https://example.com/scorecard.pdf?email=private@example.com',
+  });
+  const events = commands(visitor).filter(([name]) => name === 'event');
+  assert.equal(events.length, consent === 'accepted' ? 1 : 0);
+  if (events.length) {
+    assert.equal(events[0][1], 'resource_download');
+    assert.deepEqual(JSON.parse(JSON.stringify(events[0][2])), {
+      placement: 'article', destination_type: 'resource', page_referrer: '',
+    });
+    assert.equal(JSON.stringify(events).includes('private@example.com'), false);
+  }
+}
+
+const newsletterPaths = {
+  newsletter_signup: '/newsletter/check-email/', newsletter_confirm: '/newsletter/guides/',
+  newsletter_unsubscribe: '/newsletter/unsubscribed/',
+};
+for (const [name, pagePath] of Object.entries(newsletterPaths)) {
+  const visitor = createHarness('rejected', true, {pagePath, receipt: {newsletterReceipt: name, guide: 'teams'}});
+  assert.deepEqual(commands(visitor), []);
+  visitor.reopenButton.click();
+  visitor.acceptButton.click();
+  visitor.reopenButton.click();
+  visitor.acceptButton.click();
+  const receipts = commands(visitor).filter(([cmd, event]) => cmd === 'event' && event === name);
+  assert.equal(receipts.length, 1, name);
+  assert.equal(receipts[0][2].guide, name === 'newsletter_unsubscribe' ? undefined : 'teams');
+}
+
+for (const consent of ['accepted', 'rejected']) {
+  const visitor = createHarness(consent, true, {pagePath: '/newsletter/guides/'});
+  dispatchTrackedClick(visitor, {analyticsEvent: 'newsletter_cta_click', placement: 'article', guide: 'both'});
+  visitor.guideOptions.listeners.get('change')({target: {name: 'guide', value: 'professionals', checked: true}});
+  visitor.guideOptions.listeners.get('change')({target: {name: 'guide', value: 'private@example.com', checked: true}});
+  dispatchTrackedClick(visitor, {analyticsEvent: 'newsletter_guide_download', guide: 'teams'});
+  const events = commands(visitor).filter(([cmd]) => cmd === 'event');
+  assert.deepEqual(Array.from(events, ([,name]) => name), consent === 'accepted'
+    ? ['newsletter_cta_click', 'newsletter_guide_select', 'newsletter_guide_download'] : []);
+  assert(!JSON.stringify(events).includes('private@example.com'));
+}
+
+for (const path of ['/newsletter/confirm/PRIVATE_TOKEN', '/newsletter/unsubscribe/PRIVATE_TOKEN/unexpected']) {
+  const visitor = createHarness('accepted', true, {href: 'https://www.teraearlywine.com' + path});
+  assert.equal(visitor.loadedScripts.length, 0);
+}
+
+function receiptStorage() {
+  const state = new Map();
+  return {getItem: key => state.get(key), setItem: (key, value) => state.set(key, value),
+    removeItem: key => state.delete(key)};
+}
+{
+  // Simulate three rapid navigations where none of the receipt documents
+  // finish loading gtag. Two distinct clicks on the same PDF are intentional.
+  const sessionStorage = receiptStorage();
+  const storageKey = 'pending_newsletter_events';
+  const receiptPage = (name, overrides = {}) => createHarness('accepted', true, {
+    pagePath: newsletterPaths[name], receipt: {newsletterReceipt: name, guide: 'teams'},
+    slowTag: true, sessionStorage, ...overrides,
+  });
+  const names = h => Array.from(commands(h).filter(([cmd]) => cmd === 'event'), ([,name]) => name);
+  const signup = receiptPage('newsletter_signup');
+  assert.deepEqual(names(signup), []);
+  const privateLink = createHarness('accepted', true, {
+    href: 'https://www.teraearlywine.com/newsletter/confirm/private-email-secret', sessionStorage,
+  });
+  assert.equal(privateLink.loadedScripts.length, 0);
+  const confirm = receiptPage('newsletter_confirm');
+  for (let i = 0; i < 2; i++) {
+    dispatchTrackedClick(confirm, {analyticsEvent:'newsletter_guide_download', guide:'teams'});
+  }
+  receiptPage('newsletter_unsubscribe');
+  const pending = JSON.parse(sessionStorage.getItem(storageKey));
+  assert.equal(pending.events.length, 5);
+  assert(!JSON.stringify(pending).includes('private'));
+  const destination = createHarness('accepted', true, {sessionStorage, slowTag:true, referrer:'https://www.linkedin.com/private'});
+  assert.deepEqual(names(destination), []);
+  destination.loadedScripts[0].onload();
+  destination.loadedScripts[0].onload();
+  assert.deepEqual(names(destination), ['newsletter_signup','newsletter_confirm','newsletter_guide_download',
+    'newsletter_guide_download','newsletter_unsubscribe']);
+  const events = commands(destination).filter(([cmd]) => cmd === 'event');
+  for (const [,name,params] of events) {
+    const original = newsletterPaths[name] || '/newsletter/guides/';
+    assert.equal(params.page_path, original);
+    assert.equal(params.page_location, 'https://www.teraearlywine.com' + original);
+    assert.equal(params.page_referrer, '');
+    assert.equal(params.guide, name === 'newsletter_unsubscribe' ? undefined : 'teams');
+  }
+  assert.equal(sessionStorage.getItem(storageKey), undefined);
+  assert.deepEqual(names(createHarness('accepted', true, {sessionStorage})), []);
+
+  const late = receiptPage('newsletter_signup');
+  const expired = JSON.parse(sessionStorage.getItem(storageKey));
+  expired.events[0].at -= 61_000;
+  expired.events.push({name:'newsletter_confirm', guide:'private@example.com', at:Date.now()},
+    {name:'private@example.com', at:Date.now()});
+  sessionStorage.setItem(storageKey, JSON.stringify(expired));
+  late.loadedScripts[0].onload();
+  assert.deepEqual(names(late), []);
+  const memoryOnly = receiptPage('newsletter_confirm', {sessionStorage:undefined});
+  memoryOnly.loadedScripts[0].onload();
+  assert.deepEqual(names(memoryOnly), ['newsletter_confirm']);
+  const revoked = receiptPage('newsletter_confirm');
+  revoked.storage.set('analytics_consent', 'rejected');
+  revoked.windowListeners.get('storage')({key:'analytics_consent', newValue:'rejected'});
+  revoked.loadedScripts[0].onload();
+  revoked.acceptButton.click();
+  assert.deepEqual(names(revoked), []);
+  assert.equal(sessionStorage.getItem(storageKey), undefined);
+
+  // This tab had no analytics script running while another tab withdrew and
+  // later regranted consent. The previous consent period's queue must expire.
+  const sharedConsent = new Map();
+  receiptPage('newsletter_confirm', {localStorageState:sharedConsent});
+  const otherTab = createHarness('accepted', true, {localStorageState:sharedConsent});
+  otherTab.rejectButton.click();
+  otherTab.acceptButton.click();
+  assert.deepEqual(names(createHarness('accepted', true, {sessionStorage, localStorageState:sharedConsent})), []);
+}
+for (const [destination, consent, expected] of [
+  ['/newsletter/', 'accepted', 1],
+  ['/newsletter/', 'rejected', 0],
+  ['/blog/', 'accepted', 0],
+]) {
+  const sessionStorage = receiptStorage();
+  const source = createHarness('accepted', true, {pagePath: '/for-teams/', sessionStorage});
+  const link = new FakeElement({analyticsEvent: 'newsletter_cta_click', guide: 'teams', placement: 'services'});
+  link.origin = 'https://www.teraearlywine.com';
+  link.pathname = '/newsletter/';
+  source.documentListeners.get('click')({target: link, button: 0});
+  assert(sessionStorage.getItem('tracked_navigation'));
+  const arrival = createHarness(consent, true, {pagePath: destination, sessionStorage, href: link.origin + destination});
+  const events = commands(arrival).filter(([,name]) => name === 'newsletter_cta_click');
+  assert.equal(events.length, expected);
+  if (expected) assert.equal(events[0][2].page_path, '/for-teams/');
+  assert.equal(sessionStorage.getItem('tracked_navigation'), undefined);
+}
+
+const origin = 'https://www.teraearlywine.com';
+function followTrackedLink(from, to, destinationType, {
+  arrival = to, consent = 'accepted', arrivalConsent = consent, modifiers = {},
+} = {}) {
+  const sessionStorage = receiptStorage();
+  const page = (url, choice) => createHarness(choice, true, {
+    href: origin + url, pagePath: new URL(url, origin).pathname, sessionStorage,
+  });
+  const source = page(from, consent);
+  const target = new FakeElement({analyticsEvent: 'navigation_click', placement: 'services', destinationType});
+  const url = new URL(to, origin);
+  Object.assign(target, {origin, pathname: url.pathname, hash: url.hash});
+  source.documentListeners.get('click')({target, button: 0, ...modifiers});
+  const navigationEvents = harness => Array.from(commands(harness)).filter(([,name]) => name === 'navigation_click');
+  return {
+    source: navigationEvents(source),
+    arrival: navigationEvents(page(arrival, arrivalConsent)),
+    reload: navigationEvents(page(arrival, arrivalConsent)),
+  };
+}
+for (const [from, to, type] of [
+  ['/for-professionals/', '/blog/a-dashboard-needs-a-decision/', 'dashboard_example'],
+  ['/for-professionals/', '/?ignore=private#sample', 'net_sales_demo'],
+  ['/for-professionals/', '/blog/a-note-to-my-future-self/', 'decision_note'],
+  ['/for-teams/', '/blog/#blog-offer-heading', 'diagnostic'],
+  ['/for-teams/', '/services/production-ai-systems', 'ai_workflow_review'],
+  ['/for-teams/', '/services/data-migration-rescue', 'migration_cutover'],
+  ['/blog/', '/#contact', 'section'],
+]) {
+  const clicks = followTrackedLink(from, to, type);
+  assert.equal(clicks.source.length, 0);
+  assert.equal(clicks.arrival.length, 1);
+  assert.deepEqual({...clicks.arrival[0][2]}, {
+    placement: 'services', destination_type: type, page_referrer: '',
+    page_path: from, page_location: origin + from,
+  });
+  assert.deepEqual(clicks.reload, []);
+  for (const invalid of [{consent: 'rejected'}, {arrivalConsent: 'rejected'}, {arrival: '/newsletter/'}]) {
+    const blocked = followTrackedLink(from, to, type, invalid);
+    assert.deepEqual([blocked.source, blocked.arrival, blocked.reload], [[], [], []]);
+  }
+}
+assert.deepEqual(followTrackedLink('/for-professionals/', '/#sample', 'net_sales_demo', {arrival: '/#contact'}).arrival, []);
+const exercise = followTrackedLink('/for-professionals/', '/for-professionals/#exercise', 'exercise');
+assert.equal(exercise.source.length, 1);
+assert.deepEqual(exercise.arrival, []);
+const newTab = followTrackedLink('/for-teams/', '/services/production-ai-systems', 'ai_workflow_review', {modifiers: {metaKey: true}});
+assert.equal(newTab.source.length, 1);
+assert.deepEqual(newTab.arrival, []);
 
 // Production routing must fail closed before a tag, config, or custom event exists.
 for (const host of ['localhost', '127.0.0.1', 'preview.example', 'teraearlywine.com.attacker.example', 'preview.teraearlywine.com']) {

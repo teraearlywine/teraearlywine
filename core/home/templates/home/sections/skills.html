@@ -1,12 +1,17 @@
 <section id="services" class="section cs-services" aria-labelledby="services-heading">
     <div class="cs-frame">
-        <p class="cs-eyebrow">Services</p>
         <h2 class="cs-section-title" id="services-heading">Where do you want to start?</h2>
         <div class="cs-offer-list">
-            <article><h3>Your warehouse bill keeps climbing.</h3><p>Start with one warehouse and an agreed set of workloads. The paid Data Waste &amp; Efficiency Diagnostic gives you a baseline, ranked improvements, and a way to measure the result.</p><a class="cs-text-link" href="{{ url_for('index.blog') }}#blog-offer-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">Explore the diagnostic <span aria-hidden="true">↗</span></a></article>
-            <article><h3>Your migration is stuck.</h3><p>Trace one failing workflow from source to report. Your team gets a dependency map, reconciliation checks, and clear criteria for the next cutover or rollback.</p><a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Plan a migration <span aria-hidden="true">↗</span></a></article>
-            <article><h3>Your AI pilot is up for production review.</h3><p>Evaluate one workflow for accuracy, access, cost, and escalation. Bring an evaluation report, release criteria, and an operating runbook to the review.</p><a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Scope production AI <span aria-hidden="true">↗</span></a></article>
+            <article>
+                <h3>For teams</h3>
+                <p>You’re weighing an AI pilot, a growing warehouse bill, or a migration. Start with one decision and work out what would make the investment worthwhile.</p>
+                <a class="cs-text-link" href="{{ url_for('index.for_teams') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="teams">Explore consulting <span aria-hidden="true">↗</span></a>
+            </article>
+            <article>
+                <h3 id="readiness-heading">For technical professionals</h3>
+                <p>You know how the system works. How do you explain the difference a change will make? Try it with a dashboard, a refund, and a short decision note. For a workflow nearing release, use the <a href="{{ url_for('index.for_professionals') }}#readiness-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="readiness_scorecard">readiness scorecard</a>.</p>
+                <a class="cs-text-link" href="{{ url_for('index.for_professionals') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="professionals">Try the exercise <span aria-hidden="true">↗</span></a>
+            </article>
         </div>
-        <div class="cs-directory"><h3>Consulting expertise</h3>{% include 'home/includes/service_links.html' %}</div>
     </div>
 </section>

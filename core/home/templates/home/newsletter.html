@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+{% set use_newsletter_styles = true %}
+{% set suppress_analytics = request.method != 'GET' or newsletter_error or form.errors %}
+{% include 'home/includes/header.html' %}
+<body>
+    {% include 'home/core/navigation.html' %}
+    <main id="main" class="newsletter-layout">
+        <header class="newsletter-intro">
+            <p class="newsletter-kicker">Tera Earlywine’s email newsletter</p>
+            <h1>The Business of Technology</h1>
+            <p class="newsletter-lede">When is an AI pilot worth repeating? Who benefits from a faster query? I write about the decisions behind the tools, with examples from my work as a data engineer and consultant.</p>
+            <a class="newsletter-link" href="{{ url_for('index.blog_article', slug='nothing-wasted') }}" data-analytics-event="navigation_click" data-placement="signup" data-destination-type="writing">Read a sample of my writing <span aria-hidden="true">↗</span></a>
+        </header>
+        <section class="newsletter-panel" aria-labelledby="signup-heading">
+            <h2 id="signup-heading">Get the newsletter and a guide</h2>
+            <form action="{{ url_for('index.newsletter') }}" method="post">
+                {{ form.hidden_tag() }}
+                <div class="contact-form__honeypot" aria-hidden="true">
+                    {{ form.website.label }}
+                    {{ form.website(tabindex='-1', autocomplete='off') }}
+                </div>
+                {% if newsletter_error or form.errors %}
+                <div class="newsletter-error-summary" role="alert">
+                    {{ newsletter_error or 'Please check the fields below and try again.' }}
+                    {% if form.csrf_token is defined and form.csrf_token.errors %}
+                    <p>Your form has expired. <a href="{{ url_for('index.newsletter') }}">Open a new signup form</a>.</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="newsletter-field">
+                    <label for="{{ form.email.id }}">Email address</label>
+                    {{ form.email(type='email', autocomplete='email', maxlength=254, required=true, aria_describedby='email-hint', aria_invalid='true' if form.email.errors else 'false') }}
+                    <p id="email-hint"{% if form.email.errors %} class="newsletter-error"{% endif %}>{{ form.email.errors|first or 'I’ll send a link to confirm your address.' }}</p>
+                </div>
+                <fieldset class="newsletter-guides" data-newsletter-guides aria-describedby="guide-error">
+                    <legend>Which guide would you like?</legend>
+                    {% for option in form.guide %}
+                    <label for="{{ option.id }}" class="newsletter-choice">
+                        {{ option(required=true) }}
+                        <span>
+                            {% if option.data == 'teams' %}
+                            <strong>Choose Your Next AI Workflow</strong>
+                            <span>Compare candidate tasks and plan one small pilot.</span>
+                            {% elif option.data == 'professionals' %}
+                            <strong>From Technical Work to Business Impact</strong>
+                            <span>Turn an engineering change into a recommendation someone can act on.</span>
+                            {% else %}
+                            <strong>Send me both guides</strong>
+                            {% endif %}
+                        </span>
+                    </label>
+                    {% endfor %}
+                    <p id="guide-error" class="newsletter-error">{{ form.guide.errors|first }}</p>
+                </fieldset>
+                <label class="newsletter-consent" for="{{ form.consent.id }}">
+                    {{ form.consent(required=true, aria_describedby='consent-error', aria_invalid='true' if form.consent.errors else 'false') }}
+                    <span>Yes, subscribe me to Tera’s email newsletter and send me my guide selection. I can unsubscribe at any time.</span>
+                </label>
+                <p id="consent-error" class="newsletter-error">{{ form.consent.errors|first }}</p>
+                <button type="submit" class="button button--primary">Send my confirmation email <span aria-hidden="true">→</span></button>
+            </form>
+        </section>
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+</body>
+</html>

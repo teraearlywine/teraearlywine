@@ -1,0 +1,45 @@
+{% extends 'home/audience.html' %}
+{% set audience = 'For founders, operators, and teams' %}
+{% set heading = 'Which workflow is worth changing?' %}
+{% set introduction = 'Start with a task someone already does. When does it happen, what does it cost, and what happens when it goes wrong? Those answers help us decide whether to automate a step, redesign the process, or keep it as it is.' %}
+
+{% block hero_actions %}
+    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss a workflow <span aria-hidden="true">↗</span></a>
+    {% if config.get('BOOKING_URL') %}
+    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call</a>
+    {% endif %}
+{% endblock %}
+
+{% block audience_content %}
+<section class="section cs-services" aria-labelledby="teams-offers">
+    <div class="cs-frame">
+        <aside class="cs-resource" aria-labelledby="workflow-guide-heading">
+            <div>
+                <p class="cs-eyebrow">Newsletter guide for teams</p>
+                <h3 id="workflow-guide-heading">Choose Your Next AI Workflow</h3>
+                <p>Compare the time a task takes with the time you’ll spend reviewing an AI’s work. Use the worksheet to choose one task and set a threshold for a pilot.</p>
+            </div>
+            <a class="button button--primary" href="{{ url_for('index.newsletter', guide='teams') }}" data-analytics-event="newsletter_cta_click" data-placement="services" data-guide="teams">Get the guide by email <span aria-hidden="true">↗</span></a>
+        </aside>
+        <h2 class="cs-section-title" id="teams-offers">Bring me one decision.</h2>
+        <div class="cs-offer-list">
+            <article>
+                <h3>Where can we cut warehouse costs?</h3>
+                <p>With the paid Data Waste &amp; Efficiency Diagnostic, I review one warehouse and an agreed set of workloads. You get a baseline, a ranked list of changes, and a way to measure the result.</p>
+                <a class="cs-text-link" href="{{ url_for('index.blog') }}#blog-offer-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Explore the diagnostic <span aria-hidden="true">↗</span></a>
+            </article>
+            <article>
+                <h3>Is this AI pilot ready for our team?</h3>
+                <p>We look at one workflow, its cost per run, the mistakes that matter, and where a person needs to step in. You get criteria for deciding whether to release it.</p>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="ai_workflow_review">Review an AI workflow <span aria-hidden="true">↗</span></a>
+            </article>
+            <article>
+                <h3>Can we switch off the old system?</h3>
+                <p>Trace one workflow from source to report. Map what depends on it, what the numbers should reconcile to, and what would justify switching back.</p>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover">Plan the cutover <span aria-hidden="true">↗</span></a>
+            </article>
+        </div>
+        <div class="cs-directory"><h3>Consulting services</h3>{% include 'home/includes/service_links.html' %}</div>
+    </div>
+</section>
+{% endblock %}

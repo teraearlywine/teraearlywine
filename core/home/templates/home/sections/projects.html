@@ -1,25 +1,31 @@
 <section id="projects" class="section cs-work" aria-labelledby="projects-heading">
     <div class="cs-frame">
         <p class="cs-eyebrow">Selected work</p>
-        <h2 class="cs-section-title" id="projects-heading">Systems I’ve worked on</h2>
+        <h2 class="cs-section-title" id="projects-heading">Decisions behind the build</h2>
         <div class="cs-work-grid">
             <article class="cs-work-card">
-                <p class="cs-status">In design · Consulting</p>
-                <h3>Governed AI for compliance data</h3>
-                <p>I’m designing a governed multi-agent system for Block’s compliance data engineering team. The design focuses on access, auditability, and reliable operation.</p>
-                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="projects" data-destination-type="service">Production AI systems <span aria-hidden="true">↗</span></a>
+                <p class="cs-status">Staging proof of concept</p>
+                <h3>Could a reviewer retrace an agent’s work?</h3>
+                <p>I designed an audit-agent proof of concept for a client. Recording each step left a trail a reviewer could follow and surfaced gaps in the original process. The handoff documented what still needed work before production.</p>
+                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}" data-analytics-event="navigation_click" data-placement="projects" data-destination-type="writing">Inside the audit workflow <span aria-hidden="true">↗</span></a>
             </article>
             <article class="cs-work-card">
-                <p class="cs-status">Prior work · Platform engineering</p>
-                <h3>Modernizing enterprise data platforms</h3>
-                <p>I’ve contributed to migration programs spanning 500+ workflows. My infrastructure optimization work contributed to $500K+ in Snowflake savings.</p>
-                <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="projects" data-destination-type="service">Data platform modernization <span aria-hidden="true">↗</span></a>
+                <p class="cs-status">Independent build · Active development</p>
+                <h3>What can I hand off when I build with AI?</h3>
+                <p>I’m developing Engine Sandbox to provision and deploy web apps. I use AI-assisted implementation while I own the architecture, requirements, review, and troubleshooting. A useful handoff starts with deciding how I’ll know the work is done.</p>
+                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='pomodoro-for-ai-agents') }}" data-analytics-event="navigation_click" data-placement="projects" data-destination-type="writing">How I check in on an agent <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="cs-work-card">
+                <p class="cs-status">Prior work · Data platforms</p>
+                <h3>When is a cheaper query worth the engineering time?</h3>
+                <p>My optimization work identified $500K+ in projected Snowflake savings. An estimate gives a team a reason to investigate. Measuring the workload before and after a change tells them what it actually saved.</p>
+                <a class="cs-text-link" href="{{ url_for('index.blog_article', slug='sql-techniques-and-the-bottom-line') }}" data-analytics-event="navigation_click" data-placement="projects" data-destination-type="writing">When SQL optimization pays <span aria-hidden="true">↗</span></a>
             </article>
             <article class="cs-work-card">
                 <p class="cs-status">Prior roles · Block &amp; Mercari</p>
-                <h3>Data products for financial and marketplace teams</h3>
-                <p>At Block, I helped set technical direction as a staff data engineer. At Mercari, I worked across business intelligence, warehouse engineering, and data engineering.</p>
-                <a class="cs-text-link" href="#experience">See my experience <span aria-hidden="true">↓</span></a>
+                <h3>What does a sales number actually count?</h3>
+                <p>At Mercari I worked in business intelligence and warehouse engineering. At Block I helped set technical direction for financial data systems. I made a small example you can try here. Change one refund and see exactly why the reported total moves.</p>
+                <a class="cs-text-link" href="#sample" data-analytics-event="navigation_click" data-placement="projects" data-destination-type="net_sales_demo">Trace a refund through net sales <span aria-hidden="true">↓</span></a>
             </article>
         </div>
     </div>

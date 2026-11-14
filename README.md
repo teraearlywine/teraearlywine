@@ -13,7 +13,7 @@ My specialty is production-grade data and AI for regulated, high-consequence ope
 - Production AI systems with state, permissions, recovery, and auditability
 - Fractional data-platform leadership
 
-My work has included enterprise programs spanning 500+ workflows, infrastructure optimization contributing to $500K+ in Snowflake savings, and data-platform leadership across Block, Mercari, and independent consulting.
+My work has included enterprise programs spanning 500+ workflows, infrastructure optimization identifying $500K+ in projected Snowflake savings, and data-platform leadership across Block, Mercari, and independent consulting.
 
 The tools vary—SQL, Python, dbt, Airflow, Snowflake, BigQuery, GCP, Terraform, and LLM systems—but the job is consistent: make the important system understandable, operable, and trustworthy.
 

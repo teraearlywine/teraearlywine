@@ -9,3 +9,6 @@
 {% if use_cross_section_home|default(false) %}
 <link rel="stylesheet" href="{{ url_for('index.static', filename='css/cross-section-home.css') }}">
 {% endif %}
+{% if use_newsletter_styles|default(false) %}
+<link rel="stylesheet" href="{{ url_for('index.static', filename='css/newsletter.css') }}">
+{% endif %}

@@ -2,11 +2,11 @@
 <section id="contact" class="section contact" data-analytics-contact-view>
     <div class="container">
         <div class="section-header fade-up">
-            <p class="section-kicker">Speak with Tera</p>
-            <h2 class="section-title">A conversation about what is expensive, fragile, or stuck.</h2>
+            <p class="section-kicker">Get in touch</p>
+            <h2 class="section-title">What are you working on?</h2>
         </div>
         <p class="contact-text fade-up fade-up-delay-1">
-            Tell me what your team is trying to fix. A 20–30 minute fit call gives us time to talk through the problem and agree on a useful next step.
+            For consulting, tell me which decision your team needs to make. For a role, talk, or collaboration, choose “Help me scope it” and tell me who the work is for.
         </p>
         <form
             class="contact-form fade-up fade-up-delay-2"
@@ -54,7 +54,7 @@
             </div>
             <fieldset class="contact-form__field contact-form__field--full contact-engagement">
                 <legend>Potential engagement</legend>
-                {% set engagement_notes = ['Find the right starting point.', 'Map the path forward.', 'Evaluate a workflow for production.', 'Describe the problem in your own words.'] %}
+                {% set engagement_notes = ['Weigh the cost and the opportunity.', 'Plan the next data platform change.', 'Evaluate a workflow for production.', 'Roles, talks, collaborations, or another question.'] %}
                 <div class="contact-engagement__choices">
                     {% for option in contact_form.engagement_type %}
                     <label class="contact-engagement__choice" for="{{ option.id }}">

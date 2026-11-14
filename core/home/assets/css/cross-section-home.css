@@ -185,10 +185,11 @@
 [data-demo-control][hidden] { display: none; }
 
 .cs-opening, #projects.cs-work, .cs-services { background: var(--white); color: var(--ink); }
-.cs-work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 34px; border-top: 1px solid var(--ink); }
+.cs-work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 34px; border-top: 1px solid var(--ink); }
 .cs-work-card { display: flex; flex-direction: column; align-items: flex-start; padding: 28px 26px; border-left: 1px solid var(--color-border); }
-.cs-work-card:first-child { padding-left: 0; border-left: 0; }
-.cs-work-card:last-child { padding-right: 0; }
+.cs-work-card:nth-child(odd) { padding-left: 0; border-left: 0; }
+.cs-work-card:nth-child(even) { padding-right: 0; }
+.cs-work-card:nth-child(n+3) { border-top: 1px solid var(--color-border); }
 .cs-work-card .cs-status { margin-bottom: 24px; }
 .cs-work-card h3, .cs-offer-list h3 { font: 700 clamp(21px, 1.9vw, 29px)/1.14 var(--font-family); letter-spacing: -.045em; }
 .cs-work-card p:not(.cs-status), .cs-offer-list p { color: var(--color-text-secondary); font-size: 16px; line-height: 1.6; margin: 16px 0 22px; }
@@ -257,7 +258,7 @@
   .cs-readout-controls strong { font-size: 12px; }
   .cs-readout-controls .cs-layer-control span { min-height: 40px; display: grid; place-items: center; padding: 7px 9px; }
   .cs-work-grid, .cs-offer-list article { grid-template-columns: 1fr; }
-  .cs-work-card, .cs-work-card:first-child, .cs-work-card:last-child { padding: 24px 0; border-left: 0; border-bottom: 1px solid var(--color-border); }
+  .cs-work-card:nth-child(n) { padding: 24px 0; border-top: 0; border-left: 0; border-bottom: 1px solid var(--color-border); }
   .cs-work-card .cs-status { margin-bottom: 12px; }
   .cs-offer-list article { gap: 14px; }
   .cs-offer-list a { justify-self: start; }
@@ -270,3 +271,9 @@
 @media (prefers-reduced-motion: reduce) {
   .cs-pin-line, .cs-pin-label { transition: none; }
 }
+
+.cs-resource { display: flex; align-items: center; justify-content: space-between; gap: 32px; margin: 32px 0; padding: clamp(24px, 4vw, 44px); background: var(--cool-gray); }
+.cs-resource h3 { max-width: 620px; margin: 10px 0; font: 700 clamp(24px, 2.4vw, 34px)/1.15 var(--font-family); letter-spacing: -.04em; }
+.cs-resource p:not(.cs-eyebrow) { max-width: 620px; color: var(--color-text-secondary); line-height: 1.6; }
+.cs-resource .button { flex-shrink: 0; }
+@media (max-width: 740px) { .cs-resource { align-items: flex-start; flex-direction: column; gap: 20px; } }

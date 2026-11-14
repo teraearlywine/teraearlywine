@@ -1,3 +1,4 @@
+import html
 import json
 import re
 from xml.etree import ElementTree
@@ -98,8 +99,8 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
     canonical = f'https://www.teraearlywine.com/services/{slug}'
     assert len(collect_elements(document, 'h1')) == 1
     assert len(collect_elements(document, 'title')) == 1
-    assert service['name'] in document
-    assert service['title'] in document
+    assert html.escape(service['name']) in document
+    assert html.escape(service['title']) in document
     assert service['problem'] in document
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
     metas = collect_elements(document, 'meta')
@@ -137,7 +138,7 @@ def test_sitemap_and_internal_links_cover_all_service_pages(app_factory):
     root = ElementTree.fromstring(client.get('/sitemap.xml').data)
     blog_paths = {'/blog/'} | {f"/blog/{article['slug']}/" for article in ARTICLES}
     assert {loc.text for loc in root.findall('.//{*}loc')} == {
-        f'https://www.teraearlywine.com{path}' for path in paths | {'/'} | blog_paths
+        f'https://www.teraearlywine.com{path}' for path in paths | {'/', '/for-teams/', '/for-professionals/', '/newsletter/'} | blog_paths
     }
     for path in paths | {'/'}:
         document = client.get(path).get_data(as_text=True)

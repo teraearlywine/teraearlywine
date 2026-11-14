@@ -5,13 +5,14 @@
     {% include 'home/core/navigation.html' %}
     <main id="main" class="writing-page">
         <header class="writing-intro">
-            <div>
-                <h1 id="blog-heading">Writing</h1>
-                <p>Essays on the cost of compute, reliable data, and the work of getting AI into production.</p>
-            </div>
-            <div class="writing-links">
-                <a class="blog-text-link" id="archiveLink" href="#archive">Browse the archive</a>
-                {% if rss_url %}<a class="blog-text-link" href="{{ url_for('index.rss_subscription') }}">Subscribe via RSS</a>{% endif %}
+            <h1 id="blog-heading"><span>The Business</span> <span>of Technology</span></h1>
+            <div class="writing-intro-copy">
+                <p>When is a cheaper query worth the effort? Where does an AI workflow need a person? My field notes on what technology is worth in real work.</p>
+                <div class="writing-links">
+                    <a class="writing-subscribe" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="both">Get the newsletter <span aria-hidden="true">↗</span></a>
+                    <a class="blog-text-link" id="archiveLink" href="#archive" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="archive">Browse the archive</a>
+                    {% if rss_url %}<a class="blog-text-link" href="{{ url_for('index.rss_subscription') }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="rss">Subscribe via RSS</a>{% endif %}
+                </div>
             </div>
         </header>
 
@@ -21,29 +22,33 @@
             <div class="stack-art">
                 {% include 'home/includes/paper_stack.html' %}
                 {% if stack_articles|length > 1 %}
-                <p class="stack-hover-hint" id="stackHoverHint" aria-hidden="true" hidden>Hover over the stack to turn a sheet.</p>
+                <p class="stack-hover-hint" id="stackHoverHint" aria-hidden="true" hidden><span class="stack-mouse-hint">Hover over the stack to turn a sheet.</span><span class="stack-touch-hint">Swipe left for older essays, right for newer.</span></p>
                 {% endif %}
-            </div>
-            <div class="stack-reading" id="articlePreview">
-                <p class="blog-kicker" id="previewMeta">{{ latest.category }} / {{ latest.read_minutes }} min read</p>
-                <h2 id="previewTitle">{{ latest.title }}</h2>
-                <p class="stack-dek" id="previewDek">{{ latest.dek }}</p>
-                <a class="stack-read" id="previewLink" href="{{ latest.url }}">Read essay <span aria-hidden="true">↗</span></a>
-                <div class="stack-navigation" id="stackNavigation" hidden>
-                    <button id="olderSheet" type="button"><span aria-hidden="true">←</span> Older</button>
-                    <span id="sheetCount" class="sheet-count">Sheet {{ stack_articles|length }} of {{ stack_articles|length }}</span>
-                    <button id="newerSheet" type="button">Newer <span aria-hidden="true">→</span></button>
+                <div class="stack-toolbar">
+                    <div class="stack-navigation" id="stackNavigation" hidden>
+                        <button id="olderSheet" type="button" aria-label="Older"><span aria-hidden="true">←</span> <span class="sheet-direction">Older</span></button>
+                        <span id="sheetCount" class="sheet-count">Sheet {{ stack_articles|length }} of {{ stack_articles|length }}</span>
+                        <button id="newerSheet" type="button" aria-label="Newer"><span class="sheet-direction">Newer</span> <span aria-hidden="true">→</span></button>
+                    </div>
+                    <a class="stack-read" id="previewLink" href="{{ latest.url }}" aria-describedby="previewTitle" data-analytics-event="navigation_click" data-placement="writing_stack" data-destination-type="writing">Read essay <span aria-hidden="true">↗</span></a>
                 </div>
                 <p class="sr-only" id="sheetStatus" role="status"></p>
+            </div>
+            <div class="stack-reading" id="articlePreview">
+                <div id="previewCopy">
+                    <p class="blog-kicker" id="previewMeta">{{ latest.category }} / {{ latest.read_minutes }} min read</p>
+                    <h2 class="stack-title" id="previewTitle">{{ latest.title }}</h2>
+                    <p class="stack-dek" id="previewDek">{{ latest.dek }}</p>
+                </div>
             </div>
         </section>
         {% endif %}
 
         <section class="blog-writing" aria-labelledby="writing-heading">
-            <h2 id="writing-heading">Featured reading</h2>
+            <h2 id="writing-heading">Start with these essays</h2>
             <div class="writing-list">
                 {% for article in featured_articles %}
-                <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}">
+                <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}" data-analytics-event="navigation_click" data-placement="featured" data-destination-type="writing">
                     <span><small>{{ article.category }}</small>{{ article.title }}</span>
                     <span class="row-arrow" aria-hidden="true">↗</span>
                 </a>
@@ -55,7 +60,7 @@
             <details class="writing-archive" id="allEssays">
                 <summary>All {{ articles|length }} essays</summary>
                 {% for article in articles|reverse %}
-                <a class="writing-row writing-row--archive" href="{{ url_for('index.blog_article', slug=article.slug) }}">
+                <a class="writing-row writing-row--archive" href="{{ url_for('index.blog_article', slug=article.slug) }}" data-analytics-event="navigation_click" data-placement="archive" data-destination-type="writing">
                     <span><small>{{ article.category }} / {{ article.read_minutes }} min read</small>{{ article.title }}</span>
                     <span class="row-arrow" aria-hidden="true">↗</span>
                 </a>
@@ -65,7 +70,7 @@
         <section class="blog-offer" aria-labelledby="blog-offer-heading">
             <h2 id="blog-offer-heading">{{ diagnostic_offer.name }}</h2>
             <p>{{ diagnostic_offer.description }}</p>
-            <a class="blog-text-link" href="{{ url_for('index.index') }}#contact">{{ diagnostic_offer.cta }}</a>
+            <a class="blog-text-link" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">{{ diagnostic_offer.cta }}</a>
         </section>
     </main>
     {% include 'home/includes/footer.html' %}

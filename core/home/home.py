@@ -48,40 +48,32 @@ FAQ_ITEMS = (
     {
         'question': 'Who is Tera Earlywine?',
         'answer': (
-            'Tera Earlywine is an independent data and AI consultant with '
-            '9+ years of experience building and modernizing enterprise data '
-            'platforms across fintech, marketplaces, and regulated operations.'
+            'I’m a data engineer, writer, and independent consultant with 9+ years '
+            'of experience across fintech, marketplaces, and enterprise data platforms.'
         ),
     },
     {
-        'question': 'What does Tera Earlywine do?',
+        'question': 'What can I learn here?',
         'answer': (
-            'She helps engineering teams stabilize data platforms, rescue '
-            'migrations, build AI-ready data foundations, and move agentic AI '
-            'workflows into reliable production services.'
-        ),
-    },
-    {
-        'question': 'Who does Tera work with?',
-        'answer': (
-            'Tera works with startup founders, growing data teams, and enterprise '
-            'platform and risk leaders across fintech, B2B software, and marketplaces.'
+            'I write about what technology costs, how people use AI at work, and '
+            'what I learn building with it. Try the net-sales example to see how '
+            'one refund changes a number that finance and engineering both rely on.'
         ),
     },
     {
         'question': 'When should a company hire Tera?',
         'answer': (
-            'Bring Tera in when a critical data platform is fragile, a '
-            'migration is stalled, ownership is unclear, or an AI pilot needs '
-            'the controls and infrastructure required for production.'
+            'Bring me a decision your team is stuck on. I can help you weigh an AI '
+            'pilot, investigate a warehouse bill, or decide when a migration is ready '
+            'for its next cutover.'
         ),
     },
     {
         'question': 'How does an engagement start?',
         'answer': (
-            'It starts with a 20–30 minute fit call. If the problem is a match, '
-            'the first engagement usually diagnoses the risk, defines the '
-            'smallest useful path, and produces a concrete next decision.'
+            'We start with a 20–30 minute fit call. Bring one example and the '
+            'question you need to answer. If I can help, we’ll agree on the scope '
+            'and what you’ll take away.'
         ),
     },
 )
@@ -252,6 +244,9 @@ def seo_metadata():
     analytics_page_path = '/404'
     if is_homepage or request.endpoint == 'index.contact':
         analytics_page_path = '/'
+    elif request.endpoint in {'index.for_teams', 'index.for_professionals', 'index.newsletter'}:
+        analytics_page_path = url_for(request.endpoint)
+        canonical_url = f'{site_url}{analytics_page_path}' if site_url else ''
     elif service:
         analytics_page_path = url_for('index.service', slug=service_slug)
     elif is_blog_index:
@@ -276,15 +271,17 @@ def seo_metadata():
                     'url': homepage_url,
                     'jobTitle': 'Independent Data & AI Consultant',
                     'description': (
-                        'Independent data and AI consultant helping engineering teams '
-                        'build data systems they can run.'
+                        'Data engineer, writer, and independent consultant exploring what '
+                        'data and AI are worth to the people who use them.'
                     ),
                     'knowsAbout': [
+                        'Technology investment decisions',
+                        'The cost of cloud computing',
                         'Production-grade data and AI for regulated, high-consequence operations',
                         'Data platform modernization',
                         'Data reliability',
                         'AI-ready data foundations',
-                        'Agentic AI productionization',
+                        'Agent orchestration and operational controls',
                         'Data governance',
                     ],
                     'sameAs': [
@@ -375,7 +372,7 @@ def seo_metadata():
             {'@type': 'ListItem', 'position': 1,
              'name': 'Home', 'item': homepage_url},
             {'@type': 'ListItem', 'position': 2,
-             'name': 'Writing', 'item': blog_url},
+             'name': 'Ideas', 'item': blog_url},
         ]
         if article:
             entity = {
@@ -403,7 +400,7 @@ def seo_metadata():
                 '@type': 'Blog',
                 '@id': f'{blog_url}#blog',
                 'url': blog_url,
-                'name': 'Writing | Tera Earlywine',
+                'name': 'The Business of Technology | Tera Earlywine',
                 'description': BLOG_DESCRIPTION,
                 'author': author,
                 'blogPost': [
@@ -586,7 +583,7 @@ def sitemap():
     site_url = _site_url()
     if site_url:
         paths = (
-            ['/'] + [f'/services/{slug}' for slug in SERVICES]
+            ['/', '/for-teams/', '/for-professionals/', '/newsletter/'] + [f'/services/{slug}' for slug in SERVICES]
             + ['/blog/']
             + [f"/blog/{article['slug']}/" for article in ARTICLES]
         )
@@ -615,7 +612,7 @@ def rss():
     root = ElementTree.Element('rss', version='2.0')
     channel = ElementTree.SubElement(root, 'channel')
     for name, value in (
-        ('title', 'Writing by Tera Earlywine'),
+        ('title', 'The Business of Technology by Tera Earlywine'),
         ('link', f'{site_url}/blog/'),
         ('description', BLOG_DESCRIPTION),
         ('language', 'en-us'),
@@ -646,6 +643,30 @@ def rss():
     return response.make_conditional(request)
 
 
+@index_bp.route('/for-teams/')
+def for_teams():
+    return render_template(
+        'home/for_teams.html',
+        page_title='Data & AI Consulting for Teams | Tera Earlywine',
+        page_description=(
+            'Work with Tera Earlywine to assess an AI workflow, investigate a '
+            'warehouse bill, or decide when a data migration is ready.'
+        ),
+    )
+
+
+@index_bp.route('/for-professionals/')
+def for_professionals():
+    return render_template(
+        'home/for_professionals.html',
+        page_title='From Technical Work to Business Decisions | Tera Earlywine',
+        page_description=(
+            'Try a short exercise in explaining technical trade-offs. Use a real '
+            'decision, a net-sales demo, and a three-sentence recommendation.'
+        ),
+    )
+
+
 @index_bp.route('/blog/subscribe/')
 def rss_subscription():
     """Help visitors add the RSS feed to their preferred reader."""
@@ -653,8 +674,8 @@ def rss_subscription():
         'home/rss_subscription.html',
         page_title='Subscribe via RSS | Tera Earlywine',
         page_description=(
-            'Follow Tera Earlywine’s articles on warehouse efficiency, '
-            'reliable data, and production AI in your RSS reader.'
+            'Follow Tera Earlywine’s field notes on data, AI at work, and technology '
+            'investment decisions in your RSS reader.'
         ),
     ), 200 if _site_url() else 503
 
@@ -678,7 +699,7 @@ def blog():
         diagnostic_offer=OFFERS['diagnostic'],
         stack_articles=stack_articles,
         is_blog=True,
-        page_title='Writing | Tera Earlywine',
+        page_title='The Business of Technology | Tera Earlywine',
         page_description=BLOG_DESCRIPTION,
     )
 

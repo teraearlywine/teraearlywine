@@ -1,4 +1,4 @@
 <script type="module" src="{{ url_for('index.static', filename='js/main.js') }}"></script>
-{% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
+{% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') and not suppress_analytics %}
 <script type="module" src="{{ url_for('index.static', filename='js/analytics.js') }}"></script>
 {% endif %}

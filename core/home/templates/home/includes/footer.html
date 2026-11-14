@@ -1,16 +1,21 @@
 <footer class="site-footer">
     <div class="container site-footer__content">
         <div class="footer-identity">
-            <img class="footer-logo" src="{{ url_for('index.static', filename='images/cross-section-lockup.svg') }}" alt="Tera Earlywine Consulting" width="388" height="112" loading="lazy">
+            {% set lockup = url_for('index.static', filename='images/cross-section-lockup.svg') %}
+            {% set consulting = service_slug or request.endpoint == 'index.for_teams' %}
+            <svg class="footer-logo" viewBox="0 0 388 112" width="388" height="112" role="img" aria-label="{{ 'Tera Earlywine Consulting' if consulting else 'Tera Earlywine' }}">
+                <use href="{{ lockup }}#mark"/><use href="{{ lockup }}#name"/>
+                {% if consulting %}<use href="{{ lockup }}#descriptor"/>{% endif %}
+            </svg>
         </div>
         <p>&copy; 2026 Tera Earlywine</p>
-        {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
+        {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') and not suppress_analytics %}
         <button class="privacy-choices-button" type="button" data-consent-reopen>
             Privacy choices
         </button>
         {% endif %}
     </div>
 </footer>
-{% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
+{% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') and not suppress_analytics %}
 {% include 'home/includes/analytics_consent.html' %}
 {% endif %}

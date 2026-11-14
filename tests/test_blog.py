@@ -90,7 +90,8 @@ def test_each_writing_destination_renders_its_article_and_metadata(app_factory, 
     assert article['offer']['name'] in document
     assert article['offer']['description'] in document
     assert article['offer']['cta'] in document
-    assert {'class': 'blog-text-link', 'href': '/#contact'} in collect_elements(document, 'a')
+    offer = next(link for link in collect_elements(document, 'a') if link.get('href') == '/#contact' and link.get('class') == 'blog-text-link')
+    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'article', 'section')
     assert len(collect_elements(document, 'h1')) == 1
     canonical = f"{SITE_URL}/blog/{article['slug']}/"
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
@@ -143,7 +144,8 @@ def test_featured_reading_path_preserves_all_article_destinations(app_factory):
     reading_links = [link['href'] for link in links if 'writing-row--archive' in link.get('class', '').split()]
     assert len(reading_links) == len(set(reading_links)) == len(ARTICLES)
     assert set(reading_links) == {f"/blog/{article['slug']}/" for article in ARTICLES}
-    assert {'class': 'blog-text-link', 'href': '/#contact'} in links
+    offer = next(link for link in links if link.get('href') == '/#contact' and link.get('class') == 'blog-text-link')
+    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'services', 'section')
     assert 'id="contact"' in app.test_client().get('/').get_data(as_text=True)
 
 
@@ -160,7 +162,7 @@ def test_production_navigation_links_to_writing_and_services(app_factory):
     document = app.test_client().get('/').get_data(as_text=True)
     links = collect_elements(document, 'a')
     destinations = [link.get('href') for link in links]
-    assert '/blog/' in destinations and '#services' in destinations
+    assert {'/blog/', '/for-teams/', '/for-professionals/'} <= set(destinations)
     assert 'css/blog.css' not in document
     assert 'js/blog.js' not in document
 
@@ -182,9 +184,9 @@ def test_public_sitemap_includes_every_blog_article(app_factory):
     locations = [loc.text for loc in root.findall('.//{*}loc')]
     assert len(locations) == len(set(locations))
     assert set(locations) == {
-        f'{SITE_URL}/',
+        f'{SITE_URL}/', f'{SITE_URL}/for-teams/', f'{SITE_URL}/for-professionals/',
         *[f'{SITE_URL}/services/{slug}' for slug in SERVICES],
-        f'{SITE_URL}/blog/',
+        f'{SITE_URL}/blog/', f'{SITE_URL}/newsletter/',
         *[f"{SITE_URL}/blog/{article['slug']}/" for article in ARTICLES],
     }
 

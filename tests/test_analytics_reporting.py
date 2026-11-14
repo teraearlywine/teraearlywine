@@ -16,12 +16,15 @@ MAIN_CSS = PROJECT_ROOT / 'core/home/assets/css/main.css'
 CONSULTANCY_CSS = PROJECT_ROOT / 'core/home/assets/css/consultancy.css'
 
 EVENT_PARAMETERS = {
+    'newsletter_cta_click': ('placement', 'guide'),
     'navigation_click': ('placement', 'destination_type'),
     'outbound_click': ('placement', 'destination_type'),
     'contact_submit': (),
+    'resource_download': ('placement', 'destination_type'),
     'contact_click': ('contact_method', 'placement', 'destination_type'),
 }
 ALLOWED_VALUES = {
+    'guide': {'teams', 'professionals', 'both'},
     'contact_method': {'email', 'booking'},
     'placement': {
         'navigation',
@@ -31,8 +34,16 @@ ALLOWED_VALUES = {
         'contact',
         'footer',
         'error',
+        'article',
+        'signup',
+        'writing_stack',
+        'featured',
+        'archive',
     },
     'destination_type': {
+        'teams',
+        'professionals',
+        'writing',
         'section',
         'service',
         'github',
@@ -42,6 +53,17 @@ ALLOWED_VALUES = {
         'email',
         'booking',
         'home',
+        'resource',
+        'archive',
+        'rss',
+        'exercise',
+        'dashboard_example',
+        'net_sales_demo',
+        'decision_note',
+        'diagnostic',
+        'ai_workflow_review',
+        'migration_cutover',
+        'readiness_scorecard',
     },
 }
 
@@ -195,11 +217,15 @@ def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
             for link in links
             if link.get('data-contact-method') == 'booking'
         ]
-        assert len(booking_links) >= 2
-        hero_booking = next(
-            link for link in booking_links if link['data-placement'] == 'hero'
+        assert any(link['data-placement'] == 'contact' for link in booking_links)
+        teams_html = app_factory(**configuration).test_client().get(
+            '/for-teams/'
+        ).get_data(as_text=True)
+        assert any(
+            link.get('data-placement') == 'hero'
+            and link.get('href') == configuration['BOOKING_URL']
+            for link in collect_elements(teams_html, 'a')
         )
-        assert 'button--primary' in hero_booking.get('class', '').split()
 
 
 def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
@@ -210,20 +236,29 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     )
 
     text = ' '.join(re.sub(r'<[^>]+>', ' ', document).split())
-    assert 'Data systems your team can run.' in text
-    assert 'I work alongside your engineers' in text
-    assert 'Data Waste &amp; Efficiency Diagnostic' in document
+    assert 'What’s worth building?' in text
+    assert 'I’m Tera Earlywine, a data engineer and independent consultant.' in text
     assert 'Help me scope it' in document
-    assert 'In design' in document
+    assert 'Staging proof of concept' in document
+    assert 'Active development' in document
+    assert 'Engine Sandbox' in document
+    assert 'AI-assisted implementation' in document
+    assert 'projected Snowflake savings' in document
+    assert 'Block compliance data engineering engagement through Qbiz' not in document
+    assert document.index('id="services"') < document.index('id="projects"')
+    assert 'open to applied AI engineering and senior data roles' in document
     assert '9+ years' in document
     assert '500+' in document
     assert '$500K+' in document
     assert 'Block' in document
     assert 'Mercari' in document
-    assert document.count('href="https://calendar.example/book"') >= 2
     assert 'Who is Tera Earlywine?' in document
-    assert 'What does Tera Earlywine do?' in document
     assert 'When should a company hire Tera?' in document
+    links = collect_elements(document, 'a')
+    for destination, path in [('writing', '/blog/'), ('teams', '/for-teams/'),
+                              ('professionals', '/for-professionals/')]:
+        assert any(link.get('data-destination-type') == destination
+                   and link.get('href') == path for link in links)
 
 
 def test_contact_urls_remain_single_escaped_attributes(app_factory):
@@ -310,7 +345,7 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
         for entity in faq['mainEntity']
     }
     assert questions['Who is Tera Earlywine?'] in document
-    assert questions['What does Tera Earlywine do?'] in document
+    assert questions['What can I learn here?'] in document
 
 
 @pytest.mark.parametrize(
@@ -438,6 +473,38 @@ def test_analytics_client_has_basic_consent_and_sanitization_contracts():
     assert 'page_path: pagePath' in source
 
 
+@pytest.mark.parametrize(('path', 'expected'), [
+    ('/for-teams/', [
+        ('/blog/#blog-offer-heading', 'services', 'diagnostic'),
+        ('/services/production-ai-systems', 'services', 'ai_workflow_review'),
+        ('/services/data-migration-rescue', 'services', 'migration_cutover'),
+    ]),
+    ('/for-professionals/', [
+        ('#exercise', 'hero', 'exercise'),
+        ('/blog/a-dashboard-needs-a-decision/', 'services', 'dashboard_example'),
+        ('/#sample', 'services', 'net_sales_demo'),
+        ('/blog/a-note-to-my-future-self/', 'services', 'decision_note'),
+    ]),
+    ('/blog/', [
+        ('/#contact', 'services', 'section'),
+        ('/blog/nothing-wasted/', 'archive', 'writing'),
+    ]),
+    ('/blog/ai-workflow-production-evidence/', [
+        ('/services/production-ai-systems', 'article', 'ai_workflow_review'),
+        ('/blog/audit-agent-proof-of-concept/', 'article', 'writing'),
+        ('/#contact', 'article', 'section'),
+    ]),
+])
+def test_brand_links_emit_navigation_events(app_factory, path, expected):
+    document = app_factory().test_client().get(path).get_data(as_text=True)
+    links = collect_elements(document, 'a')
+    navigation = {
+        (link['href'], link['data-placement'], link['data-destination-type'])
+        for link in links if link.get('data-analytics-event') == 'navigation_click'
+    }
+    assert set(expected) <= navigation
+
+
 def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_factory):
     document = render_home(
         app_factory(
@@ -462,16 +529,16 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
         (
             link['data-analytics-event'],
             link['data-placement'],
-            link['data-destination-type'],
+            link.get('data-destination-type', link.get('data-guide')),
         )
         for link in tracked_links
     }
     assert {
         ('navigation_click', 'navigation', 'home'),
         ('navigation_click', 'navigation', 'section'),
-        ('navigation_click', 'hero', 'section'),
-        ('navigation_click', 'services', 'section'),
-        ('contact_click', 'hero', 'booking'),
+        ('newsletter_cta_click', 'hero', 'both'),
+        ('navigation_click', 'hero', 'teams'),
+        ('navigation_click', 'services', 'professionals'),
         ('outbound_click', 'contact', 'github'),
         ('outbound_click', 'contact', 'linkedin'),
         ('contact_click', 'contact', 'booking'),
@@ -689,7 +756,7 @@ def test_unknown_paths_report_fixed_404_without_raw_path(app_factory, path):
 def test_known_content_paths_are_preserved_in_analytics_config(app_factory):
     from core.home.home import ARTICLES, SERVICES
     app = app_factory(GOOGLE_ANALYTICS_MEASUREMENT_ID='G-NF6SVCGZDF')
-    paths = ['/', '/blog/']
+    paths = ['/', '/blog/', '/for-teams/', '/for-professionals/', '/newsletter/']
     paths += [f'/services/{slug}' for slug in SERVICES]
     paths += [f"/blog/{article['slug']}/" for article in ARTICLES]
     for path in paths:
