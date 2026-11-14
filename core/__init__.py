@@ -169,6 +169,10 @@ def create_app(env=''):
     )
     app.config['NEWSLETTER_FROM'] = os.environ.get('NEWSLETTER_FROM', '').strip()
     app.config['NEWSLETTER_PROJECT'] = os.environ.get('GOOGLE_CLOUD_PROJECT', '').strip()
+    app.config['CONTACT_ADMISSION_PROJECT'] = os.environ.get(
+        'CONTACT_ADMISSION_PROJECT',
+        os.environ.get('GOOGLE_CLOUD_PROJECT', ''),
+    ).strip()
     app.config['RESEND_API_KEY'] = load_secret('RESEND_API_KEY', app.logger)
     app.config['NEWSLETTER_IDENTITY_KEY'] = load_secret('NEWSLETTER_IDENTITY_KEY', app.logger)
     contact_broker_url = os.environ.get('CONTACT_BROKER_URL', '').strip()

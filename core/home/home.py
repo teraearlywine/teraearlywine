@@ -1,5 +1,7 @@
 # Set up home blueprint
 import hashlib
+from ipaddress import ip_address
+import os
 import time
 import uuid
 from urllib.parse import urlsplit, urlunsplit
@@ -21,6 +23,10 @@ from flask import (
 
 from core.home.blog_content import (
     ARTICLES, ARTICLES_BY_SLUG, BLOG_DESCRIPTION, FEATURED_ARTICLES, OFFERS,
+)
+from core.home.contact_admission import (
+    ContactAdmissionError,
+    ContactAdmissionStore,
 )
 from core.home.contact_delivery import (
     ContactDeliveryError,
@@ -189,6 +195,30 @@ def _contact_submission_fingerprint(submission):
         )
     )
     return hashlib.sha256(private_payload.encode('utf-8')).hexdigest()
+
+
+def _contact_source_identity():
+    """Return a canonical address from a server-controlled request source."""
+    source = request.remote_addr or ''
+    if os.environ.get('GAE_ENV') == 'standard':
+        # App Engine removes externally supplied X-Appengine-* headers and sets
+        # this value at its frontend. Do not trust forwarding headers elsewhere.
+        source = request.headers.get('X-Appengine-User-Ip', '')
+    try:
+        return ip_address(str(source).strip()).compressed
+    except ValueError:
+        # Missing and malformed identities share one constrained bucket rather
+        # than becoming attacker-selected bucket keys.
+        return 'unknown'
+
+
+def _contact_admission_store():
+    if 'contact_admission_store' not in current_app.extensions:
+        current_app.extensions['contact_admission_store'] = ContactAdmissionStore(
+            current_app.config['CONTACT_ADMISSION_PROJECT'],
+            current_app.config['SECRET_KEY'],
+        )
+    return current_app.extensions['contact_admission_store']
 
 
 def _site_url():
@@ -518,8 +548,35 @@ def contact():
         'CONTACT_DELIVERY_TIMEOUT_SECONDS'
     ]
 
-    try:
-        if not state['delivered']:
+    if not state['delivered']:
+        try:
+            admitted = _contact_admission_store().admit(
+                _contact_source_identity()
+            )
+        except ContactAdmissionError as error:
+            current_app.logger.warning(
+                'Contact admission unavailable for submission %s: %s',
+                submission_id,
+                error,
+            )
+            return _contact_form_response(
+                form,
+                'Message delivery is temporarily unavailable. Please try again later.',
+                503,
+            )
+
+        if not admitted:
+            current_app.logger.warning(
+                'contact_spam_decision ruleId=source_rate timestamp=%s count=1',
+                int(time.time()),
+            )
+            return _contact_form_response(
+                form,
+                'Your submission could not be accepted. Please try again later.',
+                429,
+            )
+
+        try:
             deliver_contact_submission(
                 submission,
                 broker_url=current_app.config['CONTACT_BROKER_URL'],
@@ -529,25 +586,25 @@ def contact():
             state['delivered'] = True
             states[submission_id] = state
             _store_contact_submission_states(states)
-    except ContactFiltered as error:
-        return _contact_form_response(
-            form,
-            ('Please complete the verification and submit again.' if error.challenge
-             else 'Your submission could not be accepted. Please try again later.'),
-            error.status,
-            challenge=error.challenge,
-        )
-    except ContactDeliveryError as error:
-        current_app.logger.warning(
-            'Contact delivery failed for submission %s: %s',
-            submission_id,
-            error,
-        )
-        return _contact_form_response(
-            form,
-            'The message could not be sent right now. Please try again.',
-            502,
-        )
+        except ContactFiltered as error:
+            return _contact_form_response(
+                form,
+                ('Please complete the verification and submit again.' if error.challenge
+                 else 'Your submission could not be accepted. Please try again later.'),
+                error.status,
+                challenge=error.challenge,
+            )
+        except ContactDeliveryError as error:
+            current_app.logger.warning(
+                'Contact delivery failed for submission %s: %s',
+                submission_id,
+                error,
+            )
+            return _contact_form_response(
+                form,
+                'The message could not be sent right now. Please try again.',
+                502,
+            )
 
     if request.accept_mimetypes.best == 'application/json':
         return jsonify(

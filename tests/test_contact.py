@@ -10,6 +10,7 @@ import httpx
 import pytest
 
 from core import create_app
+from core.home.contact_admission import ContactAdmissionError
 
 
 PROJECT_ROOT = Path(__file__).parents[1]
@@ -42,6 +43,25 @@ class StubResponse:
 
     def json(self):
         return self.payload
+
+
+class StubContactAdmission:
+    def __init__(self, *, allowed=True, error=None):
+        self.allowed = allowed
+        self.error = error
+        self.sources = []
+
+    def admit(self, source):
+        self.sources.append(source)
+        if self.error:
+            raise self.error
+        return self.allowed
+
+
+def _set_contact_admission(app, **kwargs):
+    store = StubContactAdmission(**kwargs)
+    app.extensions['contact_admission_store'] = store
+    return store
 
 
 def _hidden_value(document, field_name):
@@ -78,10 +98,12 @@ def _post_contact(client, form_data):
 
 @pytest.fixture
 def contact_app(app_factory):
-    return app_factory(
+    app = app_factory(
         CONTACT_BROKER_URL=BROKER_URL,
         CONTACT_BROKER_SECRET=BROKER_SECRET,
     )
+    _set_contact_admission(app)
+    return app
 
 
 def test_home_renders_accessible_progressively_enhanced_contact_form(
@@ -230,6 +252,130 @@ def test_contact_rejects_honeypot_without_echoing_or_delivery(
     assert upstream_calls == []
 
 
+def test_source_limit_stops_delivery_before_shared_broker_quota(
+    contact_app,
+    monkeypatch,
+):
+    admission = _set_contact_admission(contact_app, allowed=False)
+    client = contact_app.test_client()
+    client.environ_base['REMOTE_ADDR'] = '192.0.2.44'
+    form_data, _ = _contact_form(client)
+    upstream_calls = []
+    monkeypatch.setattr(
+        'core.home.contact_delivery.httpx.post',
+        lambda *args, **kwargs: upstream_calls.append((args, kwargs)),
+    )
+
+    response = _post_contact(client, form_data)
+
+    assert response.status_code == 429
+    assert response.json == {
+        'errors': {},
+        'message': 'Your submission could not be accepted. Please try again later.',
+        'ok': False,
+    }
+    assert admission.sources == ['192.0.2.44']
+    assert upstream_calls == []
+
+
+def test_admission_failure_fails_closed_before_broker_delivery(
+    contact_app,
+    monkeypatch,
+):
+    _set_contact_admission(
+        contact_app,
+        error=ContactAdmissionError('unavailable'),
+    )
+    client = contact_app.test_client()
+    form_data, _ = _contact_form(client)
+    upstream_calls = []
+    monkeypatch.setattr(
+        'core.home.contact_delivery.httpx.post',
+        lambda *args, **kwargs: upstream_calls.append((args, kwargs)),
+    )
+
+    response = _post_contact(client, form_data)
+
+    assert response.status_code == 503
+    assert response.json['ok'] is False
+    assert response.json['message'] == (
+        'Message delivery is temporarily unavailable. Please try again later.'
+    )
+    assert upstream_calls == []
+
+
+def test_standalone_contact_ignores_forwarded_source_headers(
+    contact_app,
+    monkeypatch,
+):
+    monkeypatch.delenv('GAE_ENV', raising=False)
+    admission = contact_app.extensions['contact_admission_store']
+    client = contact_app.test_client()
+    client.environ_base['REMOTE_ADDR'] = '2001:0db8:0:0:0:0:0:5'
+    form_data, _ = _contact_form(client)
+    monkeypatch.setattr(
+        'core.home.contact_delivery.httpx.post',
+        lambda *args, **kwargs: StubResponse({
+            'submissionId': form_data['submission_id'],
+            'replayed': False,
+        }),
+    )
+
+    response = client.post(
+        '/contact',
+        data=form_data,
+        headers={
+            'Accept': 'application/json',
+            'X-Appengine-User-Ip': '198.51.100.10',
+            'X-Forwarded-For': '203.0.113.20',
+        },
+    )
+
+    assert response.status_code == 200
+    assert admission.sources == ['2001:db8::5']
+
+
+@pytest.mark.parametrize(
+    ('edge_source', 'expected_source'),
+    [
+        ('198.51.100.10', '198.51.100.10'),
+        ('not-an-address', 'unknown'),
+        ('', 'unknown'),
+    ],
+)
+def test_app_engine_contact_uses_only_canonical_edge_source(
+    contact_app,
+    monkeypatch,
+    edge_source,
+    expected_source,
+):
+    monkeypatch.setenv('GAE_ENV', 'standard')
+    admission = contact_app.extensions['contact_admission_store']
+    client = contact_app.test_client()
+    client.environ_base['REMOTE_ADDR'] = '192.0.2.99'
+    form_data, _ = _contact_form(client)
+    monkeypatch.setattr(
+        'core.home.contact_delivery.httpx.post',
+        lambda *args, **kwargs: StubResponse({
+            'submissionId': form_data['submission_id'],
+            'replayed': False,
+        }),
+    )
+
+    response = client.post(
+        '/contact',
+        data=form_data,
+        headers={
+            'Accept': 'application/json',
+            'X-Appengine-User-Ip': edge_source,
+            'X-Forwarded-For': '203.0.113.20',
+        },
+    )
+
+    assert response.status_code == 200
+    assert admission.sources == [expected_source]
+
+
 @pytest.mark.parametrize('choice', [TEST_ENGAGEMENT, 'Help me scope it'])
 def test_success_sends_exact_signed_broker_payload(
     contact_app,
@@ -321,6 +467,9 @@ def test_retry_reuses_submission_id_and_broker_confirms_both_deliveries(
         (BROKER_URL, calls[0][1]),
     ]
     assert calls[0][1]['submissionId'] == submission_id
+    assert len(
+        contact_app.extensions['contact_admission_store'].sources
+    ) == 2
 
 
 def test_duplicate_success_reuses_receipt_without_duplicate_upstreams(
@@ -346,6 +495,9 @@ def test_duplicate_success_reuses_receipt_without_duplicate_upstreams(
     assert first_response.status_code == 200
     assert second_response.status_code == 200
     assert calls == [BROKER_URL]
+    assert len(
+        contact_app.extensions['contact_admission_store'].sources
+    ) == 1
 
 
 def test_duplicate_submission_id_rejects_changed_content(
@@ -377,6 +529,9 @@ def test_duplicate_submission_id_rejects_changed_content(
         'ok': False,
     }
     assert calls == [BROKER_URL]
+    assert len(
+        contact_app.extensions['contact_admission_store'].sources
+    ) == 1
 
 
 def test_timeout_returns_generic_error_without_secrets_or_submission_content(
@@ -495,6 +650,7 @@ def test_production_requires_stable_secret_key(monkeypatch):
 def test_deployment_config_references_secret_manager_without_secret_values():
     deployment_config = (PROJECT_ROOT / 'app.yaml').read_text()
 
+    assert 'CONTACT_ADMISSION_PROJECT: "teraearlywine"' in deployment_config
     assert 'CONTACT_BROKER_SECRET_SECRET_ID:' in deployment_config
     assert 'SECRET_KEY_SECRET_ID:' in deployment_config
     assert re.search(
@@ -526,6 +682,7 @@ def test_filtered_broker_response_never_claims_sent(contact_app, monkeypatch, st
 
 def test_challenge_html_has_widget_without_echoing_message(app_factory, monkeypatch):
     app = app_factory(CONTACT_BROKER_URL=BROKER_URL, CONTACT_BROKER_SECRET=BROKER_SECRET, CONTACT_TURNSTILE_SITE_KEY='test-site-key')
+    _set_contact_admission(app)
     client = app.test_client()
     form, _ = _contact_form(client)
     monkeypatch.setattr('core.home.contact_delivery.httpx.post', lambda *a, **k: StubResponse({'error': 'CHALLENGE_REQUIRED'}, 403))
