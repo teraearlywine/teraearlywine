@@ -5,13 +5,14 @@
     {% include 'home/core/navigation.html' %}
     <main id="main" class="writing-page">
         <header class="writing-intro">
-            <div>
-                <h1 id="blog-heading">The business of technology</h1>
-                <p>I write about the decisions behind the tools. When is a cheaper query worth the effort? What happens when an AI agent needs help? These are my field notes from the work.</p>
-            </div>
-            <div class="writing-links">
-                <a class="blog-text-link" id="archiveLink" href="#archive">Browse the archive</a>
-                {% if rss_url %}<a class="blog-text-link" href="{{ url_for('index.rss_subscription') }}">Subscribe via RSS</a>{% endif %}
+            <h1 id="blog-heading"><span>The Business</span> <span>of Technology</span></h1>
+            <div class="writing-intro-copy">
+                <p>When is a cheaper query worth the effort? Where does an AI workflow need a person? My field notes on what technology is worth in real work.</p>
+                <div class="writing-links">
+                    <a class="writing-subscribe" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="both">Get the newsletter <span aria-hidden="true">↗</span></a>
+                    <a class="blog-text-link" id="archiveLink" href="#archive" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="archive">Browse the archive</a>
+                    {% if rss_url %}<a class="blog-text-link" href="{{ url_for('index.rss_subscription') }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="rss">Subscribe via RSS</a>{% endif %}
+                </div>
             </div>
         </header>
 

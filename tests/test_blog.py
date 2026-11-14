@@ -184,7 +184,7 @@ def test_public_sitemap_includes_every_blog_article(app_factory):
     assert set(locations) == {
         f'{SITE_URL}/', f'{SITE_URL}/for-teams/', f'{SITE_URL}/for-professionals/',
         *[f'{SITE_URL}/services/{slug}' for slug in SERVICES],
-        f'{SITE_URL}/blog/',
+        f'{SITE_URL}/blog/', f'{SITE_URL}/newsletter/',
         *[f"{SITE_URL}/blog/{article['slug']}/" for article in ARTICLES],
     }
 

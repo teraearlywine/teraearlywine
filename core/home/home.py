@@ -244,7 +244,7 @@ def seo_metadata():
     analytics_page_path = '/404'
     if is_homepage or request.endpoint == 'index.contact':
         analytics_page_path = '/'
-    elif request.endpoint in {'index.for_teams', 'index.for_professionals'}:
+    elif request.endpoint in {'index.for_teams', 'index.for_professionals', 'index.newsletter'}:
         analytics_page_path = url_for(request.endpoint)
         canonical_url = f'{site_url}{analytics_page_path}' if site_url else ''
     elif service:
@@ -583,7 +583,7 @@ def sitemap():
     site_url = _site_url()
     if site_url:
         paths = (
-            ['/', '/for-teams/', '/for-professionals/'] + [f'/services/{slug}' for slug in SERVICES]
+            ['/', '/for-teams/', '/for-professionals/', '/newsletter/'] + [f'/services/{slug}' for slug in SERVICES]
             + ['/blog/']
             + [f"/blog/{article['slug']}/" for article in ARTICLES]
         )

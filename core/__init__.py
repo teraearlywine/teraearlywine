@@ -85,6 +85,7 @@ def register_blueprints(app):
     mimetypes.add_type('image/webp', '.webp')
 
     from core.home.home import index_bp  # noqa: E402
+    from core.home import newsletter  # noqa: F401 - registers routes on index_bp
     app.register_blueprint(index_bp)
 
 
@@ -166,6 +167,10 @@ def create_app(env=''):
     app.config['CONTACT_EMAIL'] = (
         app.config['CONTACT_EMAIL'] or 'tera@idea-factory.io'
     )
+    app.config['NEWSLETTER_FROM'] = os.environ.get('NEWSLETTER_FROM', '').strip()
+    app.config['NEWSLETTER_PROJECT'] = os.environ.get('GOOGLE_CLOUD_PROJECT', '').strip()
+    app.config['RESEND_API_KEY'] = load_secret('RESEND_API_KEY', app.logger)
+    app.config['NEWSLETTER_IDENTITY_KEY'] = load_secret('NEWSLETTER_IDENTITY_KEY', app.logger)
     contact_broker_url = os.environ.get('CONTACT_BROKER_URL', '').strip()
     app.config['CONTACT_DELIVERY_TIMEOUT_SECONDS'] = 15.0
     app.config['MAX_CONTENT_LENGTH'] = 32 * 1024

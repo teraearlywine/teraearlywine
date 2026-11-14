@@ -47,6 +47,8 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
   const acceptButton = new FakeElement({ consentChoice: 'accepted' });
   const reopenButton = new FakeElement();
   const contactSection = new FakeElement();
+  const guideOptions = new FakeElement();
+  const receipt = options.receipt ? new FakeElement(options.receipt) : null;
   const configElement = {
     textContent: JSON.stringify({
       measurementId: options.measurementId ?? 'G-TEST123',
@@ -78,6 +80,8 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     querySelector(selector) {
       if (selector === '[data-consent-reopen]') return reopenButton;
       if (selector === '[data-analytics-contact-view]') return contactSection;
+      if (selector === '[data-newsletter-guides]') return guideOptions;
+      if (selector === '[data-newsletter-receipt]') return receipt;
       return null;
     },
     createElement(tagName) {
@@ -172,6 +176,7 @@ function createHarness(initialConsent = null, storageAvailable = true, options =
     cookieWrites,
     document,
     documentListeners,
+    guideOptions,
     loadedScripts,
     observer: FakeIntersectionObserver.instance,
     rejectButton,
@@ -420,6 +425,35 @@ for (const consent of ['accepted', 'rejected']) {
     });
     assert.equal(JSON.stringify(events).includes('private@example.com'), false);
   }
+}
+
+for (const name of ['newsletter_signup', 'newsletter_confirm', 'newsletter_unsubscribe']) {
+  const visitor = createHarness('rejected', true, {receipt: {newsletterReceipt: name, guide: 'teams'}});
+  assert.deepEqual(commands(visitor), []);
+  visitor.reopenButton.click();
+  visitor.acceptButton.click();
+  visitor.reopenButton.click();
+  visitor.acceptButton.click();
+  const receipts = commands(visitor).filter(([cmd, event]) => cmd === 'event' && event === name);
+  assert.equal(receipts.length, 1, name);
+  assert.equal(receipts[0][2].guide, name === 'newsletter_unsubscribe' ? undefined : 'teams');
+}
+
+for (const consent of ['accepted', 'rejected']) {
+  const visitor = createHarness(consent);
+  dispatchTrackedClick(visitor, {analyticsEvent: 'newsletter_cta_click', placement: 'article', guide: 'both'});
+  visitor.guideOptions.listeners.get('change')({target: {name: 'guide', value: 'professionals', checked: true}});
+  visitor.guideOptions.listeners.get('change')({target: {name: 'guide', value: 'private@example.com', checked: true}});
+  dispatchTrackedClick(visitor, {analyticsEvent: 'newsletter_guide_download', guide: 'teams'});
+  const events = commands(visitor).filter(([cmd]) => cmd === 'event');
+  assert.deepEqual(Array.from(events, ([,name]) => name), consent === 'accepted'
+    ? ['newsletter_cta_click', 'newsletter_guide_select', 'newsletter_guide_download'] : []);
+  assert(!JSON.stringify(events).includes('private@example.com'));
+}
+
+for (const path of ['/newsletter/confirm/PRIVATE_TOKEN', '/newsletter/unsubscribe/PRIVATE_TOKEN/unexpected']) {
+  const visitor = createHarness('accepted', true, {href: 'https://www.teraearlywine.com' + path});
+  assert.equal(visitor.loadedScripts.length, 0);
 }
 
 // Production routing must fail closed before a tag, config, or custom event exists.

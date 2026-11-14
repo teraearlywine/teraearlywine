@@ -55,6 +55,7 @@
                 <span class="blog-kicker">Keep exploring</span>
                 <a class="writing-row" href="{{ url_for('index.blog_article', slug=next_article.slug) }}">{{ next_article.title }}<img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="26" height="26"></a>
                 <a class="blog-text-link" href="{{ url_for('index.blog') }}">Return to all articles</a>
+                <a class="blog-text-link" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="article" data-guide="both">Get my field notes by email</a>
             </nav>
         </article>
     </main>

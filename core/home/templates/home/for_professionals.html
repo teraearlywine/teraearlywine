@@ -4,8 +4,8 @@
 {% set introduction = 'A faster query is easy to measure. The harder question is who can do something differently because it runs faster. Here’s an exercise you can use the next time someone asks why your team should fund the work.' %}
 
 {% block hero_actions %}
-    <a class="button button--primary" href="#exercise">Try the exercise <span aria-hidden="true">↓</span></a>
-    <a class="service-contact-link" href="{{ url_for('index.blog') }}">Read more field notes</a>
+    <a class="button button--primary" href="{{ url_for('index.newsletter', guide='professionals') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="professionals">Get the business impact guide <span aria-hidden="true">↗</span></a>
+    <a class="service-contact-link" href="#exercise">Try the exercise below</a>
 {% endblock %}
 
 {% block audience_content %}

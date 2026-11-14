@@ -13,6 +13,14 @@
 {% block audience_content %}
 <section class="section cs-services" aria-labelledby="teams-offers">
     <div class="cs-frame">
+        <aside class="cs-resource" aria-labelledby="workflow-guide-heading">
+            <div>
+                <p class="cs-eyebrow">Newsletter guide for teams</p>
+                <h3 id="workflow-guide-heading">Choose Your Next AI Workflow</h3>
+                <p>Compare the time a task takes with the time you’ll spend reviewing an AI’s work. Use the worksheet to choose one task and set a threshold for a pilot.</p>
+            </div>
+            <a class="button button--primary" href="{{ url_for('index.newsletter', guide='teams') }}" data-analytics-event="newsletter_cta_click" data-placement="services" data-guide="teams">Get the guide by email <span aria-hidden="true">↗</span></a>
+        </aside>
         <h2 class="cs-section-title" id="teams-offers">Bring me one decision.</h2>
         <div class="cs-offer-list">
             <article>

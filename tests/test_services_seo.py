@@ -138,7 +138,7 @@ def test_sitemap_and_internal_links_cover_all_service_pages(app_factory):
     root = ElementTree.fromstring(client.get('/sitemap.xml').data)
     blog_paths = {'/blog/'} | {f"/blog/{article['slug']}/" for article in ARTICLES}
     assert {loc.text for loc in root.findall('.//{*}loc')} == {
-        f'https://www.teraearlywine.com{path}' for path in paths | {'/', '/for-teams/', '/for-professionals/'} | blog_paths
+        f'https://www.teraearlywine.com{path}' for path in paths | {'/', '/for-teams/', '/for-professionals/', '/newsletter/'} | blog_paths
     }
     for path in paths | {'/'}:
         document = client.get(path).get_data(as_text=True)

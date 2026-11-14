@@ -59,7 +59,8 @@ def test_feed_discovery_and_missing_configuration(app_factory):
                    for link in collect_elements(document, 'link'))
     blog = client.get('/blog/').get_data(as_text=True)
     assert 'Subscribe via RSS' in blog
-    assert {'class': 'blog-text-link', 'href': '/blog/subscribe/'} in collect_elements(blog, 'a')
+    assert any(link.get('href') == '/blog/subscribe/' and link.get('data-destination-type') == 'rss'
+               for link in collect_elements(blog, 'a'))
     unconfigured = app_factory().test_client()
     assert unconfigured.get('/rss.xml').status_code == 503
     assert 'application/rss+xml' not in unconfigured.get('/blog/').get_data(as_text=True)

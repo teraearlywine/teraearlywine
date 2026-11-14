@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+{% set page_description = 'Manage your subscription to The Business of Technology by Tera Earlywine.' %}
+{% set robots_meta = 'noindex, nofollow' %}
+{% set use_newsletter_styles = true %}
+{% set suppress_analytics = not analytics_safe_status %}
+{% include 'home/includes/header.html' %}
+<body>
+    {% include 'home/core/navigation.html' %}
+    <main id="main" class="newsletter-result"{% if analytics_safe_status and newsletter_event %} data-newsletter-receipt="{{ newsletter_event.name }}"{% if newsletter_event.guide %} data-guide="{{ newsletter_event.guide }}"{% endif %}{% endif %}>
+        <p class="newsletter-kicker">The Business of Technology</p>
+        <h1>{{ heading }}</h1>
+        <p class="newsletter-lede">{{ message }}</p>
+        {% if form %}
+        <form method="post">
+            {{ form.hidden_tag() }}
+            {% for errors in form.errors.values() %}
+                {% for error in errors %}<p class="newsletter-error" role="alert">{{ error }}</p>{% endfor %}
+            {% endfor %}
+            <button class="button button--primary" type="submit">{{ action_label|default('Confirm subscription') }}</button>
+        </form>
+        {% endif %}
+        {% if guides %}
+        <ul class="newsletter-downloads" aria-label="Your PDF guides">
+            {% for guide in guides %}
+            <li><a class="newsletter-link" href="{{ guide.url }}" download data-analytics-event="newsletter_guide_download" data-guide="{{ guide.key }}">{{ guide.title }} <span>(PDF)</span><span aria-hidden="true"> ↓</span></a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if signup_link %}
+        <a class="newsletter-link" href="{{ url_for('index.newsletter') }}">Return to the signup form <span aria-hidden="true">↗</span></a>
+        {% else %}
+        <a class="newsletter-link" href="{{ url_for('index.blog') }}">Read more field notes <span aria-hidden="true">↗</span></a>
+        {% endif %}
+    </main>
+    {% include 'home/includes/footer.html' %}
+    {% include 'home/includes/scripts.html' %}
+</body>
+</html>

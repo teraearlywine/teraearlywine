@@ -4,6 +4,7 @@ const analyticsEnabledCallbacks = new Set();
 
 const ALLOWED_VALUES = Object.freeze({
   contact_method: new Set(['email', 'booking']),
+  guide: new Set(['teams', 'professionals', 'both']),
   placement: new Set([
     'navigation',
     'hero',
@@ -13,11 +14,14 @@ const ALLOWED_VALUES = Object.freeze({
     'contact',
     'footer',
     'error',
+    'signup',
   ]),
   destination_type: new Set([
     'teams',
     'professionals',
     'writing',
+    'archive',
+    'rss',
     'section',
     'service',
     'github',
@@ -38,6 +42,12 @@ const EVENT_PARAMETERS = Object.freeze({
   contact_click: ['contact_method', 'placement', 'destination_type'],
   contact_submit: [],
   resource_download: ['placement', 'destination_type'],
+  newsletter_cta_click: ['placement', 'guide'],
+  newsletter_guide_select: ['guide'],
+  newsletter_signup: ['guide'],
+  newsletter_confirm: ['guide'],
+  newsletter_guide_download: ['guide'],
+  newsletter_unsubscribe: [],
 });
 
 const PRODUCTION_MEASUREMENT_ID = 'G-NF6SVCGZDF';
@@ -50,6 +60,10 @@ const CAMPAIGN_TUPLES = new Map([
   ['newsletter|email|website_baseline_2026_09|footer', {
     campaign_source: 'newsletter', campaign_medium: 'email',
     campaign_name: 'website_baseline_2026_09', campaign_content: 'footer',
+  }],
+  ['newsletter|email|business_of_technology|issue', {
+    campaign_source: 'newsletter', campaign_medium: 'email',
+    campaign_name: 'business_of_technology', campaign_content: 'issue',
   }],
 ]);
 const REFERRER_ORIGINS = new Map([
@@ -90,6 +104,8 @@ function allowlistedAttribution(locationHref, referrer) {
 }
 
 function readAnalyticsConfig() {
+  // Bearer links may also reach a generic 404 handler. Never load Google on them.
+  if (/^\/newsletter\/(?:confirm|unsubscribe)(?:\/|$)/i.test(window.location.pathname)) return null;
   const configElement = document.getElementById('analyticsConfig');
   if (!configElement) {
     return null;
@@ -203,6 +219,7 @@ function initializeGoogleAnalytics() {
 
   const googleTag = document.createElement('script');
   googleTag.async = true;
+  googleTag.referrerPolicy = 'no-referrer';
   googleTag.src = (
     'https://www.googletagmanager.com/gtag/js?id='
     + encodeURIComponent(analyticsConfig.measurementId)
@@ -364,8 +381,29 @@ function initializeTaggedClickTracking() {
       contact_method: link.dataset.contactMethod,
       placement: link.dataset.placement,
       destination_type: link.dataset.destinationType,
+      guide: link.dataset.guide,
     });
   });
+}
+
+function initializeNewsletterTracking() {
+  const choices = document.querySelector('[data-newsletter-guides]');
+  choices?.addEventListener('change', event => {
+    if (event.target.name === 'guide' && event.target.checked) {
+      trackEvent('newsletter_guide_select', {guide: event.target.value});
+    }
+  });
+
+  const receipt = document.querySelector('[data-newsletter-receipt]');
+  if (!receipt) return;
+  const name = receipt.dataset.newsletterReceipt;
+  if (!['newsletter_signup', 'newsletter_confirm', 'newsletter_unsubscribe'].includes(name)) return;
+  const sendReceipt = () => {
+    if (trackEvent(name, {guide: receipt.dataset.guide})) {
+      analyticsEnabledCallbacks.delete(sendReceipt);
+    }
+  };
+  analyticsEnabledCallbacks.add(sendReceipt);
 }
 
 function initializeContactViewTracking() {
@@ -407,6 +445,7 @@ function initializeContactSubmitTracking() {
   });
 }
 
+initializeNewsletterTracking();
 initializeConsentControls();
 initializeTaggedClickTracking();
 initializeContactViewTracking();

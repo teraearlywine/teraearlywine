@@ -9,13 +9,13 @@
             </svg>
         </div>
         <p>&copy; 2026 Tera Earlywine</p>
-        {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
+        {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') and not suppress_analytics %}
         <button class="privacy-choices-button" type="button" data-consent-reopen>
             Privacy choices
         </button>
         {% endif %}
     </div>
 </footer>
-{% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') %}
+{% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') and not suppress_analytics %}
 {% include 'home/includes/analytics_consent.html' %}
 {% endif %}

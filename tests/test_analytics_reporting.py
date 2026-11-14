@@ -16,6 +16,7 @@ MAIN_CSS = PROJECT_ROOT / 'core/home/assets/css/main.css'
 CONSULTANCY_CSS = PROJECT_ROOT / 'core/home/assets/css/consultancy.css'
 
 EVENT_PARAMETERS = {
+    'newsletter_cta_click': ('placement', 'guide'),
     'navigation_click': ('placement', 'destination_type'),
     'outbound_click': ('placement', 'destination_type'),
     'contact_submit': (),
@@ -23,6 +24,7 @@ EVENT_PARAMETERS = {
     'contact_click': ('contact_method', 'placement', 'destination_type'),
 }
 ALLOWED_VALUES = {
+    'guide': {'teams', 'professionals', 'both'},
     'contact_method': {'email', 'booking'},
     'placement': {
         'navigation',
@@ -480,14 +482,14 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
         (
             link['data-analytics-event'],
             link['data-placement'],
-            link['data-destination-type'],
+            link.get('data-destination-type', link.get('data-guide')),
         )
         for link in tracked_links
     }
     assert {
         ('navigation_click', 'navigation', 'home'),
         ('navigation_click', 'navigation', 'section'),
-        ('navigation_click', 'hero', 'writing'),
+        ('newsletter_cta_click', 'hero', 'both'),
         ('navigation_click', 'hero', 'teams'),
         ('navigation_click', 'services', 'professionals'),
         ('outbound_click', 'contact', 'github'),
@@ -707,7 +709,7 @@ def test_unknown_paths_report_fixed_404_without_raw_path(app_factory, path):
 def test_known_content_paths_are_preserved_in_analytics_config(app_factory):
     from core.home.home import ARTICLES, SERVICES
     app = app_factory(GOOGLE_ANALYTICS_MEASUREMENT_ID='G-NF6SVCGZDF')
-    paths = ['/', '/blog/', '/for-teams/', '/for-professionals/']
+    paths = ['/', '/blog/', '/for-teams/', '/for-professionals/', '/newsletter/']
     paths += [f'/services/{slug}' for slug in SERVICES]
     paths += [f"/blog/{article['slug']}/" for article in ARTICLES]
     for path in paths:

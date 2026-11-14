@@ -45,7 +45,7 @@
     {% if seo_structured_data %}
     <script type="application/ld+json">{{ seo_structured_data|tojson }}</script>
     {% endif %}
-    {% include 'home/includes/google_analytics.html' %}
+    {% if not suppress_analytics %}{% include 'home/includes/google_analytics.html' %}{% endif %}
     <link rel="preload" href="{{ url_for('index.static', filename='fonts/inter-regular.2b416f85f934.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url_for('index.static', filename='fonts/inter-bold.af63a20a4c9a.woff2') }}" as="font" type="font/woff2" crossorigin>
     {% include 'home/includes/themes.html' %}
