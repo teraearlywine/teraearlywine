@@ -1,20 +1,15 @@
 # Tera Earlywine
 
-**Independent Data & AI Consultant · Fortune 500 Advisor · ex-Block, ex-Mercari**
+**Data and AI Consulting**
 
-I fix the data systems your reporting, compliance, and AI depend on.
+I help business and technical teams use data and AI to make better decisions, reduce repetitive work, and move projects forward.
 
-My specialty is production-grade data and AI for regulated, high-consequence operations. Usually that means rescuing a migration, making a fragile platform reliable, building the data foundation underneath AI, or turning an agent prototype into something a real team can safely operate.
+## Where I can help
 
-## What I get called for
+- Data and reporting your team can rely on
+- Practical AI and workflow automation
+- Data and AI project scoping, alignment, and delivery
 
-- Reliability and migration rescue
-- AI-ready data foundations
-- Production AI systems with state, permissions, recovery, and auditability
-- Fractional data-platform leadership
+My background spans business intelligence, data engineering, and consulting, including roles at Mercari and Block. I connect business needs with technical implementation and help teams continue the work through clear responsibilities, documentation, and handoffs.
 
-My work has included enterprise programs spanning 500+ workflows, infrastructure optimization identifying $500K+ in projected Snowflake savings, and data-platform leadership across Block, Mercari, and independent consulting.
-
-The tools vary—SQL, Python, dbt, Airflow, Snowflake, BigQuery, GCP, Terraform, and LLM systems—but the job is consistent: make the important system understandable, operable, and trustworthy.
-
-[See my work and book a fit call](https://www.teraearlywine.com/) · [LinkedIn](https://www.linkedin.com/in/teraearlywine/)
+[Discuss your project](https://www.teraearlywine.com/#contact) · [LinkedIn](https://www.linkedin.com/in/teraearlywine/)

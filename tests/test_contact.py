@@ -97,9 +97,9 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert 'action="/contact"' in document
     assert 'data-contact-form' in document
     assert '<label for="name">Name</label>' in document
-    assert '<label for="email">Email</label>' in document
+    assert '<label for="email">Work email</label>' in document
     assert (
-        '<legend>Potential engagement</legend>'
+        '<legend>What would you like help with?</legend>'
         in document
     )
     assert document.count('name="engagement_type"') == 4

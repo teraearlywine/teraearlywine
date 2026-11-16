@@ -1,16 +1,21 @@
 <section id="services" class="section cs-services" aria-labelledby="services-heading">
     <div class="cs-frame">
-        <h2 class="cs-section-title" id="services-heading">Where do you want to start?</h2>
+        <h2 class="cs-section-title" id="services-heading">Where I can help</h2>
         <div class="cs-offer-list">
             <article>
-                <h3>For teams</h3>
-                <p>You’re weighing an AI pilot, a growing warehouse bill, or a migration. Start with one decision and work out what would make the investment worthwhile.</p>
-                <a class="cs-text-link" href="{{ url_for('index.for_teams') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="teams">Explore consulting <span aria-hidden="true">↗</span></a>
+                <h3>Data your team can use</h3>
+                <p>When numbers disagree or reporting takes too much effort, decisions slow down. I help clarify what your metrics mean, improve data quality, and build reporting your team can rely on.</p>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Data and reporting <span aria-hidden="true">↗</span></a>
             </article>
             <article>
-                <h3 id="readiness-heading">For technical professionals</h3>
-                <p>You know how the system works. How do you explain the difference a change will make? Try it with a dashboard, a refund, and a short decision note. For a workflow nearing release, use the <a href="{{ url_for('index.for_professionals') }}#readiness-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="readiness_scorecard">readiness scorecard</a>.</p>
-                <a class="cs-text-link" href="{{ url_for('index.for_professionals') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="professionals">Try the exercise <span aria-hidden="true">↗</span></a>
+                <h3>Practical AI and workflow automation</h3>
+                <p>If your team spends hours gathering information, copying data, or repeating the same checks, there may be a better way to do the work. I help identify useful opportunities, build and test a workflow, and decide where a person should review the result.</p>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">AI and automation <span aria-hidden="true">↗</span></a>
+            </article>
+            <article>
+                <h3>Get data and AI projects moving</h3>
+                <p>A project can stall when people have different definitions of the problem or no clear owner for the next decision. I help business and technical teams agree on requirements, choose priorities, and make handoffs easier to manage.</p>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='fractional-data-leadership') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Project delivery <span aria-hidden="true">↗</span></a>
             </article>
         </div>
     </div>

@@ -10,15 +10,15 @@
                 <nav class="service-breadcrumb" aria-label="Breadcrumb">
                     <a href="{{ url_for('index.index') }}">Home</a><span aria-hidden="true"> / </span><span aria-current="page">{{ service.name }}</span>
                 </nav>
-                <p class="service-eyebrow">Independent data &amp; AI consulting</p>
+                <p class="service-eyebrow">Data and AI consulting</p>
                 <h1 id="service-heading">{{ service.name }}</h1>
                 <p class="service-promise">{{ service.headline }}</p>
                 <p class="service-intro">{{ service.intro }}</p>
                 <div class="hero-actions">
+                    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your project <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
                     {% if config.get('BOOKING_URL') %}
-                    <a class="button button--primary" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a fit call <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
+                    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a conversation</a>
                     {% endif %}
-                    <a class="service-contact-link" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Tell me what’s stuck</a>
                 </div>
             </div>
         </section>
@@ -88,7 +88,7 @@
                     <p><a class="service-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the readiness scorecard <span aria-hidden="true">↓</span></a></p>
                     <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">What evidence does an AI workflow need before production? <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
-                    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">{% if service_slug == 'production-ai-systems' %}Discuss an AI workflow{% elif service_slug == 'data-migration-rescue' %}Discuss your migration{% elif service_slug == 'data-platform-modernization' %}Discuss your data platform{% else %}Discuss your leadership needs{% endif %} <span aria-hidden="true">↗</span></a>
+                    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">Discuss your project <span aria-hidden="true">↗</span></a>
                 </div>
             </div>
         </section>

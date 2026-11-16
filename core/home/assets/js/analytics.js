@@ -452,7 +452,7 @@ function initializeTaggedClickTracking() {
 const NAVIGATION_CLICK_KEY = 'tracked_navigation';
 const NAVIGATION_HASHES = new Set([
   '', '#archive', '#blog-offer-heading', '#contact', '#exercise', '#experience',
-  '#projects', '#readiness-heading', '#sample',
+  '#projects', '#readiness-heading', '#sample', '#services',
 ]);
 
 function isPublicNavigationPage(path) {

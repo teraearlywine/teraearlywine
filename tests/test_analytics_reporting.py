@@ -236,29 +236,22 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     )
 
     text = ' '.join(re.sub(r'<[^>]+>', ' ', document).split())
-    assert 'What’s worth building?' in text
-    assert 'I’m Tera Earlywine, a data engineer and independent consultant.' in text
+    assert 'Data and AI consulting for better decisions and less manual work' in text
     assert 'Help me scope it' in document
-    assert 'Staging proof of concept' in document
-    assert 'Active development' in document
-    assert 'Engine Sandbox' in document
-    assert 'AI-assisted implementation' in document
+    assert 'proof of concept' in document
     assert 'projected Snowflake savings' in document
     assert 'Block compliance data engineering engagement through Qbiz' not in document
     assert document.index('id="services"') < document.index('id="projects"')
-    assert 'open to applied AI engineering and senior data roles' in document
-    assert '9+ years' in document
-    assert '500+' in document
+    assert 'open to applied AI engineering and senior data roles' not in document
+    assert 'independent consultant' not in text.lower()
     assert '$500K+' in document
     assert 'Block' in document
     assert 'Mercari' in document
     assert 'Who is Tera Earlywine?' in document
-    assert 'When should a company hire Tera?' in document
+    assert 'What can you help my team with?' in document
     links = collect_elements(document, 'a')
-    for destination, path in [('writing', '/blog/'), ('teams', '/for-teams/'),
-                              ('professionals', '/for-professionals/')]:
-        assert any(link.get('data-destination-type') == destination
-                   and link.get('href') == path for link in links)
+    for path in ['#services', '#projects', '#experience', '#contact', '/blog/', '/for-professionals/']:
+        assert any(link.get('href') == path for link in links)
 
 
 def test_contact_urls_remain_single_escaped_attributes(app_factory):
@@ -323,10 +316,9 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
         node for node in structured_data['@graph'] if node['@type'] == 'Person'
     )
     assert person['name'] == 'Tera Earlywine'
-    assert person['jobTitle'] == 'Independent Data & AI Consultant'
+    assert person['jobTitle'] == 'Data and AI Consultant'
     assert (
-        'Production-grade data and AI for regulated, high-consequence operations'
-        in person['knowsAbout']
+        'Cross-functional collaboration' in person['knowsAbout']
     )
 
     service = next(
@@ -335,7 +327,7 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
         if node['@type'] == 'ProfessionalService'
     )
     assert service['founder'] == {'@id': f'{expected_url}#person'}
-    assert 'Data platform modernization' in service['serviceType']
+    assert 'Data and reporting' in service['serviceType']
 
     faq = next(
         node for node in structured_data['@graph'] if node['@type'] == 'FAQPage'
@@ -345,7 +337,7 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
         for entity in faq['mainEntity']
     }
     assert questions['Who is Tera Earlywine?'] in document
-    assert questions['What can I learn here?'] in document
+    assert questions['What can you help my team with?'] in document
 
 
 @pytest.mark.parametrize(
@@ -482,7 +474,7 @@ def test_analytics_client_has_basic_consent_and_sanitization_contracts():
     ('/for-professionals/', [
         ('#exercise', 'hero', 'exercise'),
         ('/blog/a-dashboard-needs-a-decision/', 'services', 'dashboard_example'),
-        ('/#sample', 'services', 'net_sales_demo'),
+        ('#sample', 'services', 'net_sales_demo'),
         ('/blog/a-note-to-my-future-self/', 'services', 'decision_note'),
     ]),
     ('/blog/', [
@@ -536,9 +528,10 @@ def test_rendered_tracking_attributes_follow_the_measurement_allowlist(app_facto
     assert {
         ('navigation_click', 'navigation', 'home'),
         ('navigation_click', 'navigation', 'section'),
-        ('newsletter_cta_click', 'hero', 'both'),
-        ('navigation_click', 'hero', 'teams'),
-        ('navigation_click', 'services', 'professionals'),
+        ('newsletter_cta_click', 'footer', 'both'),
+        ('navigation_click', 'hero', 'section'),
+        ('navigation_click', 'services', 'service'),
+        ('navigation_click', 'footer', 'professionals'),
         ('outbound_click', 'contact', 'github'),
         ('outbound_click', 'contact', 'linkedin'),
         ('contact_click', 'contact', 'booking'),

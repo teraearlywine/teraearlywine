@@ -11,6 +11,8 @@
   background: var(--white);
 }
 
+.nav-brand { flex-shrink: 0; }
+
 .nav-brand svg { display: block; width: 195px; height: auto; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -25,7 +27,7 @@
     100% { transform: none; }
   }
 }
-.nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
+.nav-links { display: flex; align-items: center; gap: 24px; margin: 0; padding: 0; list-style: none; }
 .nav-links li a, .nav-toggle {
   display: inline-flex;
   min-height: 44px;
@@ -35,12 +37,13 @@
   text-decoration: none;
 }
 .nav-links li a:hover, .nav-links a[aria-current] { color: var(--blue); text-decoration: underline; text-underline-offset: 5px; }
-.nav-links li a.nav-contact { padding: 12px 20px; color: var(--white); background: var(--ink); border-radius: 0; font-weight: 700; }
+.nav-links li a.nav-contact { white-space: nowrap; padding: 12px 20px; color: var(--white); background: var(--ink); border-radius: 0; font-weight: 700; }
 .nav-links li a.nav-contact:hover { background: var(--blue); }
 .nav-toggle { display: none; background: var(--white); padding: 8px 14px; border: 1px solid var(--color-control-border); cursor: pointer; }
 
 @media (max-width: 960px) {
   .navbar { width: calc(100% - 64px); }
+  .nav-links { gap: 18px; }
 }
 @media (max-width: 740px) {
   .navbar { width: calc(100% - 36px); min-height: 68px; flex-wrap: wrap; }
@@ -49,4 +52,14 @@
   .nav-ready .nav-toggle { display: inline-flex; }
   .nav-ready .nav-links { display: none; }
   .nav-ready .nav-links.open { display: flex; }
+}
+
+.footer-insights { text-align: left; }
+.footer-insights .footer-insights__heading { margin: 0; font: 700 14px/1.4 var(--font-family); }
+.footer-insights ul { display: flex; flex-wrap: wrap; gap: 0 16px; margin: 0; padding: 0; list-style: none; }
+.footer-insights a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-size: 14px; text-underline-offset: 3px; }
+.footer-insights a:hover { color: var(--blue); }
+
+@media (max-width: 740px) {
+  .footer-insights { flex-basis: 100%; }
 }

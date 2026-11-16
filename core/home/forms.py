@@ -25,7 +25,7 @@ class ContactForm(FlaskForm):
         ],
     )
     email = StringField(
-        'Email',
+        'Work email',
         filters=[_strip],
         validators=[
             DataRequired(message='Enter your email address.'),
@@ -37,8 +37,13 @@ class ContactForm(FlaskForm):
         ],
     )
     engagement_type = RadioField(
-        'Potential engagement',
-        choices=[(value, value) for value in (*ENGAGEMENT_TYPES, UNSCOPED_ENGAGEMENT)],
+        'What would you like help with?',
+        choices=[
+            (ENGAGEMENT_TYPES[0], 'Data and AI project delivery'),
+            (ENGAGEMENT_TYPES[1], 'Data and reporting'),
+            (ENGAGEMENT_TYPES[2], 'AI and workflow automation'),
+            (UNSCOPED_ENGAGEMENT, UNSCOPED_ENGAGEMENT),
+        ],
         validators=[
             DataRequired(message='Select an engagement type.'),
         ],

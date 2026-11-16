@@ -162,7 +162,7 @@ def test_production_navigation_links_to_writing_and_services(app_factory):
     document = app.test_client().get('/').get_data(as_text=True)
     links = collect_elements(document, 'a')
     destinations = [link.get('href') for link in links]
-    assert {'/blog/', '/for-teams/', '/for-professionals/'} <= set(destinations)
+    assert {'/blog/', '#services', '#contact', '/for-professionals/'} <= set(destinations)
     assert 'css/blog.css' not in document
     assert 'js/blog.js' not in document
 
