@@ -47,34 +47,19 @@ MAX_PENDING_CONTACT_SUBMISSIONS = 5
 FAQ_ITEMS = (
     {
         'question': 'Who is Tera Earlywine?',
-        'answer': (
-            'I’m a data engineer, writer, and independent consultant with 9+ years '
-            'of experience across fintech, marketplaces, and enterprise data platforms.'
-        ),
+        'answer': 'I’m a data and AI consultant with a background in business intelligence, data engineering, and consulting, including roles at Mercari and Block.',
     },
     {
-        'question': 'What can I learn here?',
-        'answer': (
-            'I write about what technology costs, how people use AI at work, and '
-            'what I learn building with it. Try the net-sales example to see how '
-            'one refund changes a number that finance and engineering both rely on.'
-        ),
+        'question': 'What can you help my team with?',
+        'answer': 'I help teams improve data and reporting, apply AI to useful workflows, automate repetitive work, and get data and AI projects moving across departments.',
     },
     {
-        'question': 'When should a company hire Tera?',
-        'answer': (
-            'Bring me a decision your team is stuck on. I can help you weigh an AI '
-            'pilot, investigate a warehouse bill, or decide when a migration is ready '
-            'for its next cutover.'
-        ),
+        'question': 'Do we need a fully defined project?',
+        'answer': 'No. We can start with one recurring problem or a decision your team needs to make. Together, we can clarify the scope and what a useful result would look like.',
     },
     {
         'question': 'How does an engagement start?',
-        'answer': (
-            'We start with a 20–30 minute fit call. Bring one example and the '
-            'question you need to answer. If I can help, we’ll agree on the scope '
-            'and what you’ll take away.'
-        ),
+        'answer': 'We start with a conversation about the problem and whether I can help. If there is a fit, we agree on the scope, responsibilities, and what you will take away.',
     },
 )
 
@@ -269,15 +254,15 @@ def seo_metadata():
                     '@id': person_id,
                     'name': 'Tera Earlywine',
                     'url': homepage_url,
-                    'jobTitle': 'Independent Data & AI Consultant',
+                    'jobTitle': 'Data and AI Consultant',
                     'description': (
-                        'Data engineer, writer, and independent consultant exploring what '
-                        'data and AI are worth to the people who use them.'
+                        'Data and AI consulting to improve reporting, automate repetitive '
+                        'work, and help business and technical teams move projects forward.'
                     ),
                     'knowsAbout': [
-                        'Technology investment decisions',
-                        'The cost of cloud computing',
-                        'Production-grade data and AI for regulated, high-consequence operations',
+                        'Data and reporting',
+                        'Workflow automation',
+                        'Cross-functional collaboration',
                         'Data platform modernization',
                         'Data reliability',
                         'AI-ready data foundations',
@@ -295,16 +280,14 @@ def seo_metadata():
                     'name': 'Tera Earlywine Consulting',
                     'url': homepage_url,
                     'description': (
-                        'Hands-on consulting for data reliability, platform migrations, '
-                        'and production AI workflows.'
+                        'Consulting for data and reporting, practical AI and workflow '
+                        'automation, and data and AI project delivery.'
                     ),
                     'founder': {'@id': person_id},
                     'serviceType': [
-                        'Data platform modernization',
-                        'Reliability and migration rescue',
-                        'AI-ready data foundations',
-                        'Production AI systems',
-                        'Fractional platform leadership',
+                        'Data and reporting',
+                        'Practical AI and workflow automation',
+                        'Data and AI project delivery',
                     ],
                     'areaServed': 'United States',
                 },
@@ -426,7 +409,7 @@ def seo_metadata():
         'is_blog': is_blog,
         'services': SERVICES,
         'social_image_url': (
-            f"{site_url}{url_for('index.static', filename='images/cross-section-social.jpg')}"
+            f"{site_url}{url_for('index.static', filename='images/consulting-social.jpg')}"
             if site_url else ''
         ),
         'search_console_verification': str(
@@ -649,8 +632,8 @@ def for_teams():
         'home/for_teams.html',
         page_title='Data & AI Consulting for Teams | Tera Earlywine',
         page_description=(
-            'Work with Tera Earlywine to assess an AI workflow, investigate a '
-            'warehouse bill, or decide when a data migration is ready.'
+            'Get help with data and reporting, practical AI and workflow '
+            'automation, and data and AI projects that need to move forward.'
         ),
     )
 

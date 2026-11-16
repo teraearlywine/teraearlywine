@@ -586,6 +586,7 @@ for (const [from, to, type] of [
   ['/for-teams/', '/services/production-ai-systems', 'ai_workflow_review'],
   ['/for-teams/', '/services/data-migration-rescue', 'migration_cutover'],
   ['/blog/', '/#contact', 'section'],
+  ['/blog/', '/#services', 'section'],
 ]) {
   const clicks = followTrackedLink(from, to, type);
   assert.equal(clicks.source.length, 0);

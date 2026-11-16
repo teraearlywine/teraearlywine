@@ -1,6 +1,6 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <nav class="navbar" id="navbar" aria-label="Main navigation">
-    <a href="{{ url_for('index.index') }}" class="nav-brand" aria-label="Tera Earlywine home" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="home">
+    <a href="{{ url_for('index.index') }}" class="nav-brand" aria-label="Tera Earlywine Consulting home" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="home">
         {% set lockup = url_for('index.static', filename='images/cross-section-lockup.svg') %}
         <svg width="388" height="112" viewBox="0 0 388 112" aria-hidden="true" focusable="false">
             <g transform="translate(1 5)" fill="#263CF2">
@@ -11,16 +11,16 @@
                 </g>
             </g>
             <use href="{{ lockup }}#name"/>
-            {% if service_slug or request.endpoint == 'index.for_teams' %}<use href="{{ lockup }}#descriptor"/>{% endif %}
+            {% if is_homepage or service_slug or request.endpoint == 'index.for_teams' %}<use href="{{ lockup }}#descriptor"/>{% endif %}
         </svg>
     </a>
     <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">Menu</button>
     <ul class="nav-links" id="navLinks">
         {% set home = '' if is_homepage else url_for('index.index') %}
-        <li><a href="{{ url_for('index.blog') }}"{% if is_blog %} aria-current="{{ 'page' if request.endpoint == 'index.blog' else 'true' }}"{% endif %} data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="writing">Ideas</a></li>
-        <li><a href="{{ home }}#projects" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Builds</a></li>
-        <li><a href="{{ url_for('index.for_professionals') }}"{% if request.endpoint == 'index.for_professionals' %} aria-current="page"{% endif %} data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="professionals">Learn</a></li>
+        <li><a href="{{ home }}#services" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Services</a></li>
+        <li><a href="{{ home }}#projects" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Work</a></li>
         <li><a href="{{ home }}#experience" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">About</a></li>
-        <li><a class="nav-contact" href="{{ url_for('index.for_teams') }}"{% if request.endpoint == 'index.for_teams' %} aria-current="page"{% endif %} data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="teams">Work with me</a></li>
+        <li><a href="{{ url_for('index.blog') }}"{% if is_blog %} aria-current="{{ 'page' if request.endpoint == 'index.blog' else 'true' }}"{% endif %} data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="writing">Insights</a></li>
+        <li><a class="nav-contact" href="{{ home }}#contact" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Discuss your project</a></li>
     </ul>
 </nav>

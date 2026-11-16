@@ -1,0 +1,19 @@
+{% from 'home/includes/sales_layers.html' import layer_selector %}
+        <figure class="cs-figure" data-layer="rule">
+            <div class="cs-specimen">
+                <img class="cs-hero-art" src="{{ url_for('index.static', filename='images/cross-section-hero-960.webp') }}"
+                     srcset="{{ url_for('index.static', filename='images/cross-section-hero-640.webp') }} 640w,
+                             {{ url_for('index.static', filename='images/cross-section-hero-960.webp') }} 960w,
+                             {{ url_for('index.static', filename='images/cross-section-hero-1536.webp') }} 1536w"
+                     sizes="(max-width: 740px) 95vw, (min-width: 1480px) 736px, 51vw" width="1536" height="1024" fetchpriority="high"
+                     alt="Exploded layers of ultramarine paper surround a single orange cube.">
+                <div class="cs-pin" aria-hidden="true"><span class="cs-pin-line"></span><span class="cs-pin-label">Business rule</span></div>
+            </div>
+            <figcaption>
+                <div class="cs-inspector">
+                    <strong id="inspect-heading">Inspect the layers</strong>
+                    {{ layer_selector('sales-layer', 'Inspect the layers') }}
+                </div>
+                <p class="cs-hint" aria-live="polite">Subtract posted refunds from completed sales.</p>
+            </figcaption>
+        </figure>

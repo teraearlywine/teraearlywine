@@ -2,12 +2,21 @@
     <div class="container site-footer__content">
         <div class="footer-identity">
             {% set lockup = url_for('index.static', filename='images/cross-section-lockup.svg') %}
-            {% set consulting = service_slug or request.endpoint == 'index.for_teams' %}
+            {% set consulting = is_homepage or service_slug or request.endpoint == 'index.for_teams' %}
             <svg class="footer-logo" viewBox="0 0 388 112" width="388" height="112" role="img" aria-label="{{ 'Tera Earlywine Consulting' if consulting else 'Tera Earlywine' }}">
                 <use href="{{ lockup }}#mark"/><use href="{{ lockup }}#name"/>
                 {% if consulting %}<use href="{{ lockup }}#descriptor"/>{% endif %}
             </svg>
         </div>
+        <nav class="footer-insights" aria-label="Insights">
+            <p class="footer-insights__heading">Insights</p>
+            <ul>
+                <li><a href="{{ url_for('index.blog') }}" data-analytics-event="navigation_click" data-placement="footer" data-destination-type="writing">Articles</a></li>
+                <li><a href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="footer" data-guide="both">Newsletter</a></li>
+                <li><a href="{{ url_for('index.for_professionals') }}" data-analytics-event="navigation_click" data-placement="footer" data-destination-type="professionals">Professional resources</a></li>
+                <li><a{% if is_homepage %} id="sample"{% endif %} href="{{ url_for('index.for_professionals') }}#sample" data-analytics-event="navigation_click" data-placement="footer" data-destination-type="net_sales_demo">Reporting example</a></li>
+            </ul>
+        </nav>
         <p>&copy; 2026 Tera Earlywine</p>
         {% if config.get('GOOGLE_ANALYTICS_MEASUREMENT_ID') and not suppress_analytics %}
         <button class="privacy-choices-button" type="button" data-consent-reopen>

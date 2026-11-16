@@ -1,4 +1,4 @@
-/* Hero and worked example form one inspector. Keep the art and the readout in sync. */
+/* Consulting homepage and interactive reporting resource. */
 .cs-frame {
   width: min(calc(100% - 104px), 1360px);
   margin-inline: auto;
@@ -6,7 +6,7 @@
 
 .cs-hero, .cs-example-grid {
   display: grid;
-  grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
   gap: 3.4%;
 }
 
@@ -27,14 +27,15 @@
 
 .cs-hero h1 {
   color: var(--ink);
-  font: 700 clamp(60px, 6.16vw, 94px)/.98 var(--font-family);
+  font: 700 clamp(44px, 4.45vw, 68px)/1.04 var(--font-family);
   letter-spacing: -.062em;
   margin: 0;
 }
 
-.cs-hero h1 span { display: block; }
+.cs-hero-visual { min-width: 0; margin: 0; }
+.cs-demo-art { max-width: 760px; }
 .cs-lede {
-  max-width: 475px;
+  max-width: 540px;
   margin: 24px 0;
   font-size: clamp(16px, 1.32vw, 20px);
   line-height: 1.52;
@@ -185,11 +186,10 @@
 [data-demo-control][hidden] { display: none; }
 
 .cs-opening, #projects.cs-work, .cs-services { background: var(--white); color: var(--ink); }
-.cs-work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 34px; border-top: 1px solid var(--ink); }
+.cs-work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 34px; border-top: 1px solid var(--ink); }
 .cs-work-card { display: flex; flex-direction: column; align-items: flex-start; padding: 28px 26px; border-left: 1px solid var(--color-border); }
-.cs-work-card:nth-child(odd) { padding-left: 0; border-left: 0; }
-.cs-work-card:nth-child(even) { padding-right: 0; }
-.cs-work-card:nth-child(n+3) { border-top: 1px solid var(--color-border); }
+.cs-work-card:first-child { padding-left: 0; border-left: 0; }
+.cs-work-card:last-child { padding-right: 0; }
 .cs-work-card .cs-status { margin-bottom: 24px; }
 .cs-work-card h3, .cs-offer-list h3 { font: 700 clamp(21px, 1.9vw, 29px)/1.14 var(--font-family); letter-spacing: -.045em; }
 .cs-work-card p:not(.cs-status), .cs-offer-list p { color: var(--color-text-secondary); font-size: 16px; line-height: 1.6; margin: 16px 0 22px; }
@@ -220,7 +220,7 @@
 @media (max-width: 960px) {
   .cs-frame { width: calc(100% - 64px); }
   .cs-hero { padding-top: 38px; gap: 2%; }
-  .cs-hero h1 { font-size: clamp(50px, 6.8vw, 68px); }
+  .cs-hero h1 { font-size: clamp(39px, 4.8vw, 50px); }
   .cs-figure { --pin-end: 74%; }
   .cs-pin-label { font-size: 9px; }
   .cs-inspector { flex-wrap: wrap; }
@@ -234,7 +234,7 @@
   .cs-hero, .cs-example-grid { grid-template-columns: 1fr; gap: 25px; }
   .cs-hero { padding-top: 32px; }
   .cs-introduction .cs-eyebrow { margin-bottom: 17px; }
-  .cs-hero h1 { font-size: clamp(53px, 11vw, 69px); }
+  .cs-hero h1 { font-size: clamp(39px, 9.1vw, 58px); }
   .cs-lede { margin: 19px 0; }
   .cs-actions { gap: 18px; }
   .cs-specimen { aspect-ratio: 1.55; max-height: 370px; }
