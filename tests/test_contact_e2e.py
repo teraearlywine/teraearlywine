@@ -4,7 +4,7 @@ import os
 import httpx
 import pytest
 
-from test_contact import _contact_form, _post_contact
+from test_contact import _contact_form, _post_contact, _set_contact_admission
 
 BROKER = os.environ.get('CONTACT_E2E_BROKER', '')
 pytestmark = pytest.mark.skipif(not BROKER, reason='local broker/emulator not requested')
@@ -25,6 +25,7 @@ def e2e(app_factory):
     httpx.post(f'{BROKER}/_test/reset').raise_for_status()
     app = app_factory(CONTACT_BROKER_SECRET='contact-broker-test-secret')
     app.config['CONTACT_BROKER_URL'] = f'{BROKER}/contact-deliveries'
+    _set_contact_admission(app)
     return app
 
 
