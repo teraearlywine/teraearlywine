@@ -217,7 +217,9 @@ def test_contact_form_replaces_email_cta_and_keeps_configured_booking_fallback(
             for link in links
             if link.get('data-contact-method') == 'booking'
         ]
-        assert any(link['data-placement'] == 'contact' for link in booking_links)
+        assert len(booking_links) == 1
+        assert booking_links[0]['data-placement'] == 'contact'
+        assert document.index('id="contact-heading"') < document.index('Book a 30-minute call') < document.index('data-contact-form')
         teams_html = app_factory(**configuration).test_client().get(
             '/for-teams/'
         ).get_data(as_text=True)

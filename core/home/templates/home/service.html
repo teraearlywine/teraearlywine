@@ -2,7 +2,6 @@
 <html lang="en">
 {% set use_cross_section_home = true %}
 {% set is_warehouse_diagnostic = service_slug == warehouse_diagnostic_slug %}
-{% set inquiry_url = url_for('index.index', _anchor='contact', topic=warehouse_diagnostic_slug) if is_warehouse_diagnostic else url_for('index.index', _anchor='contact') %}
 {% set inquiry_label = 'Send a diagnostic inquiry' if is_warehouse_diagnostic else 'Discuss your project' %}
 {% macro booking_link(placement) %}
     {% if config.get('BOOKING_URL') %}

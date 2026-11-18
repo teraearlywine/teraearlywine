@@ -112,14 +112,23 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
     assert next(m for m in metas if m.get('name') == 'twitter:card')['content'] == 'summary_large_image'
     assert not any(m.get('name') == 'robots' and 'noindex' in m.get('content', '') for m in metas)
     links = collect_elements(document, 'a')
+    inquiry_url = f'/?topic={slug}#contact'
+    assert {a['data-placement'] for a in links if a.get('href') == inquiry_url} == {'navigation', 'hero', 'contact'}
+    inquiry = client.get(inquiry_url.partition('#')[0]).get_data(as_text=True)
+    expected_engagement = {
+        'data-platform-modernization': 'Data Foundation Blueprint',
+        'data-migration-rescue': 'Data Foundation Blueprint',
+        'production-ai-systems': 'Production AI Lighthouse',
+        'fractional-data-leadership': 'Value / Risk Diagnostic',
+        WAREHOUSE_DIAGNOSTIC_SLUG: 'Warehouse cost diagnostic',
+    }[slug]
+    assert [
+        option['value'] for option in collect_elements(inquiry, 'input')
+        if option.get('name') == 'engagement_type' and 'checked' in option
+    ] == [expected_engagement]
     if slug == WAREHOUSE_DIAGNOSTIC_SLUG:
-        inquiry_url = f'/?topic={slug}#contact'
-        assert {a['data-placement'] for a in links if a.get('href') == inquiry_url} == {'navigation', 'hero', 'contact'}
         assert {a['data-placement'] for a in links if a.get('href') == 'https://calendar.example/book'} == {'hero', 'contact'}
         assert service['sample']['change'] in document
-    else:
-        inquiry_url = '/#contact'
-        assert any(a.get('href') == inquiry_url for a in links)
     assert any(a.get('href') == 'https://calendar.example/book' for a in links)
     assert all(a['href'].startswith('/#') or a['href'] == inquiry_url for a in links if a.get('data-placement') == 'navigation' and a.get('data-destination-type') == 'section')
     assert 'assets/js/analytics.js' in document

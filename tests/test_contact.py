@@ -10,7 +10,7 @@ import httpx
 import pytest
 
 from core import create_app
-from core.home.forms import ENGAGEMENT_TYPES, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT
+from core.home.forms import PROJECT_DELIVERY_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT
 from core.home.services import WAREHOUSE_DIAGNOSTIC_SLUG
 from test_analytics_reporting import collect_elements
 
@@ -130,6 +130,14 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     )
 
 
+def test_unknown_inquiry_topic_leaves_choices_unselected(app_factory):
+    document = app_factory().test_client().get('/?topic=unlisted-service').get_data(as_text=True)
+    assert not any(
+        'checked' in option for option in collect_elements(document, 'input')
+        if option.get('name') == 'engagement_type'
+    )
+
+
 def test_javascript_contact_form_behavior():
     node = shutil.which('node')
     if node is None:
@@ -237,7 +245,7 @@ def test_contact_rejects_honeypot_without_echoing_or_delivery(
 @pytest.mark.parametrize(('choice', 'expected_engagement'), [
     (TEST_ENGAGEMENT, TEST_ENGAGEMENT),
     ('Help me scope it', None),
-    (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, ENGAGEMENT_TYPES[0]),
+    (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, PROJECT_DELIVERY_ENGAGEMENT),
 ])
 def test_success_sends_exact_signed_broker_payload(
     contact_app,
@@ -466,6 +474,10 @@ def test_html_delivery_failure_does_not_echo_submission_content(
 
     assert response.status_code == 502
     assert 'The message could not be sent right now. Please try again.' in document
+    assert [
+        option['value'] for option in collect_elements(document, 'input')
+        if option.get('name') == 'engagement_type' and 'checked' in option
+    ] == [TEST_ENGAGEMENT]
     for private_value in (TEST_NAME, TEST_EMAIL, TEST_MESSAGE):
         assert private_value not in document
 

@@ -136,7 +136,6 @@
     right: 1rem;
   }
 
-  .contact-actions,
   .consent-banner__actions {
     align-items: stretch;
     flex-direction: column;

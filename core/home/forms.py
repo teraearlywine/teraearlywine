@@ -4,11 +4,9 @@ from wtforms.validators import DataRequired, Email, Length, Optional
 
 UNSCOPED_ENGAGEMENT = 'Help me scope it'
 WAREHOUSE_DIAGNOSTIC_ENGAGEMENT = 'Warehouse cost diagnostic'
-ENGAGEMENT_TYPES = (
-    'Value / Risk Diagnostic',
-    'Data Foundation Blueprint',
-    'Production AI Lighthouse',
-)
+PROJECT_DELIVERY_ENGAGEMENT = 'Value / Risk Diagnostic'
+DATA_REPORTING_ENGAGEMENT = 'Data Foundation Blueprint'
+AI_AUTOMATION_ENGAGEMENT = 'Production AI Lighthouse'
 
 
 def _strip(value):
@@ -40,9 +38,9 @@ class ContactForm(FlaskForm):
     engagement_type = RadioField(
         'What would you like help with?',
         choices=[
-            (ENGAGEMENT_TYPES[0], 'Data and AI project delivery'),
-            (ENGAGEMENT_TYPES[1], 'Data and reporting'),
-            (ENGAGEMENT_TYPES[2], 'AI and workflow automation'),
+            (PROJECT_DELIVERY_ENGAGEMENT, 'Data and AI project delivery'),
+            (DATA_REPORTING_ENGAGEMENT, 'Data and reporting'),
+            (AI_AUTOMATION_ENGAGEMENT, 'AI and workflow automation'),
             (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT),
             (UNSCOPED_ENGAGEMENT, UNSCOPED_ENGAGEMENT),
         ],
