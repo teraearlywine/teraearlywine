@@ -3,6 +3,7 @@ from wtforms import HiddenField, RadioField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
 UNSCOPED_ENGAGEMENT = 'Help me scope it'
+WAREHOUSE_DIAGNOSTIC_ENGAGEMENT = 'Warehouse cost diagnostic'
 ENGAGEMENT_TYPES = (
     'Value / Risk Diagnostic',
     'Data Foundation Blueprint',
@@ -42,6 +43,7 @@ class ContactForm(FlaskForm):
             (ENGAGEMENT_TYPES[0], 'Data and AI project delivery'),
             (ENGAGEMENT_TYPES[1], 'Data and reporting'),
             (ENGAGEMENT_TYPES[2], 'AI and workflow automation'),
+            (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT),
             (UNSCOPED_ENGAGEMENT, UNSCOPED_ENGAGEMENT),
         ],
         validators=[

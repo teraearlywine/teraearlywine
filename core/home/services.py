@@ -1,5 +1,10 @@
 """Public service copy shared by page routes, navigation, and the sitemap."""
 
+from core.home.blog_content import OFFERS
+
+
+WAREHOUSE_DIAGNOSTIC_SLUG = 'warehouse-cost-diagnostic'
+
 SERVICES = {
     'data-platform-modernization': {
         'name': 'Data and reporting',
@@ -194,6 +199,59 @@ SERVICES = {
             'Bring a project that is stuck, the decisions waiting to be made, and the '
             'people involved. We can agree on where I can help clarify the work and '
             'support your team through the next step.'
+        ),
+    },
+    WAREHOUSE_DIAGNOSTIC_SLUG: {
+        'name': OFFERS['diagnostic']['name'],
+        'title': 'Warehouse Cost Diagnostic | Tera Earlywine',
+        'description': (
+            'A paid review of one data warehouse and a defined set of workloads. '
+            'Get a cost baseline, ranked improvements, and a plan to verify savings.'
+        ),
+        'headline': 'Find out what is driving your warehouse bill.',
+        'intro': (
+            'A paid review of one warehouse and a defined set of workloads. Get a cost '
+            'baseline, ranked recommendations, and a plan to verify the results.'
+        ),
+        'problem_title': 'Your warehouse bill went up. What would you change first?',
+        'problem': (
+            'A higher bill can come from more demand, repeated processing, or capacity you '
+            'pay for even when it sits idle. I trace costs to the jobs and reports they '
+            'support so your team can decide where to spend engineering time.'
+        ),
+        'signals': [
+            'Costs are rising and your team cannot explain which workloads drove the increase.',
+            'Recurring queries or refresh jobs look expensive, but their business requirements are unclear.',
+            'Finance needs assumptions and a way to verify the benefit before funding a change.',
+        ],
+        'deliverables': [
+            ('Cost baseline', 'The recurring costs we can attribute to the workloads in scope, with the period and assumptions behind them.'),
+            ('Ranked recommendations', 'The changes worth testing first, with estimated benefit, engineering effort, and risks to the output.'),
+            ('Measurement plan', 'What to compare before and after a change, including warehouse charges, data freshness, and reporting accuracy.'),
+        ],
+        'approach': (
+            'We agree on the workloads and what each one needs to deliver. I review billing '
+            'and query history with your team, then walk through which changes are worth '
+            'testing and how to measure the results. We scope implementation separately.'
+        ),
+        'sample': {
+            'title': 'Example recommendation',
+            'change': 'Test moving a dashboard refresh from every five minutes to every 15 minutes.',
+            'details': [
+                'Expected benefit. Cut scheduled runs from 288 to 96 per day. Check whether that reduces billed compute for the shared warehouse.',
+                'Engineering effort. Review refresh requirements with the report owner, change one schedule, and keep the existing schedule ready to restore.',
+                'How to verify it. Compare billed compute and report freshness over comparable weeks, and reconcile the reported totals before keeping the change.',
+            ],
+        },
+        'experience': (
+            'My optimization work identified $500K+ in projected Snowflake savings. '
+            'I connect technical recommendations to the business case and the evidence '
+            'the team needs to measure the result.'
+        ),
+        'starting_point': (
+            'Bring one example of a rising charge or a workload you want to investigate. '
+            'Billing history, query history, and someone who knows what the workload '
+            'supports can help us agree on the scope of the diagnostic.'
         ),
     },
 }

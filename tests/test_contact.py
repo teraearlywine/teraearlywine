@@ -10,6 +10,9 @@ import httpx
 import pytest
 
 from core import create_app
+from core.home.forms import ENGAGEMENT_TYPES, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT
+from core.home.services import WAREHOUSE_DIAGNOSTIC_SLUG
+from test_analytics_reporting import collect_elements
 
 
 PROJECT_ROOT = Path(__file__).parents[1]
@@ -53,8 +56,8 @@ def _hidden_value(document, field_name):
     return match.group(1)
 
 
-def _contact_form(client):
-    response = client.get('/')
+def _contact_form(client, path='/'):
+    response = client.get(path)
     assert response.status_code == 200
     document = response.get_data(as_text=True)
     return {
@@ -102,7 +105,7 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
         '<legend>What would you like help with?</legend>'
         in document
     )
-    assert document.count('name="engagement_type"') == 4
+    assert document.count('name="engagement_type"') == 5
     assert '<select' not in document
     assert '<label for="message">Message</label>' in document
     assert 'autocomplete="name"' in document
@@ -115,6 +118,7 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
         'Value / Risk Diagnostic',
         'Data Foundation Blueprint',
         'Production AI Lighthouse',
+        WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
         'Help me scope it',
     ):
         assert engagement_type in document
@@ -230,14 +234,25 @@ def test_contact_rejects_honeypot_without_echoing_or_delivery(
     assert upstream_calls == []
 
 
-@pytest.mark.parametrize('choice', [TEST_ENGAGEMENT, 'Help me scope it'])
+@pytest.mark.parametrize(('choice', 'expected_engagement'), [
+    (TEST_ENGAGEMENT, TEST_ENGAGEMENT),
+    ('Help me scope it', None),
+    (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, ENGAGEMENT_TYPES[0]),
+])
 def test_success_sends_exact_signed_broker_payload(
     contact_app,
     monkeypatch,
     choice,
+    expected_engagement,
 ):
     client = contact_app.test_client()
-    form_data, _ = _contact_form(client)
+    path = f'/?topic={WAREHOUSE_DIAGNOSTIC_SLUG}' if choice == WAREHOUSE_DIAGNOSTIC_ENGAGEMENT else '/'
+    form_data, document = _contact_form(client, path)
+    checked_topics = [
+        field['value'] for field in collect_elements(document, 'input')
+        if field.get('name') == 'engagement_type' and 'checked' in field
+    ]
+    assert checked_topics == ([choice] if path != '/' else [])
     form_data['engagement_type'] = choice
     submission_id = form_data['submission_id']
     calls = []
@@ -267,8 +282,8 @@ def test_success_sends_exact_signed_broker_payload(
         'submissionId': submission_id,
         'spamContext': {'honeypot': '', 'elapsedSeconds': broker_request['json']['spamContext']['elapsedSeconds'], 'challengeToken': ''},
     }
-    if choice == TEST_ENGAGEMENT:
-        expected_payload['engagementType'] = TEST_ENGAGEMENT
+    if expected_engagement:
+        expected_payload['engagementType'] = expected_engagement
     assert broker_request['json'] == expected_payload
     assert broker_request['timeout'] == 15.0
     timestamp = broker_request['headers']['X-Contact-Timestamp']

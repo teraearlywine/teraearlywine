@@ -6,7 +6,7 @@ from xml.etree import ElementTree
 import pytest
 
 from core.home.blog_content import ARTICLES
-from core.home.services import SERVICES
+from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
 from test_analytics_reporting import ALLOWED_VALUES, EVENT_PARAMETERS, collect_elements
 
 
@@ -112,9 +112,16 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
     assert next(m for m in metas if m.get('name') == 'twitter:card')['content'] == 'summary_large_image'
     assert not any(m.get('name') == 'robots' and 'noindex' in m.get('content', '') for m in metas)
     links = collect_elements(document, 'a')
-    assert any(a.get('href') == '/#contact' for a in links)
+    if slug == WAREHOUSE_DIAGNOSTIC_SLUG:
+        inquiry_url = f'/?topic={slug}#contact'
+        assert {a['data-placement'] for a in links if a.get('href') == inquiry_url} == {'navigation', 'hero', 'contact'}
+        assert {a['data-placement'] for a in links if a.get('href') == 'https://calendar.example/book'} == {'hero', 'contact'}
+        assert service['sample']['change'] in document
+    else:
+        inquiry_url = '/#contact'
+        assert any(a.get('href') == inquiry_url for a in links)
     assert any(a.get('href') == 'https://calendar.example/book' for a in links)
-    assert all(a['href'].startswith('/#') for a in links if a.get('data-placement') == 'navigation' and a.get('data-destination-type') == 'section')
+    assert all(a['href'].startswith('/#') or a['href'] == inquiry_url for a in links if a.get('data-placement') == 'navigation' and a.get('data-destination-type') == 'section')
     assert 'assets/js/analytics.js' in document
     assert 'googletagmanager.com' not in document
     for link in links:

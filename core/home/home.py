@@ -28,8 +28,10 @@ from core.home.contact_delivery import (
     ContactSubmission,
     deliver_contact_submission,
 )
-from core.home.forms import ContactForm, UNSCOPED_ENGAGEMENT
-from core.home.services import SERVICES
+from core.home.forms import (
+    ContactForm, ENGAGEMENT_TYPES, UNSCOPED_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
+)
+from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
 
 
 index_bp = Blueprint(
@@ -143,6 +145,10 @@ def _contact_form_response(form, message, status_code, challenge=False):
     safe_form = ContactForm(
         formdata=None,
         submission_id=_new_contact_submission(),
+        engagement_type=(
+            WAREHOUSE_DIAGNOSTIC_ENGAGEMENT
+            if form.engagement_type.data == WAREHOUSE_DIAGNOSTIC_ENGAGEMENT else None
+        ),
     )
     for field_name in ('name', 'email', 'engagement_type', 'message'):
         safe_form[field_name].errors = list(form.errors.get(field_name, ()))
@@ -408,6 +414,8 @@ def seo_metadata():
         'page_og_type': 'article' if article else 'website',
         'is_blog': is_blog,
         'services': SERVICES,
+        'warehouse_diagnostic_slug': WAREHOUSE_DIAGNOSTIC_SLUG,
+        'diagnostic_offer': OFFERS['diagnostic'],
         'social_image_url': (
             f"{site_url}{url_for('index.static', filename='images/consulting-social.jpg')}"
             if site_url else ''
@@ -426,7 +434,10 @@ def index():
 
     Browser home page for www.teraearlywine.com
     """
-    form = ContactForm(submission_id=_new_contact_submission())
+    engagement = WAREHOUSE_DIAGNOSTIC_ENGAGEMENT if (
+        request.args.get('topic') == WAREHOUSE_DIAGNOSTIC_SLUG
+    ) else None
+    form = ContactForm(submission_id=_new_contact_submission(), engagement_type=engagement)
     return render_template('home/home.html', contact_form=form)
 
 
@@ -470,14 +481,16 @@ def contact():
             503,
         )
 
+    # The delivery broker accepts the original diagnostic category.
+    engagement = {
+        UNSCOPED_ENGAGEMENT: None,
+        WAREHOUSE_DIAGNOSTIC_ENGAGEMENT: ENGAGEMENT_TYPES[0],
+    }.get(form.engagement_type.data, form.engagement_type.data)
     submission = ContactSubmission(
         submission_id=submission_id,
         name=form.name.data,
         email=''.join(form.email.data.split()).lower(),
-        engagement_type=(
-            None if form.engagement_type.data == UNSCOPED_ENGAGEMENT
-            else form.engagement_type.data
-        ),
+        engagement_type=engagement,
         message=form.message.data,
         spam_context={
             'honeypot': form.website.data or '',
@@ -679,7 +692,6 @@ def blog():
         'home/blog_index.html',
         articles=ARTICLES,
         featured_articles=FEATURED_ARTICLES,
-        diagnostic_offer=OFFERS['diagnostic'],
         stack_articles=stack_articles,
         is_blog=True,
         page_title='The Business of Technology | Tera Earlywine',

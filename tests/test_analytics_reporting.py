@@ -467,7 +467,7 @@ def test_analytics_client_has_basic_consent_and_sanitization_contracts():
 
 @pytest.mark.parametrize(('path', 'expected'), [
     ('/for-teams/', [
-        ('/blog/#blog-offer-heading', 'services', 'diagnostic'),
+        ('/services/warehouse-cost-diagnostic', 'services', 'diagnostic'),
         ('/services/production-ai-systems', 'services', 'ai_workflow_review'),
         ('/services/data-migration-rescue', 'services', 'migration_cutover'),
     ]),
@@ -478,13 +478,20 @@ def test_analytics_client_has_basic_consent_and_sanitization_contracts():
         ('/blog/a-note-to-my-future-self/', 'services', 'decision_note'),
     ]),
     ('/blog/', [
-        ('/#contact', 'services', 'section'),
+        ('/services/warehouse-cost-diagnostic', 'services', 'diagnostic'),
         ('/blog/nothing-wasted/', 'archive', 'writing'),
     ]),
     ('/blog/ai-workflow-production-evidence/', [
         ('/services/production-ai-systems', 'article', 'ai_workflow_review'),
         ('/blog/audit-agent-proof-of-concept/', 'article', 'writing'),
         ('/#contact', 'article', 'section'),
+    ]),
+    ('/', [('/services/warehouse-cost-diagnostic', 'projects', 'diagnostic')]),
+    ('/services/data-platform-modernization', [
+        ('/services/warehouse-cost-diagnostic', 'services', 'diagnostic'),
+    ]),
+    ('/blog/sql-techniques-and-the-bottom-line/', [
+        ('/services/warehouse-cost-diagnostic', 'article', 'diagnostic'),
     ]),
 ])
 def test_brand_links_emit_navigation_events(app_factory, path, expected):
