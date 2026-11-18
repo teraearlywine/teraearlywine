@@ -645,21 +645,6 @@ body {
   overflow: hidden;
 }
 
-.contact-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-}
-
-.contact-actions__title {
-  margin: 0;
-  font-size: var(--font-size-body);
-  font-weight: 500;
-}
-
 .contact-cta {
   display: inline-flex;
   align-items: center;

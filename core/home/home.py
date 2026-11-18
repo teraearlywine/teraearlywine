@@ -29,7 +29,8 @@ from core.home.contact_delivery import (
     deliver_contact_submission,
 )
 from core.home.forms import (
-    ContactForm, ENGAGEMENT_TYPES, UNSCOPED_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
+    AI_AUTOMATION_ENGAGEMENT, DATA_REPORTING_ENGAGEMENT, PROJECT_DELIVERY_ENGAGEMENT,
+    UNSCOPED_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, ContactForm,
 )
 from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
 
@@ -46,6 +47,13 @@ index_bp = Blueprint(
 CONTACT_SUBMISSIONS_SESSION_KEY = 'contact_submissions'
 CONTACT_SUBMISSION_TTL_SECONDS = 3600
 MAX_PENDING_CONTACT_SUBMISSIONS = 5
+SERVICE_INQUIRY_TOPICS = {
+    'data-platform-modernization': DATA_REPORTING_ENGAGEMENT,
+    'data-migration-rescue': DATA_REPORTING_ENGAGEMENT,
+    'production-ai-systems': AI_AUTOMATION_ENGAGEMENT,
+    'fractional-data-leadership': PROJECT_DELIVERY_ENGAGEMENT,
+    WAREHOUSE_DIAGNOSTIC_SLUG: WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
+}
 FAQ_ITEMS = (
     {
         'question': 'Who is Tera Earlywine?',
@@ -142,12 +150,13 @@ def _contact_form_response(form, message, status_code, challenge=False):
             }
         ), status_code
 
+    selected_topic = form.engagement_type.data
     safe_form = ContactForm(
         formdata=None,
         submission_id=_new_contact_submission(),
         engagement_type=(
-            WAREHOUSE_DIAGNOSTIC_ENGAGEMENT
-            if form.engagement_type.data == WAREHOUSE_DIAGNOSTIC_ENGAGEMENT else None
+            selected_topic
+            if any(value == selected_topic for value, _ in form.engagement_type.choices) else None
         ),
     )
     for field_name in ('name', 'email', 'engagement_type', 'message'):
@@ -434,9 +443,7 @@ def index():
 
     Browser home page for www.teraearlywine.com
     """
-    engagement = WAREHOUSE_DIAGNOSTIC_ENGAGEMENT if (
-        request.args.get('topic') == WAREHOUSE_DIAGNOSTIC_SLUG
-    ) else None
+    engagement = SERVICE_INQUIRY_TOPICS.get(request.args.get('topic'))
     form = ContactForm(submission_id=_new_contact_submission(), engagement_type=engagement)
     return render_template('home/home.html', contact_form=form)
 
@@ -484,7 +491,7 @@ def contact():
     # The delivery broker accepts the original diagnostic category.
     engagement = {
         UNSCOPED_ENGAGEMENT: None,
-        WAREHOUSE_DIAGNOSTIC_ENGAGEMENT: ENGAGEMENT_TYPES[0],
+        WAREHOUSE_DIAGNOSTIC_ENGAGEMENT: PROJECT_DELIVERY_ENGAGEMENT,
     }.get(form.engagement_type.data, form.engagement_type.data)
     submission = ContactSubmission(
         submission_id=submission_id,
@@ -726,6 +733,7 @@ def service(slug):
         'home/service.html',
         service=service,
         service_slug=slug,
+        inquiry_url=url_for('index.index', topic=slug, _anchor='contact'),
         page_title=service['title'],
         page_description=service['description'],
     )

@@ -1,9 +1,23 @@
 {% set booking_url = config.get('BOOKING_URL') %}
-<section id="contact" class="section contact" data-analytics-contact-view>
+<section id="contact" class="section contact" aria-labelledby="contact-heading" data-analytics-contact-view>
     <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-kicker">Get in touch</p>
-            <h2 class="section-title">Discuss your project</h2>
+        <div class="section-header contact-header fade-up">
+            <div>
+                <p class="section-kicker">Get in touch</p>
+                <h2 class="section-title" id="contact-heading">Discuss your project</h2>
+            </div>
+            {% if booking_url %}
+            <a
+                class="contact-cta contact-cta--secondary"
+                href="{{ booking_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-analytics-event="contact_click"
+                data-contact-method="booking"
+                data-placement="contact"
+                data-destination-type="booking"
+            >Book a 30-minute call</a>
+            {% endif %}
         </div>
         <p class="contact-text fade-up fade-up-delay-1">
             Tell me what is taking too much time, which decision is stuck, or what you want to explore with AI. We will start with a conversation about the problem and whether I can help.
@@ -115,26 +129,6 @@
             <div data-contact-challenge data-sitekey="{{ config['CONTACT_TURNSTILE_SITE_KEY'] }}"{% if not contact_challenge %} hidden{% endif %}></div>
             {% endif %}
         </form>
-        {% if booking_url %}
-        <div
-            class="contact-actions fade-up fade-up-delay-3"
-            aria-labelledby="direct-booking-title"
-        >
-            <h3 id="direct-booking-title" class="contact-actions__title">
-                Or book a call directly
-            </h3>
-            <a
-                class="contact-cta contact-cta--secondary"
-                href="{{ booking_url }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-analytics-event="contact_click"
-                data-contact-method="booking"
-                data-placement="contact"
-                data-destination-type="booking"
-            >Book a conversation</a>
-        </div>
-        {% endif %}
         <div class="contact-social fade-up fade-up-delay-4">
             <a href="https://github.com/teraearlywine" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-analytics-event="outbound_click" data-placement="contact" data-destination-type="github">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
