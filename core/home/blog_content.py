@@ -22,7 +22,7 @@ OFFERS = {
             'testing. You get a cost baseline, the assumptions behind each estimate, '
             'and a plan to measure the result. We scope implementation separately.'
         ),
-        'cta': 'Discuss your warehouse bill',
+        'cta': 'Explore the warehouse diagnostic',
     },
     'blueprint': {
         'name': 'AI-Ready Data Foundation Blueprint',

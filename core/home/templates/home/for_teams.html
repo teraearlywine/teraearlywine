@@ -33,7 +33,7 @@
         </div>
         <div class="cs-directory">
             <h3>Specialist support</h3>
-            <p>For a focused starting point, <a href="{{ url_for('index.blog') }}#blog-offer-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">explore the warehouse diagnostic</a> or <a href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover">plan a migration cutover</a>.</p>
+            <p>For a focused starting point, <a href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">explore the warehouse diagnostic</a> or <a href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover">plan a migration cutover</a>.</p>
             {% include 'home/includes/service_links.html' %}
         </div>
         <aside class="cs-resource" aria-labelledby="workflow-guide-heading">

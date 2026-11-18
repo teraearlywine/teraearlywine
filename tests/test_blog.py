@@ -7,8 +7,8 @@ from xml.etree import ElementTree
 import pytest
 from flask import template_rendered
 
-from core.home.blog_content import ARTICLES
-from core.home.services import SERVICES
+from core.home.blog_content import ARTICLES, OFFERS
+from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
 from test_analytics_reporting import collect_elements
 
 
@@ -90,8 +90,12 @@ def test_each_writing_destination_renders_its_article_and_metadata(app_factory, 
     assert article['offer']['name'] in document
     assert article['offer']['description'] in document
     assert article['offer']['cta'] in document
-    offer = next(link for link in collect_elements(document, 'a') if link.get('href') == '/#contact' and link.get('class') == 'blog-text-link')
-    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'article', 'section')
+    is_diagnostic = article['offer'] == OFFERS['diagnostic']
+    target = f'/services/{WAREHOUSE_DIAGNOSTIC_SLUG}' if is_diagnostic else '/#contact'
+    offer = next(link for link in collect_elements(document, 'a') if link.get('href') == target and link.get('class') == 'blog-text-link')
+    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == (
+        'navigation_click', 'article', 'diagnostic' if is_diagnostic else 'section',
+    )
     assert len(collect_elements(document, 'h1')) == 1
     canonical = f"{SITE_URL}/blog/{article['slug']}/"
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
@@ -144,8 +148,8 @@ def test_featured_reading_path_preserves_all_article_destinations(app_factory):
     reading_links = [link['href'] for link in links if 'writing-row--archive' in link.get('class', '').split()]
     assert len(reading_links) == len(set(reading_links)) == len(ARTICLES)
     assert set(reading_links) == {f"/blog/{article['slug']}/" for article in ARTICLES}
-    offer = next(link for link in links if link.get('href') == '/#contact' and link.get('class') == 'blog-text-link')
-    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'services', 'section')
+    offer = next(link for link in links if link.get('href') == f'/services/{WAREHOUSE_DIAGNOSTIC_SLUG}' and link.get('class') == 'blog-text-link')
+    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'services', 'diagnostic')
     assert 'id="contact"' in app.test_client().get('/').get_data(as_text=True)
 
 

@@ -49,7 +49,9 @@
                 <p class="blog-kicker">A relevant next step</p>
                 <h2 id="essay-offer-heading">{{ article.offer.name }}</h2>
                 <p>{{ article.offer.description }}</p>
-                <a class="blog-text-link" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="article" data-destination-type="section">{{ article.offer.cta }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
+                {% set is_diagnostic_offer = article.offer == diagnostic_offer %}
+                {% set offer_url = url_for('index.service', slug=warehouse_diagnostic_slug) if is_diagnostic_offer else url_for('index.index', _anchor='contact') %}
+                <a class="blog-text-link" href="{{ offer_url }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="{{ 'diagnostic' if is_diagnostic_offer else 'section' }}">{{ article.offer.cta }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
             </section>
             <nav class="essay-next" aria-label="Next article">
                 <span class="blog-kicker">Keep exploring</span>

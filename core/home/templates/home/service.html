@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 {% set use_cross_section_home = true %}
+{% set is_warehouse_diagnostic = service_slug == warehouse_diagnostic_slug %}
+{% set inquiry_url = url_for('index.index', _anchor='contact', topic=warehouse_diagnostic_slug) if is_warehouse_diagnostic else url_for('index.index', _anchor='contact') %}
+{% set inquiry_label = 'Send a diagnostic inquiry' if is_warehouse_diagnostic else 'Discuss your project' %}
+{% macro booking_link(placement) %}
+    {% if config.get('BOOKING_URL') %}
+    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="{{ placement }}" data-destination-type="booking">{{ 'Book a 30-minute call' if is_warehouse_diagnostic else 'Book a conversation' }}</a>
+    {% endif %}
+{% endmacro %}
 {% include 'home/includes/header.html' %}
 <body class="service-page">
     {% include 'home/core/navigation.html' %}
@@ -15,10 +23,8 @@
                 <p class="service-promise">{{ service.headline }}</p>
                 <p class="service-intro">{{ service.intro }}</p>
                 <div class="hero-actions">
-                    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your project <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
-                    {% if config.get('BOOKING_URL') %}
-                    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a conversation</a>
-                    {% endif %}
+                    <a class="button button--primary" href="{{ inquiry_url }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">{{ inquiry_label }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
+                    {{ booking_link('hero') }}
                 </div>
             </div>
         </section>
@@ -61,11 +67,20 @@
                 </div>
                 <div class="service-prose">
                     <p>{{ service.approach }}</p>
+                    {% if service.sample %}
+                    <h3>{{ service.sample.title }}</h3>
+                    <p>{{ service.sample.change }}</p>
+                    <ul class="service-signals">
+                        {% for detail in service.sample.details %}<li>{{ detail }}</li>{% endfor %}
+                    </ul>
+                    {% endif %}
                     <h3>Relevant experience</h3>
                     <p>{{ service.experience }}</p>
                     <a class="service-text-link" href="{{ url_for('index.index') }}#experience">See my experience <span aria-hidden="true">↗</span></a>
                     {% if service_slug == 'production-ai-systems' %}
                     <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read the audit-agent case study <span aria-hidden="true">↗</span></a></p>
+                    {% elif is_warehouse_diagnostic %}
+                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='sql-techniques-and-the-bottom-line') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read how I assess SQL payback <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
                 </div>
             </div>
@@ -80,7 +95,7 @@
                 <div class="service-prose">
                     <p>{{ service.starting_point }}</p>
                     {% if service_slug == 'data-platform-modernization' %}
-                    <p><a class="service-text-link" href="{{ url_for('index.blog') }}#blog-offer-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Explore the warehouse diagnostic <span aria-hidden="true">↗</span></a></p>
+                    <p><a class="service-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Explore the warehouse diagnostic <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
                     {% if service_slug == 'production-ai-systems' %}
                     <h3>Explore your production-readiness gaps</h3>
@@ -88,7 +103,10 @@
                     <p><a class="service-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the readiness scorecard <span aria-hidden="true">↓</span></a></p>
                     <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">What evidence does an AI workflow need before production? <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
-                    <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">Discuss your project <span aria-hidden="true">↗</span></a>
+                    <div class="hero-actions">
+                        <a class="button button--primary" href="{{ inquiry_url }}" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">{{ inquiry_label }} <span aria-hidden="true">↗</span></a>
+                        {% if is_warehouse_diagnostic %}{{ booking_link('contact') }}{% endif %}
+                    </div>
                 </div>
             </div>
         </section>

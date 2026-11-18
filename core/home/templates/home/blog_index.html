@@ -70,7 +70,7 @@
         <section class="blog-offer" aria-labelledby="blog-offer-heading">
             <h2 id="blog-offer-heading">{{ diagnostic_offer.name }}</h2>
             <p>{{ diagnostic_offer.description }}</p>
-            <a class="blog-text-link" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="services" data-destination-type="section">{{ diagnostic_offer.cta }}</a>
+            <a class="blog-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">{{ diagnostic_offer.cta }}</a>
         </section>
     </main>
     {% include 'home/includes/footer.html' %}
