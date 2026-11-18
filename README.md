@@ -1,15 +1,21 @@
-# Tera Earlywine
+# Hi, I’m Tera 👋
 
-**Data and AI Consulting**
+I’m a data engineer with a business background, currently building an independent consulting practice and making things along the way.
 
-I help business and technical teams use data and AI to make better decisions, reduce repetitive work, and move projects forward.
+I like figuring out how things work, especially when the data, the documentation and the people involved all tell a slightly different story. A lot of my work has been about making data more useful, less expensive to run and easier for the next person to understand.
 
-## Where I can help
+## What I’m working on
 
-- Data and reporting your team can rely on
-- Practical AI and workflow automation
-- Data and AI project scoping, alignment, and delivery
+- **My consulting practice.** Putting words to the work I enjoy: hands-on data engineering, warehouse efficiency and helping teams work through messy problems together.
+- **A personal development platform.** Using Terraform, GCP and AI-assisted development to turn ideas into websites and apps. It’s also where I experiment with the instructions and workflows that help AI do useful work.
+- **My website and its data.** Working toward a clearer view of newsletter signups, downloads and engagement, with data I can actually inspect.
 
-My background spans business intelligence, data engineering, and consulting, including roles at Mercari and Block. I connect business needs with technical implementation and help teams continue the work through clear responsibilities, documentation, and handoffs.
+I’m also exploring where newer AI tools can simplify what I’ve built, and where keeping control of the infrastructure still matters. Plenty to learn here. :)
 
-[Discuss your project](https://www.teraearlywine.com/#contact) · [LinkedIn](https://www.linkedin.com/in/teraearlywine/)
+## A few things I care about
+
+Clear SQL. Useful documentation. Knowing where a number came from. Making room for people to ask questions and learn.
+
+This profile is a snapshot of work in progress. I’ll update it as things take shape.
+
+[Website](https://www.teraearlywine.com/) · [LinkedIn](https://www.linkedin.com/in/teraearlywine/)
