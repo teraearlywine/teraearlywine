@@ -98,6 +98,9 @@
                     <p><a class="service-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Explore the warehouse diagnostic <span aria-hidden="true">↗</span></a></p>
                     {% endif %}
                     {% if service_slug == 'production-ai-systems' %}
+                    <h3>Choose Your Next AI Workflow</h3>
+                    <p>Compare candidate tasks, estimate the time you’ll spend reviewing AI output, and choose one small pilot.</p>
+                    <p><a class="service-text-link" href="{{ url_for('index.newsletter', guide='teams') }}" data-analytics-event="newsletter_cta_click" data-placement="services" data-guide="teams">Get the guide with the newsletter <span aria-hidden="true">↗</span></a></p>
                     <h3>Explore your production-readiness gaps</h3>
                     <p>Review one workflow for ownership, data, access, evaluation, recovery, and operating costs. The free worksheet helps you identify next actions; no email is required.</p>
                     <p><a class="service-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the readiness scorecard <span aria-hidden="true">↓</span></a></p>
