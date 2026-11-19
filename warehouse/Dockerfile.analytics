@@ -1,0 +1,10 @@
+FROM python:3.12-slim
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY warehouse/requirements-analytics.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+COPY scripts/ga4_aggregate.py scripts/run_website_analytics.py /app/scripts/
+RUN chmod 755 /app/scripts && chmod 644 /app/scripts/*.py
+USER 65532:65532
+ENTRYPOINT ["python", "-m", "scripts.run_website_analytics"]
+CMD ["--execute"]
