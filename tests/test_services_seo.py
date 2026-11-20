@@ -101,7 +101,7 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
     assert len(collect_elements(document, 'title')) == 1
     assert html.escape(service['name']) in document
     assert html.escape(service['title']) in document
-    assert service['problem'] in document
+    assert service['headline'] in document
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
     metas = collect_elements(document, 'meta')
     assert next(m for m in metas if m.get('property') == 'og:url')['content'] == canonical
@@ -126,10 +126,11 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
         option['value'] for option in collect_elements(inquiry, 'input')
         if option.get('name') == 'engagement_type' and 'checked' in option
     ] == [expected_engagement]
+    assert document.count('Tell me what’s stuck') == 3
+    assert document.count('Book a 30-minute call') == 2
+    assert {a['data-placement'] for a in links if a.get('href') == 'https://calendar.example/book'} == {'hero', 'contact'}
     if slug == WAREHOUSE_DIAGNOSTIC_SLUG:
-        assert {a['data-placement'] for a in links if a.get('href') == 'https://calendar.example/book'} == {'hero', 'contact'}
         assert service['sample']['change'] in document
-    assert any(a.get('href') == 'https://calendar.example/book' for a in links)
     assert all(a['href'].startswith('/#') or a['href'] == inquiry_url for a in links if a.get('data-placement') == 'navigation' and a.get('data-destination-type') == 'section')
     assert 'assets/js/analytics.js' in document
     assert 'googletagmanager.com' not in document

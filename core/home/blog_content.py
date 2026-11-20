@@ -14,7 +14,7 @@ BLOG_DESCRIPTION = (
 
 OFFERS = {
     'diagnostic': {
-        'name': 'Data Waste & Efficiency Diagnostic',
+        'name': 'Warehouse cost diagnostic',
         'description': (
             'If your warehouse bill keeps climbing, bring the billing history, '
             'a set of queries, and someone who knows what they support. In this '
@@ -22,7 +22,7 @@ OFFERS = {
             'testing. You get a cost baseline, the assumptions behind each estimate, '
             'and a plan to measure the result. We scope implementation separately.'
         ),
-        'cta': 'Explore the warehouse diagnostic',
+        'cta': 'Explore the Warehouse Cost Diagnostic',
     },
     'blueprint': {
         'name': 'AI-Ready Data Foundation Blueprint',
@@ -110,7 +110,7 @@ ARTICLES = [
             ),
             _section(
                 'Turn the findings into an investment decision',
-                'The first step is a small workload inventory with an owner, business output, schedule, and available operating evidence for each item. A Data Waste & Efficiency Diagnostic develops that inventory into ranked improvements, effort assumptions, and a measurement plan. The sponsor can then authorize a bounded implementation, request more evidence, or leave a workload unchanged.',
+                'The first step is a small workload inventory with an owner, business output, schedule, and available operating evidence for each item. A Warehouse Cost Diagnostic develops that inventory into ranked improvements, effort assumptions, and a measurement plan. The sponsor can then authorize a bounded implementation, request more evidence, or leave a workload unchanged.',
             ),
         ], offer='diagnostic',
     ),
@@ -137,7 +137,7 @@ ARTICLES = [
             ),
             _section(
                 'Choose the next stage from the evidence',
-                'The practical first step is a map of one AI workflow showing every data preparation step, its owner, and how often it runs. Unnecessary warehouse work points toward a Data Waste & Efficiency Diagnostic. Unclear definitions, dependencies, or access boundaries point toward an AI-Ready Data Foundation Blueprint.',
+                'The practical first step is a map of one AI workflow showing every data preparation step, its owner, and how often it runs. Unnecessary warehouse work points toward a Warehouse Cost Diagnostic. Unclear definitions, dependencies, or access boundaries point toward an AI-Ready Data Foundation Blueprint.',
                 'Once the foundation and business owner are established, a Production AI Lighthouse can test one integrated workflow against agreed acceptance criteria. The resulting evidence supports a decision to scale, revise, or stop. A successful demonstration alone leaves those production questions open.',
             ),
         ], offer='lighthouse',
@@ -187,7 +187,7 @@ ARTICLES = [
             ),
             _section(
                 'A useful first step',
-                'A data leader can begin with one dashboard and a short inventory of its consumers, source update times, upstream jobs, and freshness requirements. A Data Waste & Efficiency Diagnostic turns that evidence into a prioritized change and measurement plan. Any expected savings remain qualified until the operating comparison is complete.',
+                'A data leader can begin with one dashboard and a short inventory of its consumers, source update times, upstream jobs, and freshness requirements. A Warehouse Cost Diagnostic turns that evidence into a prioritized change and measurement plan. Any expected savings remain qualified until the operating comparison is complete.',
             ),
         ], offer='diagnostic',
     ),
@@ -347,7 +347,7 @@ ARTICLES = [
             ),
             _section(
                 'Keep freshness in the comparison',
-                'A Data Waste & Efficiency Diagnostic can use that requirement to assess refresh frequency and unnecessary processing. A candidate change needs a visible stale-data state and a recovery plan if the requirement is missed. Lower resource use only supports acceptance when the output remains fit for its intended decision.',
+                'A Warehouse Cost Diagnostic can use that requirement to assess refresh frequency and unnecessary processing. A candidate change needs a visible stale-data state and a recovery plan if the requirement is missed. Lower resource use only supports acceptance when the output remains fit for its intended decision.',
             ),
         ], offer='diagnostic',
     ),
@@ -540,7 +540,7 @@ ARTICLES = [
             ),
             _section(
                 'Turn evidence into a ranked decision',
-                'A useful first step is a baseline for one warehouse and a defined workload set, with a named owner and representative operating period. A Data Waste & Efficiency Diagnostic uses that baseline to rank changes, state effort and savings assumptions, and define how implementation would be measured.',
+                'A useful first step is a baseline for one warehouse and a defined workload set, with a named owner and representative operating period. A Warehouse Cost Diagnostic uses that baseline to rank changes, state effort and savings assumptions, and define how implementation would be measured.',
                 'The output is a decision about where to invest first. Implementation and formal carbon assurance require separate scope. Claims about environmental savings remain limited to what the available measurement can establish.',
             ),
         ], offer='diagnostic',
@@ -573,7 +573,7 @@ ARTICLES = [
             ),
             _section(
                 'Agree on the next decision',
-                'A Data Waste & Efficiency Diagnostic can turn that baseline into ranked changes and an agreed measurement plan. A delivery partner can contribute a defined implementation workstream once responsibilities and acceptance are established. The decision remains tied to a specific need, a plausible delivery path, and evidence the receiving team can assess.',
+                'A Warehouse Cost Diagnostic can turn that baseline into ranked changes and an agreed measurement plan. A delivery partner can contribute a defined implementation workstream once responsibilities and acceptance are established. The decision remains tied to a specific need, a plausible delivery path, and evidence the receiving team can assess.',
             ),
         ], offer='diagnostic',
     ),
@@ -678,7 +678,7 @@ ARTICLES = [
                 'Choose the next change by business value',
                 'Rank candidates by avoidable recurring cost, execution frequency, implementation effort, and operational risk. Compare representative workloads, including peak periods and corrections, and keep output quality and freshness constant. Record retries, failed runs, and manual repair alongside compute and storage. Cost per successful reporting cycle is more useful than cost per query attempt.',
                 'Lower recurring expense can improve operating profit if other factors stay constant. A gross-margin improvement also depends on whether that expense is classified as cost of revenue. Faster reports may have business value, but a revenue claim needs evidence connecting the earlier answer to a changed decision or customer outcome.',
-                'Start with one recurring workload whose owner, bill, and required output are clear. A Data Waste & Efficiency Diagnostic can turn that evidence into ranked SQL improvements, a payback estimate, and a validation plan. The strongest proposal makes the financial benefit and the ongoing responsibility equally visible.',
+                'Start with one recurring workload whose owner, bill, and required output are clear. A Warehouse Cost Diagnostic can turn that evidence into ranked SQL improvements, a payback estimate, and a validation plan. The strongest proposal makes the financial benefit and the ongoing responsibility equally visible.',
             ),
         ], offer='diagnostic',
     ),

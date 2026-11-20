@@ -6,21 +6,21 @@
                 <h3>Do your reports disagree?</h3>
                 <p>Agree on what the numbers mean and put checks in place so your team can use the same report.</p>
                 <div class="cs-offer-links">
-                    <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Data and reporting <span aria-hidden="true">↗</span></a>
-                    <a class="cs-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Warehouse cost diagnostic <span aria-hidden="true">↗</span></a>
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['data-platform-modernization'].name }} <span aria-hidden="true">↗</span></a>
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic"> {{ services[warehouse_diagnostic_slug].name }} <span aria-hidden="true">↗</span></a>
                 </div>
             </article>
             <article>
                 <h3>Does your team repeat the same tasks?</h3>
                 <p>Start with one task. Get a tested workflow and clear guidance on when a person should step in.</p>
-                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">AI and automation <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['production-ai-systems'].name }} <span aria-hidden="true">↗</span></a>
             </article>
             <article>
                 <h3>Is a data or AI project stuck?</h3>
                 <p>Get business and technical teams to agree on the next decision, who owns it, and what happens after.</p>
                 <div class="cs-offer-links">
-                    <a class="cs-text-link" href="{{ url_for('index.service', slug='fractional-data-leadership') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Project delivery <span aria-hidden="true">↗</span></a>
-                    <a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover">Migration rescue <span aria-hidden="true">↗</span></a>
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug='fractional-data-leadership') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['fractional-data-leadership'].name }} <span aria-hidden="true">↗</span></a>
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover"> {{ services['data-migration-rescue'].name }} <span aria-hidden="true">↗</span></a>
                 </div>
             </article>
         </div>
