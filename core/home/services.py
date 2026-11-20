@@ -1,8 +1,5 @@
 """Public service copy shared by page routes, navigation, and the sitemap."""
 
-from core.home.blog_content import OFFERS
-
-
 WAREHOUSE_DIAGNOSTIC_SLUG = 'warehouse-cost-diagnostic'
 
 SERVICES = {
@@ -131,7 +128,7 @@ SERVICES = {
         ),
     },
     WAREHOUSE_DIAGNOSTIC_SLUG: {
-        'name': OFFERS['diagnostic']['name'],
+        'name': 'Warehouse cost diagnostic',
         'title': 'Warehouse Cost Diagnostic | Tera Earlywine',
         'description': (
             'A paid review of one data warehouse and a defined set of workloads. '

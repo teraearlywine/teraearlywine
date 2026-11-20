@@ -20,7 +20,7 @@ from flask import (
 )
 
 from core.home.blog_content import (
-    ARTICLES, ARTICLES_BY_SLUG, BLOG_DESCRIPTION, FEATURED_ARTICLES, OFFERS,
+    ARTICLES, ARTICLES_BY_SLUG, BLOG_DESCRIPTION, FEATURED_ARTICLES,
 )
 from core.home.contact_delivery import (
     ContactDeliveryError,
@@ -363,7 +363,7 @@ def seo_metadata():
             {'@type': 'ListItem', 'position': 1,
              'name': 'Home', 'item': homepage_url},
             {'@type': 'ListItem', 'position': 2,
-             'name': 'Ideas', 'item': blog_url},
+             'name': 'Writing', 'item': blog_url},
         ]
         if article:
             entity = {
@@ -417,7 +417,6 @@ def seo_metadata():
         'is_blog': is_blog,
         'services': SERVICES,
         'warehouse_diagnostic_slug': WAREHOUSE_DIAGNOSTIC_SLUG,
-        'diagnostic_offer': OFFERS['diagnostic'],
         'social_image_url': (
             f"{site_url}{url_for('index.static', filename='images/consulting-social.jpg')}"
             if site_url else ''
@@ -702,16 +701,52 @@ def blog():
 
 @index_bp.route('/blog/<slug>/')
 def blog_article(slug):
-    """Read one article, with a path to the next note."""
+    """Read one article and its recommended next step."""
     article = ARTICLES_BY_SLUG.get(slug)
     if article is None:
         abort(404)
-    next_article = ARTICLES[(ARTICLES.index(article) + 1) % len(ARTICLES)]
+    kind, target = article['next_step']
+    if kind == 'article':
+        next_step = {
+            'heading': 'Read next',
+            'label': ARTICLES_BY_SLUG[target]['title'],
+            'url': url_for('index.blog_article', slug=target),
+            'destination': 'writing',
+        }
+    elif kind == 'service':
+        destination = {
+            WAREHOUSE_DIAGNOSTIC_SLUG: 'diagnostic',
+            'production-ai-systems': 'ai_workflow_review',
+            'data-migration-rescue': 'migration_cutover',
+        }.get(target, 'service')
+        next_step = {
+            'heading': 'Get help with this',
+            'label': SERVICES[target]['name'],
+            'url': url_for('index.service', slug=target),
+            'destination': destination,
+        }
+    elif kind == 'demo':
+        next_step = {
+            'heading': 'Try it yourself',
+            'label': 'Try the net-sales demo',
+            'url': url_for('index.for_professionals', _anchor=target),
+            'destination': 'net_sales_demo',
+        }
+    elif kind == 'download':
+        next_step = {
+            'heading': 'Review your own workflow',
+            'description': 'Use this free worksheet to find gaps and assign a next action before release. No email required.',
+            'label': 'Download the readiness scorecard',
+            'url': url_for('index.static', filename=target),
+            'destination': 'resource',
+            'download': True,
+        }
+    else:
+        raise ValueError(f'Unknown next-step kind: {kind}')
     return render_template(
         'home/blog_article.html',
         article=article,
-        next_article=next_article,
-        articles=ARTICLES,
+        next_step=next_step,
         is_blog=True,
         page_title=f"{article['title']} | Tera Earlywine",
         page_description=article['dek'],

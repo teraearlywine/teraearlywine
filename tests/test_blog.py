@@ -7,8 +7,8 @@ from xml.etree import ElementTree
 import pytest
 from flask import template_rendered
 
-from core.home.blog_content import ARTICLES, OFFERS
-from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
+from core.home.blog_content import ARTICLES
+from core.home.services import SERVICES
 from test_analytics_reporting import collect_elements
 
 
@@ -71,7 +71,6 @@ def test_each_writing_destination_renders_its_article_and_metadata(app_factory, 
     name, context = rendered[-1]
     assert name == 'home/blog_article.html'
     assert context['article'] == article
-    assert context['next_article']['slug'] != article['slug']
     raw_document = response.get_data(as_text=True)
     document = unescape(raw_document)
     assert article['title'] in document
@@ -81,21 +80,26 @@ def test_each_writing_destination_renders_its_article_and_metadata(app_factory, 
         for source in section['sources']:
             assert {'href': source['url']} in collect_elements(document, 'a')
             assert source['title'] in document
-    assert document.index('class="essay-prose"') < document.index('data-essay-signoff') < document.index('id="essay-offer-heading"')
+    assert document.index('class="essay-prose"') < document.index('data-essay-signoff') < document.index('id="essay-next-heading"')
     video = collect_elements(document, 'video')[0]
     assert video['preload'] == 'none' and 'src' not in video and 'loop' not in video
     assert video['data-src'].split('?')[0].endswith('nothing-wasted-signoff.mp4')
     assert any(img.get('alt') == 'Nothing Wasted — Tera Earlywine' and img.get('loading') == 'lazy'
                for img in collect_elements(document, 'img'))
-    assert article['offer']['name'] in document
-    assert article['offer']['description'] in document
-    assert article['offer']['cta'] in document
-    is_diagnostic = article['offer'] == OFFERS['diagnostic']
-    target = f'/services/{WAREHOUSE_DIAGNOSTIC_SLUG}' if is_diagnostic else '/#contact'
-    offer = next(link for link in collect_elements(document, 'a') if link.get('href') == target and link.get('class') == 'blog-text-link')
-    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == (
-        'navigation_click', 'article', 'diagnostic' if is_diagnostic else 'section',
-    )
+    kind, target = article['next_step']
+    assert target != article['slug']
+    expected = {
+        'article': f'/blog/{target}/',
+        'service': f'/services/{target}',
+        'demo': '/for-professionals/#sample',
+        'download': f'/static/assets/{target}',
+    }[kind]
+    next_section = document.split('id="essay-next-heading"', 1)[1].split('</section>', 1)[0]
+    link, = collect_elements(next_section, 'a')
+    assert link['href'].partition('?')[0] == expected
+    assert link['data-placement'] == 'article'
+    assert link['data-analytics-event'] == ('resource_download' if kind == 'download' else 'navigation_click')
+    assert app.test_client().get(link['href'].partition('#')[0]).status_code == 200
     assert len(collect_elements(document, 'h1')) == 1
     canonical = f"{SITE_URL}/blog/{article['slug']}/"
     assert {'rel': 'canonical', 'href': canonical} in collect_elements(document, 'link')
@@ -139,17 +143,18 @@ def test_featured_reading_path_preserves_all_article_destinations(app_factory):
     with captured_templates(app) as rendered:
         response = app.test_client().get('/blog/')
     context = rendered[-1][1]
-    assert [article['slug'] for article in context['featured_articles']] == [
-        'nothing-wasted',
-        'measure-the-whole-path',
+    assert [article['slug'] for _, article in context['featured_articles']] == [
         'a-dashboard-needs-a-decision',
+        'ai-workflow-production-evidence',
+        'sql-techniques-and-the-bottom-line',
+        'nothing-wasted',
     ]
-    links = collect_elements(response.get_data(as_text=True), 'a')
+    document = response.get_data(as_text=True)
+    assert document.index('id="writing-heading"') < document.index('data-paper-stack')
+    links = collect_elements(document, 'a')
     reading_links = [link['href'] for link in links if 'writing-row--archive' in link.get('class', '').split()]
     assert len(reading_links) == len(set(reading_links)) == len(ARTICLES)
     assert set(reading_links) == {f"/blog/{article['slug']}/" for article in ARTICLES}
-    offer = next(link for link in links if link.get('href') == f'/services/{WAREHOUSE_DIAGNOSTIC_SLUG}' and link.get('class') == 'blog-text-link')
-    assert (offer['data-analytics-event'], offer['data-placement'], offer['data-destination-type']) == ('navigation_click', 'services', 'diagnostic')
     assert 'id="contact"' in app.test_client().get('/').get_data(as_text=True)
 
 
