@@ -117,7 +117,7 @@ def test_service_pages_have_unique_metadata_content_and_conversion_path(app_fact
     inquiry = client.get(inquiry_url.partition('#')[0]).get_data(as_text=True)
     expected_engagement = {
         'data-platform-modernization': 'Data Foundation Blueprint',
-        'data-migration-rescue': 'Data Foundation Blueprint',
+        'data-migration-rescue': 'Migration rescue',
         'production-ai-systems': 'Production AI Lighthouse',
         'fractional-data-leadership': 'Value / Risk Diagnostic',
         WAREHOUSE_DIAGNOSTIC_SLUG: 'Warehouse cost diagnostic',
