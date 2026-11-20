@@ -7,7 +7,7 @@
         <header class="writing-intro">
             <h1 id="blog-heading"><span>The Business</span> <span>of Technology</span></h1>
             <div class="writing-intro-copy">
-                <p>When is a cheaper query worth the effort? Where does an AI workflow need a person? My field notes on what technology is worth in real work.</p>
+                <p>Field notes on the decisions behind data and AI work. Who needs the number, what should we automate, and when is a change worth the cost?</p>
                 <div class="writing-links">
                     <a class="writing-subscribe" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="both">Get the newsletter <span aria-hidden="true">↗</span></a>
                     <a class="blog-text-link" id="archiveLink" href="#archive" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="archive">Browse the archive</a>
@@ -15,6 +15,18 @@
                 </div>
             </div>
         </header>
+
+        <section class="blog-writing" aria-labelledby="writing-heading">
+            <h2 id="writing-heading">Start here</h2>
+            <div class="writing-list">
+                {% for topic, article in featured_articles %}
+                <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}" data-analytics-event="navigation_click" data-placement="featured" data-destination-type="writing">
+                    <span><small>{{ topic }}</small>{{ article.title }}</span>
+                    <span class="row-arrow" aria-hidden="true">↗</span>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
 
         {% if stack_articles %}
         {% set latest = stack_articles[-1] %}
@@ -44,17 +56,6 @@
         </section>
         {% endif %}
 
-        <section class="blog-writing" aria-labelledby="writing-heading">
-            <h2 id="writing-heading">Start with these essays</h2>
-            <div class="writing-list">
-                {% for article in featured_articles %}
-                <a class="writing-row" href="{{ url_for('index.blog_article', slug=article.slug) }}" data-analytics-event="navigation_click" data-placement="featured" data-destination-type="writing">
-                    <span><small>{{ article.category }}</small>{{ article.title }}</span>
-                    <span class="row-arrow" aria-hidden="true">↗</span>
-                </a>
-                {% endfor %}
-            </div>
-        </section>
         <section class="blog-writing" id="archive" aria-labelledby="archive-heading">
             <h2 id="archive-heading">Archive</h2>
             <details class="writing-archive" id="allEssays">
@@ -66,11 +67,6 @@
                 </a>
                 {% endfor %}
             </details>
-        </section>
-        <section class="blog-offer" aria-labelledby="blog-offer-heading">
-            <h2 id="blog-offer-heading">{{ diagnostic_offer.name }}</h2>
-            <p>{{ diagnostic_offer.description }}</p>
-            <a class="blog-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">{{ diagnostic_offer.cta }}</a>
         </section>
     </main>
     {% include 'home/includes/footer.html' %}

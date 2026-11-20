@@ -20,7 +20,7 @@
         <li><a href="{{ home }}#services" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Services</a></li>
         <li><a href="{{ home }}#projects" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">Work</a></li>
         <li><a href="{{ home }}#experience" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">About</a></li>
-        <li><a href="{{ url_for('index.blog') }}"{% if is_blog %} aria-current="{{ 'page' if request.endpoint == 'index.blog' else 'true' }}"{% endif %} data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="writing">Insights</a></li>
+        <li><a href="{{ url_for('index.blog') }}"{% if is_blog %} aria-current="{{ 'page' if request.endpoint == 'index.blog' else 'true' }}"{% endif %} data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="writing">Writing</a></li>
         <li><a class="nav-contact" href="{{ inquiry_url|default(home ~ '#contact') }}" data-analytics-event="navigation_click" data-placement="navigation" data-destination-type="section">{{ inquiry_label|default('Discuss your project') }}</a></li>
     </ul>
 </nav>

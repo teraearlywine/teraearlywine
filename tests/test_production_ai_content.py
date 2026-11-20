@@ -23,8 +23,6 @@ def test_article_connects_readiness_journey(app_factory):
     assert 'This is an example, not a description of a client system.' in html
     assert 'downloads/data-ai-production-readiness-scorecard.pdf' in html
     assert 'data-analytics-event="resource_download"' in html
-    assert '/services/production-ai-systems' in html
-    assert '/blog/audit-agent-proof-of-concept/' in html
-    assert '/blog/an-agent-needs-an-edge/' in html
-    assert '/blog/show-the-work-that-matters/' in html
-    assert '/blog/a-useful-stopping-point/' in html
+    assert 'No email required.' in html
+    case_study = client.get('/blog/audit-agent-proof-of-concept/').get_data(as_text=True)
+    assert 'class="blog-text-link essay-next-link" href="/blog/ai-workflow-production-evidence/"' in case_study
