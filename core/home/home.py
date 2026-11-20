@@ -294,7 +294,7 @@ def seo_metadata():
                     'founder': {'@id': person_id},
                     'serviceType': [
                         'Data and reporting',
-                        'Practical AI and workflow automation',
+                        SERVICES['production-ai-systems']['name'],
                         'Data and AI project delivery',
                     ],
                     'areaServed': 'United States',

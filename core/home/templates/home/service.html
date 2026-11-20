@@ -2,11 +2,14 @@
 <html lang="en">
 {% set use_cross_section_home = true %}
 {% set is_warehouse_diagnostic = service_slug == warehouse_diagnostic_slug %}
-{% set inquiry_label = 'Send a diagnostic inquiry' if is_warehouse_diagnostic else 'Discuss your project' %}
-{% macro booking_link(placement) %}
-    {% if config.get('BOOKING_URL') %}
-    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="{{ placement }}" data-destination-type="booking">Book a 30-minute call</a>
-    {% endif %}
+{% set inquiry_label = 'Tell me what’s stuck' %}
+{% macro service_actions(placement) %}
+    <div class="hero-actions">
+        <a class="button button--primary" href="{{ inquiry_url }}" data-analytics-event="navigation_click" data-placement="{{ placement }}" data-destination-type="section">{{ inquiry_label }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
+        {% if config.get('BOOKING_URL') %}
+        <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="{{ placement }}" data-destination-type="booking">Book a 30-minute call</a>
+        {% endif %}
+    </div>
 {% endmacro %}
 {% include 'home/includes/header.html' %}
 <body class="service-page">
@@ -17,36 +20,16 @@
                 <nav class="service-breadcrumb" aria-label="Breadcrumb">
                     <a href="{{ url_for('index.index') }}">Home</a><span aria-hidden="true"> / </span><span aria-current="page">{{ service.name }}</span>
                 </nav>
-                <p class="service-eyebrow">Data and AI consulting</p>
                 <h1 id="service-heading">{{ service.name }}</h1>
                 <p class="service-promise">{{ service.headline }}</p>
                 <p class="service-intro">{{ service.intro }}</p>
-                <div class="hero-actions">
-                    <a class="button button--primary" href="{{ inquiry_url }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">{{ inquiry_label }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="20" height="20"></a>
-                    {{ booking_link('hero') }}
-                </div>
-            </div>
-        </section>
-
-        <section class="section service-context" aria-labelledby="problem-heading">
-            <div class="container service-columns">
-                <div>
-                    <p class="section-kicker">When to engage Tera</p>
-                    <h2 class="section-title" id="problem-heading">{{ service.problem_title }}</h2>
-                </div>
-                <div class="service-prose">
-                    <p>{{ service.problem }}</p>
-                    <ul class="service-signals">
-                        {% for signal in service.signals %}<li>{{ signal }}</li>{% endfor %}
-                    </ul>
-                </div>
+                {{ service_actions('hero') }}
             </div>
         </section>
 
         <section class="section service-deliverables" aria-labelledby="deliverables-heading">
             <div class="container">
-
-                <h2 class="section-title" id="deliverables-heading">What your team takes away</h2>
+                <h2 class="section-title" id="deliverables-heading">What you get</h2>
                 <div class="service-deliverable-grid">
                     {% for title, description in service.deliverables %}
                     <article>
@@ -60,10 +43,7 @@
 
         <section class="section" aria-labelledby="approach-heading">
             <div class="container service-columns">
-                <div>
-                    <p class="section-kicker">Approach &amp; experience</p>
-                    <h2 class="section-title" id="approach-heading">How I approach the work</h2>
-                </div>
+                <h2 class="section-title" id="approach-heading">How we work</h2>
                 <div class="service-prose">
                     <p>{{ service.approach }}</p>
                     {% if service.sample %}
@@ -75,11 +55,12 @@
                     {% endif %}
                     <h3>Relevant experience</h3>
                     <p>{{ service.experience }}</p>
-                    <a class="service-text-link" href="{{ url_for('index.index') }}#experience">See my experience <span aria-hidden="true">↗</span></a>
                     {% if service_slug == 'production-ai-systems' %}
-                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read the audit-agent case study <span aria-hidden="true">↗</span></a></p>
+                    <a class="service-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read the audit-agent case study <span aria-hidden="true">↗</span></a>
                     {% elif is_warehouse_diagnostic %}
-                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='sql-techniques-and-the-bottom-line') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read how I assess SQL payback <span aria-hidden="true">↗</span></a></p>
+                    <a class="service-text-link" href="{{ url_for('index.blog_article', slug='sql-techniques-and-the-bottom-line') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read how I assess SQL payback <span aria-hidden="true">↗</span></a>
+                    {% elif service_slug == 'data-platform-modernization' %}
+                    <a class="service-text-link" href="{{ url_for('index.for_professionals', _anchor='sample') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="net_sales_demo">Try an illustrative net-sales demo <span aria-hidden="true">↗</span></a>
                     {% endif %}
                 </div>
             </div>
@@ -87,36 +68,33 @@
 
         <section class="section service-next" aria-labelledby="next-heading">
             <div class="container service-columns">
-                <div>
-                    <p class="section-kicker">Start with a conversation</p>
-                    <h2 class="section-title" id="next-heading">Bring one example</h2>
-                </div>
+                <h2 class="section-title" id="next-heading">Bring one example</h2>
                 <div class="service-prose">
                     <p>{{ service.starting_point }}</p>
-                    {% if service_slug == 'data-platform-modernization' %}
-                    <p><a class="service-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">Explore the warehouse diagnostic <span aria-hidden="true">↗</span></a></p>
-                    {% endif %}
-                    {% if service_slug == 'production-ai-systems' %}
-                    <h3>Choose Your Next AI Workflow</h3>
-                    <p>Compare candidate tasks, estimate the time you’ll spend reviewing AI output, and choose one small pilot.</p>
-                    <p><a class="service-text-link" href="{{ url_for('index.newsletter', guide='teams') }}" data-analytics-event="newsletter_cta_click" data-placement="services" data-guide="teams">Get the guide with the newsletter <span aria-hidden="true">↗</span></a></p>
-                    <h3>Explore your production-readiness gaps</h3>
-                    <p>Review one workflow for ownership, data, access, evaluation, recovery, and operating costs. The free worksheet helps you identify next actions; no email is required.</p>
-                    <p><a class="service-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the readiness scorecard <span aria-hidden="true">↓</span></a></p>
-                    <p><a class="service-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">What evidence does an AI workflow need before production? <span aria-hidden="true">↗</span></a></p>
-                    {% endif %}
-                    <div class="hero-actions">
-                        <a class="button button--primary" href="{{ inquiry_url }}" data-analytics-event="navigation_click" data-placement="contact" data-destination-type="section">{{ inquiry_label }} <span aria-hidden="true">↗</span></a>
-                        {% if is_warehouse_diagnostic %}{{ booking_link('contact') }}{% endif %}
-                    </div>
+                    {{ service_actions('contact') }}
                 </div>
             </div>
         </section>
 
+        {% if service_slug == 'production-ai-systems' %}
+        <section class="section" aria-labelledby="resources-heading">
+            <div class="container service-columns">
+                <h2 class="section-title" id="resources-heading">Review a workflow on your own</h2>
+                <div class="service-prose">
+                    <p>Use the free scorecard to identify gaps and assign a next step before release. No email required.</p>
+                    <p><a class="service-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="services" data-destination-type="resource">Download the readiness scorecard <span aria-hidden="true">↓</span></a></p>
+                    <ul class="service-signals">
+                        <li><a href="{{ url_for('index.newsletter', guide='teams') }}" data-analytics-event="newsletter_cta_click" data-placement="services" data-guide="teams">Get the Choose Your Next AI Workflow guide with the newsletter</a></li>
+                        <li><a href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="writing">Read what evidence an AI workflow needs before production</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
         <section class="section service-related" aria-labelledby="related-heading">
             <div class="container">
-                <p class="section-kicker">Related expertise</p>
-                <h2 class="section-title" id="related-heading">More ways to work together</h2>
+                <h2 class="section-title" id="related-heading">Other services</h2>
                 {% include 'home/includes/service_links.html' %}
             </div>
         </section>

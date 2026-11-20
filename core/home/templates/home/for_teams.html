@@ -18,22 +18,22 @@
             <article>
                 <h3>Data your team can use</h3>
                 <p>Resolve inconsistent numbers, reduce reporting friction, and improve the systems behind decisions. We can work on shared metric definitions, data quality, reporting, or the platform supporting them.</p>
-                <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Improve data and reporting <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['data-platform-modernization'].name }} <span aria-hidden="true">↗</span></a>
             </article>
             <article>
-                <h3>Practical AI and workflow automation</h3>
+                <h3>Test one workflow</h3>
                 <p>Find useful opportunities to simplify repeated work, build and test a workflow, and define where human judgment belongs. Your team gets clear review points, responsibilities, and guidance for using the solution.</p>
-                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="ai_workflow_review">Explore AI and workflow automation <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="ai_workflow_review"> {{ services['production-ai-systems'].name }} <span aria-hidden="true">↗</span></a>
             </article>
             <article>
                 <h3>Get data and AI projects moving</h3>
                 <p>Clarify requirements, agree on priorities and responsibilities, and improve handoffs between business and technical teams. I help scope the work, support delivery, and give your team the context to keep going.</p>
-                <a class="cs-text-link" href="{{ url_for('index.service', slug='fractional-data-leadership') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service">Get help with project delivery <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='fractional-data-leadership') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['fractional-data-leadership'].name }} <span aria-hidden="true">↗</span></a>
             </article>
         </div>
         <div class="cs-directory">
             <h3>Specialist support</h3>
-            <p>For a focused starting point, <a href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">explore the warehouse diagnostic</a> or <a href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover">plan a migration cutover</a>.</p>
+            <p>For a focused starting point, see <a href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic">{{ services[warehouse_diagnostic_slug].name }}</a> or <a href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover">{{ services['data-migration-rescue'].name }}</a>.</p>
             {% include 'home/includes/service_links.html' %}
         </div>
         <aside class="cs-resource" aria-labelledby="workflow-guide-heading">
