@@ -238,7 +238,7 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     )
 
     text = ' '.join(re.sub(r'<[^>]+>', ' ', document).split())
-    assert 'Data and AI consulting for better decisions and less manual work' in text
+    assert 'Fix the reporting and workflows slowing your team down.' in text
     assert 'Help me scope it' in document
     assert 'proof of concept' in document
     assert 'projected Snowflake savings' in document
@@ -249,8 +249,9 @@ def test_homepage_answers_buyer_questions_and_leads_to_fit_call(
     assert '$500K+' in document
     assert 'Block' in document
     assert 'Mercari' in document
-    assert 'Who is Tera Earlywine?' in document
-    assert 'What can you help my team with?' in document
+    assert 'Do we need a fully defined project?' in document
+    assert 'How does an engagement start?' in document
+    assert document.index('id="contact"') < document.index('id="faq"') < document.index('data-contact-form')
     links = collect_elements(document, 'a')
     for path in ['#services', '#projects', '#experience', '#contact', '/blog/', '/for-professionals/']:
         assert any(link.get('href') == path for link in links)
@@ -338,8 +339,8 @@ def test_homepage_renders_canonical_open_graph_verification_and_json_ld(
         entity['name']: entity['acceptedAnswer']['text']
         for entity in faq['mainEntity']
     }
-    assert questions['Who is Tera Earlywine?'] in document
-    assert questions['What can you help my team with?'] in document
+    assert set(questions) == {'Do we need a fully defined project?', 'How does an engagement start?'}
+    assert all(answer in document for answer in questions.values())
 
 
 @pytest.mark.parametrize(

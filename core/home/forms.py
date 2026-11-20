@@ -6,6 +6,7 @@ UNSCOPED_ENGAGEMENT = 'Help me scope it'
 WAREHOUSE_DIAGNOSTIC_ENGAGEMENT = 'Warehouse cost diagnostic'
 PROJECT_DELIVERY_ENGAGEMENT = 'Value / Risk Diagnostic'
 DATA_REPORTING_ENGAGEMENT = 'Data Foundation Blueprint'
+MIGRATION_RESCUE_ENGAGEMENT = 'Migration rescue'
 AI_AUTOMATION_ENGAGEMENT = 'Production AI Lighthouse'
 
 
@@ -40,13 +41,12 @@ class ContactForm(FlaskForm):
         choices=[
             (PROJECT_DELIVERY_ENGAGEMENT, 'Data and AI project delivery'),
             (DATA_REPORTING_ENGAGEMENT, 'Data and reporting'),
+            (MIGRATION_RESCUE_ENGAGEMENT, MIGRATION_RESCUE_ENGAGEMENT),
             (AI_AUTOMATION_ENGAGEMENT, 'AI and workflow automation'),
             (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT),
             (UNSCOPED_ENGAGEMENT, UNSCOPED_ENGAGEMENT),
         ],
-        validators=[
-            DataRequired(message='Select an engagement type.'),
-        ],
+        validators=[Optional(strip_whitespace=False)],
     )
     message = TextAreaField(
         'Message',

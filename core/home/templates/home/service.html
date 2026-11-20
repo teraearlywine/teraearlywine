@@ -5,7 +5,7 @@
 {% set inquiry_label = 'Send a diagnostic inquiry' if is_warehouse_diagnostic else 'Discuss your project' %}
 {% macro booking_link(placement) %}
     {% if config.get('BOOKING_URL') %}
-    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="{{ placement }}" data-destination-type="booking">{{ 'Book a 30-minute call' if is_warehouse_diagnostic else 'Book a conversation' }}</a>
+    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="{{ placement }}" data-destination-type="booking">Book a 30-minute call</a>
     {% endif %}
 {% endmacro %}
 {% include 'home/includes/header.html' %}

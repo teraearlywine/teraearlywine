@@ -3,8 +3,7 @@
     <div class="container">
         <div class="section-header contact-header fade-up">
             <div>
-                <p class="section-kicker">Get in touch</p>
-                <h2 class="section-title" id="contact-heading">Discuss your project</h2>
+                <h2 class="section-title" id="contact-heading">Tell me what’s stuck</h2>
             </div>
             {% if booking_url %}
             <a
@@ -20,8 +19,9 @@
             {% endif %}
         </div>
         <p class="contact-text fade-up fade-up-delay-1">
-            Tell me what is taking too much time, which decision is stuck, or what you want to explore with AI. We will start with a conversation about the problem and whether I can help.
+            Bring one report people question, one task your team keeps repeating, or one decision that’s stuck. We’ll talk through what’s happening and whether I can help.
         </p>
+        {% include 'home/sections/faq.html' %}
         <form
             class="contact-form fade-up fade-up-delay-2"
             method="post"
@@ -67,8 +67,8 @@
                 >{{ contact_form.email.errors[0] if contact_form.email.errors else '' }}</p>
             </div>
             <fieldset class="contact-form__field contact-form__field--full contact-engagement">
-                <legend>What would you like help with?</legend>
-                {% set engagement_notes = ['Clarify priorities, responsibilities, and next steps.', 'Improve reporting and the data behind it.', 'Put AI to use and reduce repetitive work.', 'Find out what is driving your warehouse bill.', 'Start with the problem you want to solve.'] %}
+                <legend>What would you like help with? (optional)</legend>
+                {% set engagement_notes = ['Clarify priorities, responsibilities, and next steps.', 'Improve reporting and the data behind it.', 'Reconcile the data and get the next cutover ready.', 'Put AI to use and reduce repetitive work.', 'Find out what is driving your warehouse bill.', 'Start with the problem you want to solve.'] %}
                 <div class="contact-engagement__choices">
                     {% for option in contact_form.engagement_type %}
                     <label class="contact-engagement__choice" for="{{ option.id }}">

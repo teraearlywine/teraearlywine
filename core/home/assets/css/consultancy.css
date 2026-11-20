@@ -419,6 +419,11 @@ li[id] {
   margin: 0 0 35px;
 }
 
+.contact-faq {
+  max-width: 670px;
+  margin-bottom: 35px;
+}
+
 .contact-form {
   max-width: none;
   margin: 0;

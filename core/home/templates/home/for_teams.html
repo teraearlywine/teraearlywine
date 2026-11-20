@@ -6,7 +6,7 @@
 {% block hero_actions %}
     <a class="button button--primary" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Discuss your project <span aria-hidden="true">↗</span></a>
     {% if config.get('BOOKING_URL') %}
-    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a conversation</a>
+    <a class="service-contact-link" href="{{ config.get('BOOKING_URL') }}" target="_blank" rel="noopener noreferrer" data-analytics-event="contact_click" data-contact-method="booking" data-placement="hero" data-destination-type="booking">Book a 30-minute call</a>
     {% endif %}
 {% endblock %}
 

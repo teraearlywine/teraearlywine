@@ -29,7 +29,8 @@ from core.home.contact_delivery import (
     deliver_contact_submission,
 )
 from core.home.forms import (
-    AI_AUTOMATION_ENGAGEMENT, DATA_REPORTING_ENGAGEMENT, PROJECT_DELIVERY_ENGAGEMENT,
+    AI_AUTOMATION_ENGAGEMENT, DATA_REPORTING_ENGAGEMENT, MIGRATION_RESCUE_ENGAGEMENT,
+    PROJECT_DELIVERY_ENGAGEMENT,
     UNSCOPED_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, ContactForm,
 )
 from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
@@ -49,27 +50,19 @@ CONTACT_SUBMISSION_TTL_SECONDS = 3600
 MAX_PENDING_CONTACT_SUBMISSIONS = 5
 SERVICE_INQUIRY_TOPICS = {
     'data-platform-modernization': DATA_REPORTING_ENGAGEMENT,
-    'data-migration-rescue': DATA_REPORTING_ENGAGEMENT,
+    'data-migration-rescue': MIGRATION_RESCUE_ENGAGEMENT,
     'production-ai-systems': AI_AUTOMATION_ENGAGEMENT,
     'fractional-data-leadership': PROJECT_DELIVERY_ENGAGEMENT,
     WAREHOUSE_DIAGNOSTIC_SLUG: WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
 }
 FAQ_ITEMS = (
     {
-        'question': 'Who is Tera Earlywine?',
-        'answer': 'I’m a data and AI consultant with a background in business intelligence, data engineering, and consulting, including roles at Mercari and Block.',
-    },
-    {
-        'question': 'What can you help my team with?',
-        'answer': 'I help teams improve data and reporting, apply AI to useful workflows, automate repetitive work, and get data and AI projects moving across departments.',
-    },
-    {
         'question': 'Do we need a fully defined project?',
-        'answer': 'No. We can start with one recurring problem or a decision your team needs to make. Together, we can clarify the scope and what a useful result would look like.',
+        'answer': 'No. A few sentences about what’s happening and what you’d like to change are enough to get started.',
     },
     {
         'question': 'How does an engagement start?',
-        'answer': 'We start with a conversation about the problem and whether I can help. If there is a fit, we agree on the scope, responsibilities, and what you will take away.',
+        'answer': 'If the first conversation points to a fit, we’ll agree on the scope, who does what, and what your team will take away.',
     },
 )
 
@@ -488,11 +481,12 @@ def contact():
             503,
         )
 
-    # The delivery broker accepts the original diagnostic category.
+    # Map the public choices to the categories the delivery broker supports.
     engagement = {
         UNSCOPED_ENGAGEMENT: None,
+        MIGRATION_RESCUE_ENGAGEMENT: DATA_REPORTING_ENGAGEMENT,
         WAREHOUSE_DIAGNOSTIC_ENGAGEMENT: PROJECT_DELIVERY_ENGAGEMENT,
-    }.get(form.engagement_type.data, form.engagement_type.data)
+    }.get(form.engagement_type.data, form.engagement_type.data) or None
     submission = ContactSubmission(
         submission_id=submission_id,
         name=form.name.data,

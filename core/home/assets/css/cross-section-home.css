@@ -15,7 +15,7 @@
   padding: 48px 0 32px;
 }
 
-.cs-eyebrow, .cs-metric > span, .cs-status {
+.cs-eyebrow, .cs-metric > span {
   font: 700 11px/1.5 ui-monospace, "SFMono-Regular", Consolas, monospace;
   letter-spacing: .11em;
   text-transform: uppercase;
@@ -154,6 +154,7 @@
   font-weight: 700;
   cursor: pointer;
 }
+.cs-example .cs-text-link { display: inline-block; margin-top: 16px; }
 .cs-refund input { accent-color: var(--blue); width: 18px; height: 18px; }
 .cs-readout { min-width: 0; padding: 22px 24px; border: 1px solid var(--color-border); background: var(--white); }
 .cs-metric, .cs-layer-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
@@ -190,9 +191,8 @@
 .cs-work-card { display: flex; flex-direction: column; align-items: flex-start; padding: 28px 26px; border-left: 1px solid var(--color-border); }
 .cs-work-card:first-child { padding-left: 0; border-left: 0; }
 .cs-work-card:last-child { padding-right: 0; }
-.cs-work-card .cs-status { margin-bottom: 24px; }
 .cs-work-card h3, .cs-offer-list h3 { font: 700 clamp(21px, 1.9vw, 29px)/1.14 var(--font-family); letter-spacing: -.045em; }
-.cs-work-card p:not(.cs-status), .cs-offer-list p { color: var(--color-text-secondary); font-size: 16px; line-height: 1.6; margin: 16px 0 22px; }
+.cs-work-card p, .cs-offer-list p { color: var(--color-text-secondary); font-size: 16px; line-height: 1.6; margin: 16px 0 22px; }
 .cs-work-card a { margin-top: auto; }
 .cs-services { border-top: 1px solid var(--color-border); }
 .cs-offer-list { margin: 34px 0; }
@@ -206,7 +206,8 @@
 }
 .cs-offer-list article:first-child { border-top-color: var(--ink); }
 .cs-offer-list p { margin: 0; }
-.cs-offer-list a { justify-self: end; }
+.cs-offer-list a, .cs-offer-links { justify-self: end; }
+.cs-offer-links { display: grid; justify-items: end; gap: 12px; }
 .cs-directory { padding: 24px; background: var(--cool-gray); }
 .cs-directory h3 { margin-bottom: 13px; font: 700 19px/1.3 var(--font-family); letter-spacing: -.03em; }
 .cs-directory .service-links { margin: 0; }
@@ -259,9 +260,9 @@
   .cs-readout-controls .cs-layer-control span { min-height: 40px; display: grid; place-items: center; padding: 7px 9px; }
   .cs-work-grid, .cs-offer-list article { grid-template-columns: 1fr; }
   .cs-work-card:nth-child(n) { padding: 24px 0; border-top: 0; border-left: 0; border-bottom: 1px solid var(--color-border); }
-  .cs-work-card .cs-status { margin-bottom: 12px; }
   .cs-offer-list article { gap: 14px; }
-  .cs-offer-list a { justify-self: start; }
+  .cs-offer-list a, .cs-offer-links { justify-self: start; }
+  .cs-offer-links { justify-items: start; }
   .cs-directory { padding: 18px; }
   .cs-inspector { flex-wrap: nowrap; }
   .cs-inspector strong { font-size: 12px; }

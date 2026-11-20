@@ -10,7 +10,11 @@ import httpx
 import pytest
 
 from core import create_app
-from core.home.forms import PROJECT_DELIVERY_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT
+from core.home.forms import (
+    MIGRATION_RESCUE_ENGAGEMENT,
+    PROJECT_DELIVERY_ENGAGEMENT,
+    WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
+)
 from core.home.services import WAREHOUSE_DIAGNOSTIC_SLUG
 from test_analytics_reporting import collect_elements
 
@@ -102,10 +106,10 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert '<label for="name">Name</label>' in document
     assert '<label for="email">Work email</label>' in document
     assert (
-        '<legend>What would you like help with?</legend>'
+        '<legend>What would you like help with? (optional)</legend>'
         in document
     )
-    assert document.count('name="engagement_type"') == 5
+    assert document.count('name="engagement_type"') == 6
     assert '<select' not in document
     assert '<label for="message">Message</label>' in document
     assert 'autocomplete="name"' in document
@@ -118,6 +122,7 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
         'Value / Risk Diagnostic',
         'Data Foundation Blueprint',
         'Production AI Lighthouse',
+        MIGRATION_RESCUE_ENGAGEMENT,
         WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
         'Help me scope it',
     ):
@@ -160,7 +165,7 @@ def test_javascript_contact_form_behavior():
         ('email', ''),
         ('email', 'not-an-email'),
         ('email', f"{'e' * 243}@example.test"),
-        ('engagement_type', ''),
+        ('engagement_type', ' '),
         ('engagement_type', 'Unlisted engagement'),
         ('message', ''),
         ('message', 'short'),
@@ -244,6 +249,9 @@ def test_contact_rejects_honeypot_without_echoing_or_delivery(
 
 @pytest.mark.parametrize(('choice', 'expected_engagement'), [
     (TEST_ENGAGEMENT, TEST_ENGAGEMENT),
+    (None, None),
+    ('', None),
+    (MIGRATION_RESCUE_ENGAGEMENT, TEST_ENGAGEMENT),
     ('Help me scope it', None),
     (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, PROJECT_DELIVERY_ENGAGEMENT),
 ])
@@ -261,7 +269,10 @@ def test_success_sends_exact_signed_broker_payload(
         if field.get('name') == 'engagement_type' and 'checked' in field
     ]
     assert checked_topics == ([choice] if path != '/' else [])
-    form_data['engagement_type'] = choice
+    if choice is None:
+        form_data.pop('engagement_type')
+    else:
+        form_data['engagement_type'] = choice
     submission_id = form_data['submission_id']
     calls = []
 
