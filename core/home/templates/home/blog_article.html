@@ -23,40 +23,18 @@
                 </section>
                 {% endfor %}
             </div>
-            {% if article.slug == 'ai-workflow-production-evidence' %}
-            <section class="blog-offer" aria-labelledby="readiness-resource-heading">
-                <p class="blog-kicker">Free practical worksheet</p>
-                <h2 id="readiness-resource-heading">Review your own workflow</h2>
-                <p>The Data &amp; AI Production Readiness Scorecard helps you identify ownership, data, access, evaluation, operating, and cost gaps, then assign a next action. No email required.</p>
-                <p><a class="blog-text-link" href="{{ url_for('index.static', filename='downloads/data-ai-production-readiness-scorecard.pdf') }}" download data-analytics-event="resource_download" data-placement="article" data-destination-type="resource">Download the readiness scorecard ↓</a></p>
-                <p><a class="blog-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="ai_workflow_review">Explore applied AI workflows ↗</a></p>
-                <p><a class="blog-text-link" href="{{ url_for('index.blog_article', slug='audit-agent-proof-of-concept') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">Read the audit-agent case study ↗</a></p>
-                <p>Keep reading: <a href="{{ url_for('index.blog_article', slug='an-agent-needs-an-edge') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">operating boundaries</a>, <a href="{{ url_for('index.blog_article', slug='show-the-work-that-matters') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">reviewable evidence</a>, and <a href="{{ url_for('index.blog_article', slug='a-useful-stopping-point') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">a definition of completion</a>.</p>
-            </section>
-            {% elif article.slug == 'audit-agent-proof-of-concept' %}
-            <section class="blog-offer" aria-labelledby="case-study-next-heading">
-                <p class="blog-kicker">Put the approach to work</p>
-                <h2 id="case-study-next-heading">What does your workflow need?</h2>
-                <p><a class="blog-text-link" href="{{ url_for('index.blog_article', slug='ai-workflow-production-evidence') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">Read the production evidence guide ↗</a></p>
-                <p><a class="blog-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="ai_workflow_review">Explore applied AI workflows ↗</a></p>
-            </section>
-            {% endif %}
             <figure class="essay-signoff" data-essay-signoff>
                 <img src="{{ url_for('index.static', filename='images/nothing-wasted-signoff.webp') }}" alt="Nothing Wasted — Tera Earlywine" width="1080" height="600" loading="lazy">
                 <video data-src="{{ url_for('index.static', filename='media/nothing-wasted-signoff.mp4') }}" muted playsinline preload="none" width="1080" height="600" hidden aria-hidden="true"></video>
             </figure>
-            <section class="blog-offer essay-offer" aria-labelledby="essay-offer-heading">
-                <p class="blog-kicker">A relevant next step</p>
-                <h2 id="essay-offer-heading">{{ article.offer.name }}</h2>
-                <p>{{ article.offer.description }}</p>
-                <a class="blog-text-link" href="{{ url_for('index.index') }}#contact" data-analytics-event="navigation_click" data-placement="article" data-destination-type="section">{{ article.offer.cta }} <img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21"></a>
+            <section class="blog-offer essay-offer" aria-labelledby="essay-next-heading">
+                <h2 id="essay-next-heading">{{ next_step.heading }}</h2>
+                {% if next_step.description %}<p>{{ next_step.description }}</p>{% endif %}
+                <a class="blog-text-link essay-next-link" href="{{ next_step.url }}"{% if next_step.download %} download{% endif %}
+                   data-analytics-event="{{ 'resource_download' if next_step.download else 'navigation_click' }}" data-placement="article" data-destination-type="{{ next_step.destination }}">
+                    {{ next_step.label }} {% if next_step.download %}<span aria-hidden="true">↓</span>{% else %}<img src="{{ url_for('index.static', filename='images/arrow-up-right.svg') }}" alt="" width="21" height="21">{% endif %}
+                </a>
             </section>
-            <nav class="essay-next" aria-label="Next article">
-                <span class="blog-kicker">Keep exploring</span>
-                <a class="writing-row" href="{{ url_for('index.blog_article', slug=next_article.slug) }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">{{ next_article.title }}<img src="{{ url_for('index.static', filename='images/arrow-right.svg') }}" alt="" width="26" height="26"></a>
-                <a class="blog-text-link" href="{{ url_for('index.blog') }}" data-analytics-event="navigation_click" data-placement="article" data-destination-type="writing">Return to all articles</a>
-                <a class="blog-text-link" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="article" data-guide="both">Get my field notes by email</a>
-            </nav>
         </article>
     </main>
     {% include 'home/includes/footer.html' %}

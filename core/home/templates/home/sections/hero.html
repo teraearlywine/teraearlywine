@@ -1,16 +1,15 @@
-{% from 'home/includes/sales_layers.html' import layer_selector %}
 <section class="cs-frame cs-opening" id="hero" aria-labelledby="hero-heading">
     <div class="cs-hero">
         <div class="cs-introduction">
-            <p class="cs-eyebrow">The business of technology</p>
-            <h1 id="hero-heading"><span>What’s worth</span> <span>building?</span></h1>
-            <p class="cs-lede">I’m Tera Earlywine, a data engineer and independent consultant. I write about what a warehouse bill can tell you, where an AI workflow needs a person, and how to decide whether a new tool earns its keep.</p>
+            <p class="cs-eyebrow">Tera Earlywine · Data and AI Consulting</p>
+            <h1 id="hero-heading">Fix the reporting and workflows slowing your team down.</h1>
+            <p class="cs-lede">I help business and technical teams agree on the numbers, automate repetitive work, and get stalled data and AI projects moving. We start with one problem, test a practical fix, and make sure your team can carry the work forward.</p>
             <div class="cs-actions">
-                <a class="button button--primary" href="{{ url_for('index.newsletter') }}" data-analytics-event="newsletter_cta_click" data-placement="hero" data-guide="both">Get the newsletter <span aria-hidden="true">↗</span></a>
-                <a class="cs-text-link" href="{{ url_for('index.for_teams') }}" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="teams">Work with me</a>
+                <a class="button button--primary" href="#contact" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">Tell me what’s stuck <span aria-hidden="true">↗</span></a>
+                <a class="cs-text-link" href="#projects" data-analytics-event="navigation_click" data-placement="hero" data-destination-type="section">See examples of my work</a>
             </div>
         </div>
-        <figure class="cs-figure" data-layer="rule">
+        <figure class="cs-hero-visual">
             <div class="cs-specimen">
                 <img class="cs-hero-art" src="{{ url_for('index.static', filename='images/cross-section-hero-960.webp') }}"
                      srcset="{{ url_for('index.static', filename='images/cross-section-hero-640.webp') }} 640w,
@@ -18,19 +17,7 @@
                              {{ url_for('index.static', filename='images/cross-section-hero-1536.webp') }} 1536w"
                      sizes="(max-width: 740px) 95vw, (min-width: 1480px) 736px, 51vw" width="1536" height="1024" fetchpriority="high"
                      alt="Exploded layers of ultramarine paper surround a single orange cube.">
-                <div class="cs-pin" aria-hidden="true"><span class="cs-pin-line"></span><span class="cs-pin-label">Business rule</span></div>
             </div>
-            <figcaption>
-                <div class="cs-inspector">
-                    <strong id="inspect-heading">Inspect the layers</strong>
-                    {{ layer_selector('sales-layer', 'Inspect the layers') }}
-                </div>
-                <p class="cs-hint" aria-live="polite">Subtract posted refunds from completed sales.</p>
-            </figcaption>
         </figure>
-    </div>
-    <div class="cs-proof">
-        <div><p>Migration programs I’ve worked on spanned</p><strong>500+ workflows</strong></div>
-        <div><p>My optimization work identified</p><strong>$500K+ in projected Snowflake savings</strong></div>
     </div>
 </section>

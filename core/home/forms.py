@@ -3,11 +3,11 @@ from wtforms import HiddenField, RadioField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
 UNSCOPED_ENGAGEMENT = 'Help me scope it'
-ENGAGEMENT_TYPES = (
-    'Value / Risk Diagnostic',
-    'Data Foundation Blueprint',
-    'Production AI Lighthouse',
-)
+WAREHOUSE_DIAGNOSTIC_ENGAGEMENT = 'Warehouse cost diagnostic'
+PROJECT_DELIVERY_ENGAGEMENT = 'Value / Risk Diagnostic'
+DATA_REPORTING_ENGAGEMENT = 'Data Foundation Blueprint'
+MIGRATION_RESCUE_ENGAGEMENT = 'Migration rescue'
+AI_AUTOMATION_ENGAGEMENT = 'Production AI Lighthouse'
 
 
 def _strip(value):
@@ -25,7 +25,7 @@ class ContactForm(FlaskForm):
         ],
     )
     email = StringField(
-        'Email',
+        'Work email',
         filters=[_strip],
         validators=[
             DataRequired(message='Enter your email address.'),
@@ -37,11 +37,16 @@ class ContactForm(FlaskForm):
         ],
     )
     engagement_type = RadioField(
-        'Potential engagement',
-        choices=[(value, value) for value in (*ENGAGEMENT_TYPES, UNSCOPED_ENGAGEMENT)],
-        validators=[
-            DataRequired(message='Select an engagement type.'),
+        'What would you like help with?',
+        choices=[
+            (PROJECT_DELIVERY_ENGAGEMENT, 'Data and AI project delivery'),
+            (DATA_REPORTING_ENGAGEMENT, 'Data and reporting'),
+            (MIGRATION_RESCUE_ENGAGEMENT, MIGRATION_RESCUE_ENGAGEMENT),
+            (AI_AUTOMATION_ENGAGEMENT, 'AI and workflow automation'),
+            (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT),
+            (UNSCOPED_ENGAGEMENT, UNSCOPED_ENGAGEMENT),
         ],
+        validators=[Optional(strip_whitespace=False)],
     )
     message = TextAreaField(
         'Message',

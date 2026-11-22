@@ -1,178 +1,169 @@
 """Public service copy shared by page routes, navigation, and the sitemap."""
 
+WAREHOUSE_DIAGNOSTIC_SLUG = 'warehouse-cost-diagnostic'
+
 SERVICES = {
     'data-platform-modernization': {
-        'name': 'Data platform modernization',
-        'title': 'Data Platform Modernization Consultant | Tera Earlywine',
+        'name': 'Data and reporting',
+        'title': 'Data and Reporting Consulting | Tera Earlywine',
         'description': (
-            'Modernize the data behind reporting, compliance, and AI. Work with Tera '
-            'Earlywine to map critical workflows, define ownership, and plan migration.'
+            'Resolve conflicting metrics and improve recurring reports with shared '
+            'definitions, data quality checks, and a handoff your team can maintain.'
         ),
-        'headline': 'Make the warehouse easier to run.',
+        'headline': 'The same question returns two numbers.',
         'intro': (
-            'A report changes when you switch dashboards. The same transformations '
-            'run over and over. I help your engineers trace what the business depends '
-            'on and decide where a platform change will pay off.'
+            'I help the people who build and use your reports agree on what the '
+            'numbers mean and fix the data behind them.'
         ),
-        'problem_title': 'The same question returns two numbers.',
-        'problem': (
-            'Competing definitions, expensive refreshes, and unknown downstream '
-            'consumers make even simple changes hard to release. I work with the '
-            'people who build and use the data to identify the first useful repair.'
-        ),
-        'signals': [
-            'Teams reconcile competing versions of the same metric.',
-            'Warehouse costs are rising faster than the workloads they support.',
-            'Quality or access issues are blocking analytics and AI work.',
-        ],
         'deliverables': [
-            ('Workload assessment', 'A map of critical jobs, consumers, operating costs, and ownership gaps.'),
-            ('Data Foundation Blueprint', 'The target architecture, data contracts, access model, and tests.'),
-            ('Migration sequence', 'An order of work with decision owners, cutover checks, and a rollback path.'),
+            ('Shared definitions', 'Agreed metric definitions, business rules, and owners.'),
+            ('Reporting fixes', 'Data models and quality checks for the reports your team uses to make decisions.'),
+            ('A handoff', 'Documentation and a walkthrough so your team can maintain the changes.'),
         ],
         'approach': (
-            'We start with one decision the platform has to support. We follow the '
-            'data into the report or application, identify redundant work, and agree '
-            'which checks will tell us the change is safe.'
+            'We trace one disputed number or recurring manual fix to its source. '
+            'Then we test the change with the people who use the report.'
         ),
         'experience': (
-            'My work includes enterprise migrations, platform engineering at Block '
-            'and Mercari, and infrastructure optimization that identified $500K+ '
-            'in projected Snowflake savings.'
+            'I aligned stakeholders on shared data definitions, built a prototype, '
+            'and taught the approach to the implementation team.'
         ),
         'starting_point': (
-            'For a smaller team, the paid Data Waste & Efficiency Diagnostic reviews '
-            'one warehouse and a defined set of workloads. Bring query history, billing '
-            'context, and a workload owner. You leave with a baseline, ranked improvements, '
-            'explicit assumptions, and a measurement plan.'
+            'Bring one report people question or one manual step your team repeats. '
+            'We’ll use it to decide what to fix first.'
         ),
     },
     'data-migration-rescue': {
-        'name': 'Data migration rescue',
-        'title': 'Data Migration Rescue Consultant | Tera Earlywine',
+        'name': 'Migration rescue',
+        'title': 'Data Migration Rescue Consulting | Tera Earlywine',
         'description': (
-            'Get a stalled data migration moving with dependency mapping, '
-            'reconciliation, cutover planning, and rollback criteria. Independent '
-            'consulting by Tera Earlywine.'
+            'Get a stalled data migration ready for cutover with a dependency map, '
+            'reconciliation checks, and clear criteria for switching over or rolling back.'
         ),
-        'headline': 'Get the next cutover ready.',
+        'headline': 'Know when it’s safe to switch over.',
         'intro': (
-            'When a growing platform has two versions of the truth, the next release '
-            'needs more than a date. I trace the failing workflow with your team, '
-            'identify what depends on it, and document when to switch over or roll back.'
+            'If the old and new systems disagree or another dependency turns up '
+            'late, I help your team decide what needs fixing before the cutover.'
         ),
-        'problem_title': 'The deadline keeps moving.',
-        'problem': (
-            'Downstream reports disagree and new dependencies appear each time the team '
-            'rehearses a cutover. I help your engineers separate release blockers from '
-            'follow-up work and give each blocker an owner.'
-        ),
-        'signals': [
-            'Source and target totals diverge.',
-            'Consumer dependencies surface late.',
-            'The team needs a recovery path while production keeps running.',
-        ],
         'deliverables': [
-            ('Dependency map', 'The jobs, people, reports, and applications affected by the first cutover.'),
+            ('Dependency map', 'The jobs, reports, applications, and teams affected by the cutover.'),
             ('Reconciliation checks', 'Tests for completeness, freshness, and the business rules behind the numbers.'),
-            ('Cutover runbook', 'Acceptance criteria, decision owners, rollback triggers, and a rehearsed path back.'),
+            ('Cutover runbook', 'Who makes the call, what must pass, and when and how to roll back.'),
         ],
         'approach': (
-            'We choose one representative discrepancy, reproduce it in both systems, '
-            'and test the fix against the downstream result. Then we rehearse the '
-            'transition with the people who will own it in production.'
+            'We trace one discrepancy through both systems, check the fix against '
+            'the downstream report, and rehearse the cutover with the team that will run it.'
         ),
         'experience': (
-            'I’ve worked on migration programs spanning 500+ workflows. That experience '
-            'informs how I trace dependencies and verify the reports that need to stay available.'
+            'I’ve worked on migration programs spanning 500+ workflows, where '
+            'dependencies and reporting continuity matter at every cutover.'
         ),
         'starting_point': (
-            'Bring one unresolved discrepancy, the current cutover plan, and the deadline '
-            'driving the work. We can use those to scope a recovery review.'
+            'Bring one mismatch, the current cutover plan, and the deadline. '
+            'We’ll use them to identify what’s blocking the next release.'
         ),
     },
     'production-ai-systems': {
-        'name': 'Applied AI workflows & reliability',
-        'title': 'Applied AI Workflows & Reliability | Tera Earlywine',
+        'name': 'AI and workflow automation',
+        'title': 'AI and Workflow Automation Consulting | Tera Earlywine',
         'description': (
-            'Move an AI workflow toward production with evaluation, permissions, '
-            'recovery, monitoring, and human escalation. Work with Tera Earlywine.'
+            'Automate one recurring task or strengthen an AI pilot with a tested '
+            'workflow, clear human review, and a plan for safe handoff.'
         ),
-        'headline': 'Give the production reviewer evidence.',
+        'headline': 'Take one recurring task off your team’s plate.',
         'intro': (
-            'When a pilot is ready for review, I work alongside your platform, data, and '
-            'risk teams to test one workflow under real operating constraints.'
+            'If people keep gathering, copying, or checking the same information, '
+            'I help your team decide what to automate, test it, and define where '
+            'a person should step in.'
         ),
-        'problem_title': 'The demo works. The operating questions are open.',
-        'problem': (
-            'A production reviewer needs to know which actions the workflow can take, '
-            'where a human intervenes, and how operators recover from a partial failure. '
-            'Those answers shape the release.'
-        ),
-        'signals': [
-            'The team has a promising pilot and needs evaluation criteria.',
-            'An agent needs controlled access to business systems.',
-            'Operators need to explain or recover from a failed run.',
-        ],
         'deliverables': [
-            ('Scoped workflow', 'Defined inputs, permissions, state, and human escalation points.'),
-            ('Evaluation report', 'Results for accuracy, latency, cost, and agreed failure scenarios.'),
-            ('Operational handoff', 'Monitoring, a recovery runbook, and explicit responsibilities for operating the workflow.'),
+            ('A map of the work', 'Which steps to simplify, which to automate, and who owns the result.'),
+            ('A tested workflow', 'A prototype or integration checked against real examples, costs, and failure scenarios.'),
+            ('A plan to run it', 'What people review, who handles exceptions, and how to recover when something goes wrong.'),
         ],
         'approach': (
-            'The Production AI Lighthouse starts with one use case. We establish a '
-            'baseline, integrate the workflow, and test it against agreed launch criteria. '
-            'Your team gets the evidence to release, revise, or stop.'
+            'We agree on what would make the change worthwhile before building it. '
+            'If you already have a pilot, we check its permissions, review steps, '
+            'and recovery before it goes live.'
         ),
         'experience': (
-            'For a client, I designed an audit-agent proof of concept that separated '
-            'workflow orchestration from the context needed to review a decision. '
-            'I documented gaps and the handoff. This was not a production deployment.'
+            'I designed an audit-agent proof of concept that recorded its steps '
+            'and decisions for reviewers and surfaced gaps to address before production.'
         ),
         'starting_point': (
-            'Bring one workflow, a person who owns its outcome, and an example of a '
-            'wrong or incomplete result. We can use those to scope the evaluation.'
+            'Bring one repeated task or an existing pilot and an example of the '
+            'result someone needs. We’ll work out what to test first.'
         ),
     },
     'fractional-data-leadership': {
-        'name': 'Fractional data leadership',
-        'title': 'Fractional Data Platform Leadership | Tera Earlywine',
+        'name': 'Data and AI project delivery',
+        'title': 'Data and AI Project Delivery Consulting | Tera Earlywine',
         'description': (
-            'Get independent data-platform leadership for architecture decisions, '
-            'delivery priorities, governance, and production operations. Consulting by Tera Earlywine.'
+            'Resolve the decisions holding up a data or AI project and give both '
+            'teams a shared scope, a delivery plan, and clear owners.'
         ),
-        'headline': 'Put a senior data engineer alongside your team.',
+        'headline': 'Make the decision holding up your project.',
         'intro': (
-            'When platform decisions are waiting for an owner, I help your engineering '
-            'leadership agree on priorities and work through the technical decisions with your team.'
+            'When business and technical teams are working toward different goals, '
+            'I bring them together to agree on what to deliver, who owns it, and '
+            'what to do next.'
         ),
-        'problem_title': 'The team has more commitments than capacity.',
-        'problem': (
-            'A migration, recurring incidents, and new AI requests can compete for the '
-            'same engineers. I help make the tradeoffs explicit and identify what needs a decision first.'
-        ),
-        'signals': [
-            'Architecture and investment decisions lack a clear owner.',
-            'Operational work keeps displacing planned improvements.',
-            'The team needs experienced support during a transition.',
-        ],
         'deliverables': [
-            ('Platform roadmap', 'Priorities tied to business decisions, production risk, and team capacity.'),
-            ('Decision record', 'Documented design choices, dependencies, and the evidence behind them.'),
-            ('Operating model', 'Owners, review practices, escalation paths, and a handoff your internal team can use.'),
+            ('Shared scope', 'The outcome, what’s in scope, and how both teams will judge success.'),
+            ('Delivery plan', 'Priorities, dependencies, named owners, and review points.'),
+            ('A handoff', 'Decision records, documentation, and a walkthrough for the people carrying the work forward.'),
         ],
         'approach': (
-            'We map the decisions waiting on your team and agree on a bounded remit, '
-            'working cadence, and handoff. I join design reviews and contribute directly '
-            'to the platform work that needs senior engineering attention.'
+            'We start with the decision that’s blocking progress. I lead the work '
+            'of getting both teams to agreement and can help review the design or '
+            'build the solution when that’s part of the scope.'
         ),
         'experience': (
-            'My background includes staff data engineering at Block, warehouse and data '
-            'engineering at Mercari, and independent consulting across data reliability and production AI.'
+            'My work has included translating business rules into data definitions '
+            'and teaching the team responsible for implementation how to apply them.'
         ),
         'starting_point': (
-            'Bring the decisions that are waiting, your team structure, and the outcomes '
-            'you need to protect. We can agree on which responsibilities I can take on.'
+            'Bring one stalled decision and tell me who needs to make it. '
+            'We’ll work out where I can help move the project forward.'
+        ),
+    },
+    WAREHOUSE_DIAGNOSTIC_SLUG: {
+        'name': 'Warehouse cost diagnostic',
+        'title': 'Warehouse Cost Diagnostic | Tera Earlywine',
+        'description': (
+            'A paid review of one data warehouse and a defined set of workloads. '
+            'Get a cost baseline, ranked changes, and a plan to measure the results.'
+        ),
+        'headline': 'Your warehouse bill went up. What should you change first?',
+        'intro': (
+            'I review one warehouse and a defined set of workloads to find what’s '
+            'driving the bill and which changes are worth testing. This is a paid diagnostic.'
+        ),
+        'deliverables': [
+            ('Cost baseline', 'Recurring costs attributable to the workloads in scope and the assumptions behind them.'),
+            ('Ranked changes', 'What to test first, with estimated benefit, effort, and risk to reporting.'),
+            ('Measurement plan', 'What to compare before and after, including billed compute, data freshness, and report accuracy.'),
+        ],
+        'approach': (
+            'I review billing and query history to trace costs to the jobs and '
+            'reports they support. We review the recommendations together and '
+            'scope implementation separately.'
+        ),
+        'sample': {
+            'title': 'Example recommendation',
+            'change': 'Test moving a dashboard refresh from every five minutes to every 15 minutes.',
+            'details': [
+                'Scheduled runs fall from 288 to 96 per day. Check whether billed compute falls as well.',
+                'Confirm the refresh requirement with the report owner and keep the old schedule ready to restore.',
+                'Compare billed compute and freshness over similar weeks and reconcile the report totals before keeping the change.',
+            ],
+        },
+        'experience': (
+            'My optimization work identified $500K+ in projected Snowflake savings.'
+        ),
+        'starting_point': (
+            'Bring one unexpected charge or one workload you want to understand. '
+            'We’ll use it to scope the review.'
         ),
     },
 }

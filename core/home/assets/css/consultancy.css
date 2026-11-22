@@ -405,13 +405,23 @@ li[id] {
   max-width: 1100px;
 }
 
-.contact .section-header {
+.contact-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
   margin-bottom: 25px;
 }
 
 .contact-text {
   max-width: 670px;
   margin: 0 0 35px;
+}
+
+.contact-faq {
+  max-width: 670px;
+  margin-bottom: 35px;
 }
 
 .contact-form {
@@ -515,24 +525,12 @@ li[id] {
   border-color: var(--color-error);
 }
 
-.contact-actions {
-  border-top: 1px solid var(--color-border);
-  padding-top: 24px;
-  margin-top: 32px;
-}
-
-.contact-actions__title {
-  font-size: 16px;
-  font-weight: 400;
-}
-
 .contact-cta {
   border-radius: 4px;
   font-weight: 400;
   padding: 13px 24px;
 }
 
-.contact-actions,
 .contact-social {
   justify-content: flex-start;
 }
@@ -766,7 +764,7 @@ li[id] {
   text-underline-offset: 5px;
 }
 
-.service-next .button {
+.service-next .hero-actions {
   margin-top: 28px;
 }
 
@@ -969,9 +967,6 @@ h1, h2, h3, .section-title, .service-hero h1, .engagement-number, .service-index
   }
   .contact-social {
     margin-top: 30px;
-  }
-  .contact-actions {
-    align-items: flex-start;
   }
 }
 

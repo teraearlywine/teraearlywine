@@ -22,20 +22,21 @@ from flask import (
 )
 
 from core.home.blog_content import (
-    ARTICLES, ARTICLES_BY_SLUG, BLOG_DESCRIPTION, FEATURED_ARTICLES, OFFERS,
+    ARTICLES, ARTICLES_BY_SLUG, BLOG_DESCRIPTION, FEATURED_ARTICLES,
 )
-from core.home.contact_admission import (
-    ContactAdmissionError,
-    ContactAdmissionStore,
-)
+from core.home.contact_admission import ContactAdmissionError, ContactAdmissionStore
 from core.home.contact_delivery import (
     ContactDeliveryError,
     ContactFiltered,
     ContactSubmission,
     deliver_contact_submission,
 )
-from core.home.forms import ContactForm, UNSCOPED_ENGAGEMENT
-from core.home.services import SERVICES
+from core.home.forms import (
+    AI_AUTOMATION_ENGAGEMENT, DATA_REPORTING_ENGAGEMENT, MIGRATION_RESCUE_ENGAGEMENT,
+    PROJECT_DELIVERY_ENGAGEMENT,
+    UNSCOPED_ENGAGEMENT, WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, ContactForm,
+)
+from core.home.services import SERVICES, WAREHOUSE_DIAGNOSTIC_SLUG
 
 
 index_bp = Blueprint(
@@ -50,37 +51,21 @@ index_bp = Blueprint(
 CONTACT_SUBMISSIONS_SESSION_KEY = 'contact_submissions'
 CONTACT_SUBMISSION_TTL_SECONDS = 3600
 MAX_PENDING_CONTACT_SUBMISSIONS = 5
+SERVICE_INQUIRY_TOPICS = {
+    'data-platform-modernization': DATA_REPORTING_ENGAGEMENT,
+    'data-migration-rescue': MIGRATION_RESCUE_ENGAGEMENT,
+    'production-ai-systems': AI_AUTOMATION_ENGAGEMENT,
+    'fractional-data-leadership': PROJECT_DELIVERY_ENGAGEMENT,
+    WAREHOUSE_DIAGNOSTIC_SLUG: WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
+}
 FAQ_ITEMS = (
     {
-        'question': 'Who is Tera Earlywine?',
-        'answer': (
-            'I’m a data engineer, writer, and independent consultant with 9+ years '
-            'of experience across fintech, marketplaces, and enterprise data platforms.'
-        ),
-    },
-    {
-        'question': 'What can I learn here?',
-        'answer': (
-            'I write about what technology costs, how people use AI at work, and '
-            'what I learn building with it. Try the net-sales example to see how '
-            'one refund changes a number that finance and engineering both rely on.'
-        ),
-    },
-    {
-        'question': 'When should a company hire Tera?',
-        'answer': (
-            'Bring me a decision your team is stuck on. I can help you weigh an AI '
-            'pilot, investigate a warehouse bill, or decide when a migration is ready '
-            'for its next cutover.'
-        ),
+        'question': 'Do we need a fully defined project?',
+        'answer': 'No. A few sentences about what’s happening and what you’d like to change are enough to get started.',
     },
     {
         'question': 'How does an engagement start?',
-        'answer': (
-            'We start with a 20–30 minute fit call. Bring one example and the '
-            'question you need to answer. If I can help, we’ll agree on the scope '
-            'and what you’ll take away.'
-        ),
+        'answer': 'If the first conversation points to a fit, we’ll agree on the scope, who does what, and what your team will take away.',
     },
 )
 
@@ -161,9 +146,14 @@ def _contact_form_response(form, message, status_code, challenge=False):
             }
         ), status_code
 
+    selected_topic = form.engagement_type.data
     safe_form = ContactForm(
         formdata=None,
         submission_id=_new_contact_submission(),
+        engagement_type=(
+            selected_topic
+            if any(value == selected_topic for value, _ in form.engagement_type.choices) else None
+        ),
     )
     for field_name in ('name', 'email', 'engagement_type', 'message'):
         safe_form[field_name].errors = list(form.errors.get(field_name, ()))
@@ -201,15 +191,13 @@ def _contact_source_identity():
     """Return a canonical address from a server-controlled request source."""
     source = request.remote_addr or ''
     if os.environ.get('GAE_ENV') == 'standard':
-        # App Engine removes externally supplied X-Appengine-* headers and sets
-        # this value at its frontend. Do not trust forwarding headers elsewhere.
+        # App Engine may supply this internal value; never infer an identity
+        # from caller-provided forwarding headers or an App Engine proxy peer.
         source = request.headers.get('X-Appengine-User-Ip', '')
     try:
         return ip_address(str(source).strip()).compressed
     except ValueError:
-        # Missing and malformed identities share one constrained bucket rather
-        # than becoming attacker-selected bucket keys.
-        return 'unknown'
+        return None
 
 
 def _contact_admission_store():
@@ -299,15 +287,15 @@ def seo_metadata():
                     '@id': person_id,
                     'name': 'Tera Earlywine',
                     'url': homepage_url,
-                    'jobTitle': 'Independent Data & AI Consultant',
+                    'jobTitle': 'Data and AI Consultant',
                     'description': (
-                        'Data engineer, writer, and independent consultant exploring what '
-                        'data and AI are worth to the people who use them.'
+                        'Data and AI consulting to improve reporting, automate repetitive '
+                        'work, and help business and technical teams move projects forward.'
                     ),
                     'knowsAbout': [
-                        'Technology investment decisions',
-                        'The cost of cloud computing',
-                        'Production-grade data and AI for regulated, high-consequence operations',
+                        'Data and reporting',
+                        'Workflow automation',
+                        'Cross-functional collaboration',
                         'Data platform modernization',
                         'Data reliability',
                         'AI-ready data foundations',
@@ -325,16 +313,14 @@ def seo_metadata():
                     'name': 'Tera Earlywine Consulting',
                     'url': homepage_url,
                     'description': (
-                        'Hands-on consulting for data reliability, platform migrations, '
-                        'and production AI workflows.'
+                        'Consulting for data and reporting, practical AI and workflow '
+                        'automation, and data and AI project delivery.'
                     ),
                     'founder': {'@id': person_id},
                     'serviceType': [
-                        'Data platform modernization',
-                        'Reliability and migration rescue',
-                        'AI-ready data foundations',
-                        'Production AI systems',
-                        'Fractional platform leadership',
+                        'Data and reporting',
+                        SERVICES['production-ai-systems']['name'],
+                        'Data and AI project delivery',
                     ],
                     'areaServed': 'United States',
                 },
@@ -402,7 +388,7 @@ def seo_metadata():
             {'@type': 'ListItem', 'position': 1,
              'name': 'Home', 'item': homepage_url},
             {'@type': 'ListItem', 'position': 2,
-             'name': 'Ideas', 'item': blog_url},
+             'name': 'Writing', 'item': blog_url},
         ]
         if article:
             entity = {
@@ -455,8 +441,9 @@ def seo_metadata():
         'page_og_type': 'article' if article else 'website',
         'is_blog': is_blog,
         'services': SERVICES,
+        'warehouse_diagnostic_slug': WAREHOUSE_DIAGNOSTIC_SLUG,
         'social_image_url': (
-            f"{site_url}{url_for('index.static', filename='images/cross-section-social.jpg')}"
+            f"{site_url}{url_for('index.static', filename='images/consulting-social.jpg')}"
             if site_url else ''
         ),
         'search_console_verification': str(
@@ -473,7 +460,8 @@ def index():
 
     Browser home page for www.teraearlywine.com
     """
-    form = ContactForm(submission_id=_new_contact_submission())
+    engagement = SERVICE_INQUIRY_TOPICS.get(request.args.get('topic'))
+    form = ContactForm(submission_id=_new_contact_submission(), engagement_type=engagement)
     return render_template('home/home.html', contact_form=form)
 
 
@@ -517,14 +505,17 @@ def contact():
             503,
         )
 
+    # Map the public choices to the categories the delivery broker supports.
+    engagement = {
+        UNSCOPED_ENGAGEMENT: None,
+        MIGRATION_RESCUE_ENGAGEMENT: DATA_REPORTING_ENGAGEMENT,
+        WAREHOUSE_DIAGNOSTIC_ENGAGEMENT: PROJECT_DELIVERY_ENGAGEMENT,
+    }.get(form.engagement_type.data, form.engagement_type.data) or None
     submission = ContactSubmission(
         submission_id=submission_id,
         name=form.name.data,
         email=''.join(form.email.data.split()).lower(),
-        engagement_type=(
-            None if form.engagement_type.data == UNSCOPED_ENGAGEMENT
-            else form.engagement_type.data
-        ),
+        engagement_type=engagement,
         message=form.message.data,
         spam_context={
             'honeypot': form.website.data or '',
@@ -549,32 +540,34 @@ def contact():
     ]
 
     if not state['delivered']:
-        try:
-            admitted = _contact_admission_store().admit(
-                _contact_source_identity()
-            )
-        except ContactAdmissionError as error:
-            current_app.logger.warning(
-                'Contact admission unavailable for submission %s: %s',
-                submission_id,
-                error,
-            )
-            return _contact_form_response(
-                form,
-                'Message delivery is temporarily unavailable. Please try again later.',
-                503,
-            )
+        source = _contact_source_identity() if current_app.config['CONTACT_ADMISSION_ENABLED'] else None
+        # An unavailable identity must not turn every visitor into one shared bucket.
+        # The delivery broker retains its independent controls on every request.
+        if source is not None:
+            try:
+                admitted = _contact_admission_store().admit(source)
+            except ContactAdmissionError as error:
+                current_app.logger.warning(
+                    'Contact admission unavailable for submission %s: %s',
+                    submission_id,
+                    error,
+                )
+                return _contact_form_response(
+                    form,
+                    'Message delivery is temporarily unavailable. Please try again later.',
+                    503,
+                )
 
-        if not admitted:
-            current_app.logger.warning(
-                'contact_spam_decision ruleId=source_rate timestamp=%s count=1',
-                int(time.time()),
-            )
-            return _contact_form_response(
-                form,
-                'Your submission could not be accepted. Please try again later.',
-                429,
-            )
+            if not admitted:
+                current_app.logger.warning(
+                    'contact_spam_decision ruleId=source_rate timestamp=%s count=1',
+                    int(time.time()),
+                )
+                return _contact_form_response(
+                    form,
+                    'Your submission could not be accepted. Please try again later.',
+                    429,
+                )
 
         try:
             deliver_contact_submission(
@@ -706,8 +699,8 @@ def for_teams():
         'home/for_teams.html',
         page_title='Data & AI Consulting for Teams | Tera Earlywine',
         page_description=(
-            'Work with Tera Earlywine to assess an AI workflow, investigate a '
-            'warehouse bill, or decide when a data migration is ready.'
+            'Get help with data and reporting, practical AI and workflow '
+            'automation, and data and AI projects that need to move forward.'
         ),
     )
 
@@ -753,7 +746,6 @@ def blog():
         'home/blog_index.html',
         articles=ARTICLES,
         featured_articles=FEATURED_ARTICLES,
-        diagnostic_offer=OFFERS['diagnostic'],
         stack_articles=stack_articles,
         is_blog=True,
         page_title='The Business of Technology | Tera Earlywine',
@@ -763,16 +755,52 @@ def blog():
 
 @index_bp.route('/blog/<slug>/')
 def blog_article(slug):
-    """Read one article, with a path to the next note."""
+    """Read one article and its recommended next step."""
     article = ARTICLES_BY_SLUG.get(slug)
     if article is None:
         abort(404)
-    next_article = ARTICLES[(ARTICLES.index(article) + 1) % len(ARTICLES)]
+    kind, target = article['next_step']
+    if kind == 'article':
+        next_step = {
+            'heading': 'Read next',
+            'label': ARTICLES_BY_SLUG[target]['title'],
+            'url': url_for('index.blog_article', slug=target),
+            'destination': 'writing',
+        }
+    elif kind == 'service':
+        destination = {
+            WAREHOUSE_DIAGNOSTIC_SLUG: 'diagnostic',
+            'production-ai-systems': 'ai_workflow_review',
+            'data-migration-rescue': 'migration_cutover',
+        }.get(target, 'service')
+        next_step = {
+            'heading': 'Get help with this',
+            'label': SERVICES[target]['name'],
+            'url': url_for('index.service', slug=target),
+            'destination': destination,
+        }
+    elif kind == 'demo':
+        next_step = {
+            'heading': 'Try it yourself',
+            'label': 'Try the net-sales demo',
+            'url': url_for('index.for_professionals', _anchor=target),
+            'destination': 'net_sales_demo',
+        }
+    elif kind == 'download':
+        next_step = {
+            'heading': 'Review your own workflow',
+            'description': 'Use this free worksheet to find gaps and assign a next action before release. No email required.',
+            'label': 'Download the readiness scorecard',
+            'url': url_for('index.static', filename=target),
+            'destination': 'resource',
+            'download': True,
+        }
+    else:
+        raise ValueError(f'Unknown next-step kind: {kind}')
     return render_template(
         'home/blog_article.html',
         article=article,
-        next_article=next_article,
-        articles=ARTICLES,
+        next_step=next_step,
         is_blog=True,
         page_title=f"{article['title']} | Tera Earlywine",
         page_description=article['dek'],
@@ -788,6 +816,7 @@ def service(slug):
         'home/service.html',
         service=service,
         service_slug=slug,
+        inquiry_url=url_for('index.index', topic=slug, _anchor='contact'),
         page_title=service['title'],
         page_description=service['description'],
     )

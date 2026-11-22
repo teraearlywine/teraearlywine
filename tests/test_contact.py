@@ -11,6 +11,13 @@ import pytest
 
 from core import create_app
 from core.home.contact_admission import ContactAdmissionError
+from core.home.forms import (
+    MIGRATION_RESCUE_ENGAGEMENT,
+    PROJECT_DELIVERY_ENGAGEMENT,
+    WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
+)
+from core.home.services import WAREHOUSE_DIAGNOSTIC_SLUG
+from test_analytics_reporting import collect_elements
 
 
 PROJECT_ROOT = Path(__file__).parents[1]
@@ -59,6 +66,7 @@ class StubContactAdmission:
 
 
 def _set_contact_admission(app, **kwargs):
+    app.config['CONTACT_ADMISSION_ENABLED'] = True
     store = StubContactAdmission(**kwargs)
     app.extensions['contact_admission_store'] = store
     return store
@@ -73,8 +81,8 @@ def _hidden_value(document, field_name):
     return match.group(1)
 
 
-def _contact_form(client):
-    response = client.get('/')
+def _contact_form(client, path='/'):
+    response = client.get(path)
     assert response.status_code == 200
     document = response.get_data(as_text=True)
     return {
@@ -119,12 +127,12 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert 'action="/contact"' in document
     assert 'data-contact-form' in document
     assert '<label for="name">Name</label>' in document
-    assert '<label for="email">Email</label>' in document
+    assert '<label for="email">Work email</label>' in document
     assert (
-        '<legend>Potential engagement</legend>'
+        '<legend>What would you like help with? (optional)</legend>'
         in document
     )
-    assert document.count('name="engagement_type"') == 4
+    assert document.count('name="engagement_type"') == 6
     assert '<select' not in document
     assert '<label for="message">Message</label>' in document
     assert 'autocomplete="name"' in document
@@ -137,6 +145,8 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
         'Value / Risk Diagnostic',
         'Data Foundation Blueprint',
         'Production AI Lighthouse',
+        MIGRATION_RESCUE_ENGAGEMENT,
+        WAREHOUSE_DIAGNOSTIC_ENGAGEMENT,
         'Help me scope it',
     ):
         assert engagement_type in document
@@ -145,6 +155,14 @@ def test_home_renders_accessible_progressively_enhanced_contact_form(
     assert re.fullmatch(
         r'[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
         form_data['submission_id'],
+    )
+
+
+def test_unknown_inquiry_topic_leaves_choices_unselected(app_factory):
+    document = app_factory().test_client().get('/?topic=unlisted-service').get_data(as_text=True)
+    assert not any(
+        'checked' in option for option in collect_elements(document, 'input')
+        if option.get('name') == 'engagement_type'
     )
 
 
@@ -170,7 +188,7 @@ def test_javascript_contact_form_behavior():
         ('email', ''),
         ('email', 'not-an-email'),
         ('email', f"{'e' * 243}@example.test"),
-        ('engagement_type', ''),
+        ('engagement_type', ' '),
         ('engagement_type', 'Unlisted engagement'),
         ('message', ''),
         ('message', 'short'),
@@ -252,139 +270,32 @@ def test_contact_rejects_honeypot_without_echoing_or_delivery(
     assert upstream_calls == []
 
 
-def test_source_limit_stops_delivery_before_shared_broker_quota(
-    contact_app,
-    monkeypatch,
-):
-    admission = _set_contact_admission(contact_app, allowed=False)
-    client = contact_app.test_client()
-    client.environ_base['REMOTE_ADDR'] = '192.0.2.44'
-    form_data, _ = _contact_form(client)
-    upstream_calls = []
-    monkeypatch.setattr(
-        'core.home.contact_delivery.httpx.post',
-        lambda *args, **kwargs: upstream_calls.append((args, kwargs)),
-    )
-
-    response = _post_contact(client, form_data)
-
-    assert response.status_code == 429
-    assert response.json == {
-        'errors': {},
-        'message': 'Your submission could not be accepted. Please try again later.',
-        'ok': False,
-    }
-    assert admission.sources == ['192.0.2.44']
-    assert upstream_calls == []
-
-
-def test_admission_failure_fails_closed_before_broker_delivery(
-    contact_app,
-    monkeypatch,
-):
-    _set_contact_admission(
-        contact_app,
-        error=ContactAdmissionError('unavailable'),
-    )
-    client = contact_app.test_client()
-    form_data, _ = _contact_form(client)
-    upstream_calls = []
-    monkeypatch.setattr(
-        'core.home.contact_delivery.httpx.post',
-        lambda *args, **kwargs: upstream_calls.append((args, kwargs)),
-    )
-
-    response = _post_contact(client, form_data)
-
-    assert response.status_code == 503
-    assert response.json['ok'] is False
-    assert response.json['message'] == (
-        'Message delivery is temporarily unavailable. Please try again later.'
-    )
-    assert upstream_calls == []
-
-
-def test_standalone_contact_ignores_forwarded_source_headers(
-    contact_app,
-    monkeypatch,
-):
-    monkeypatch.delenv('GAE_ENV', raising=False)
-    admission = contact_app.extensions['contact_admission_store']
-    client = contact_app.test_client()
-    client.environ_base['REMOTE_ADDR'] = '2001:0db8:0:0:0:0:0:5'
-    form_data, _ = _contact_form(client)
-    monkeypatch.setattr(
-        'core.home.contact_delivery.httpx.post',
-        lambda *args, **kwargs: StubResponse({
-            'submissionId': form_data['submission_id'],
-            'replayed': False,
-        }),
-    )
-
-    response = client.post(
-        '/contact',
-        data=form_data,
-        headers={
-            'Accept': 'application/json',
-            'X-Appengine-User-Ip': '198.51.100.10',
-            'X-Forwarded-For': '203.0.113.20',
-        },
-    )
-
-    assert response.status_code == 200
-    assert admission.sources == ['2001:db8::5']
-
-
-@pytest.mark.parametrize(
-    ('edge_source', 'expected_source'),
-    [
-        ('198.51.100.10', '198.51.100.10'),
-        ('not-an-address', 'unknown'),
-        ('', 'unknown'),
-    ],
-)
-def test_app_engine_contact_uses_only_canonical_edge_source(
-    contact_app,
-    monkeypatch,
-    edge_source,
-    expected_source,
-):
-    monkeypatch.setenv('GAE_ENV', 'standard')
-    admission = contact_app.extensions['contact_admission_store']
-    client = contact_app.test_client()
-    client.environ_base['REMOTE_ADDR'] = '192.0.2.99'
-    form_data, _ = _contact_form(client)
-    monkeypatch.setattr(
-        'core.home.contact_delivery.httpx.post',
-        lambda *args, **kwargs: StubResponse({
-            'submissionId': form_data['submission_id'],
-            'replayed': False,
-        }),
-    )
-
-    response = client.post(
-        '/contact',
-        data=form_data,
-        headers={
-            'Accept': 'application/json',
-            'X-Appengine-User-Ip': edge_source,
-            'X-Forwarded-For': '203.0.113.20',
-        },
-    )
-
-    assert response.status_code == 200
-    assert admission.sources == [expected_source]
-
-
-@pytest.mark.parametrize('choice', [TEST_ENGAGEMENT, 'Help me scope it'])
+@pytest.mark.parametrize(('choice', 'expected_engagement'), [
+    (TEST_ENGAGEMENT, TEST_ENGAGEMENT),
+    (None, None),
+    ('', None),
+    (MIGRATION_RESCUE_ENGAGEMENT, TEST_ENGAGEMENT),
+    ('Help me scope it', None),
+    (WAREHOUSE_DIAGNOSTIC_ENGAGEMENT, PROJECT_DELIVERY_ENGAGEMENT),
+])
 def test_success_sends_exact_signed_broker_payload(
     contact_app,
     monkeypatch,
     choice,
+    expected_engagement,
 ):
     client = contact_app.test_client()
-    form_data, _ = _contact_form(client)
-    form_data['engagement_type'] = choice
+    path = f'/?topic={WAREHOUSE_DIAGNOSTIC_SLUG}' if choice == WAREHOUSE_DIAGNOSTIC_ENGAGEMENT else '/'
+    form_data, document = _contact_form(client, path)
+    checked_topics = [
+        field['value'] for field in collect_elements(document, 'input')
+        if field.get('name') == 'engagement_type' and 'checked' in field
+    ]
+    assert checked_topics == ([choice] if path != '/' else [])
+    if choice is None:
+        form_data.pop('engagement_type')
+    else:
+        form_data['engagement_type'] = choice
     submission_id = form_data['submission_id']
     calls = []
 
@@ -413,8 +324,8 @@ def test_success_sends_exact_signed_broker_payload(
         'submissionId': submission_id,
         'spamContext': {'honeypot': '', 'elapsedSeconds': broker_request['json']['spamContext']['elapsedSeconds'], 'challengeToken': ''},
     }
-    if choice == TEST_ENGAGEMENT:
-        expected_payload['engagementType'] = TEST_ENGAGEMENT
+    if expected_engagement:
+        expected_payload['engagementType'] = expected_engagement
     assert broker_request['json'] == expected_payload
     assert broker_request['timeout'] == 15.0
     timestamp = broker_request['headers']['X-Contact-Timestamp']
@@ -606,6 +517,10 @@ def test_html_delivery_failure_does_not_echo_submission_content(
 
     assert response.status_code == 502
     assert 'The message could not be sent right now. Please try again.' in document
+    assert [
+        option['value'] for option in collect_elements(document, 'input')
+        if option.get('name') == 'engagement_type' and 'checked' in option
+    ] == [TEST_ENGAGEMENT]
     for private_value in (TEST_NAME, TEST_EMAIL, TEST_MESSAGE):
         assert private_value not in document
 
@@ -691,3 +606,44 @@ def test_challenge_html_has_widget_without_echoing_message(app_factory, monkeypa
     document = response.get_data(as_text=True)
     assert 'data-contact-challenge data-sitekey="test-site-key">' in document
     assert TEST_MESSAGE not in document
+
+
+@pytest.mark.parametrize('mode', ['default_off', 'edge_missing', 'edge_valid'])
+def test_contact_admission_rollout_preserves_legitimate_delivery(app_factory, monkeypatch, mode):
+    monkeypatch.setenv('GAE_ENV', 'standard')
+    app = app_factory(CONTACT_BROKER_URL=BROKER_URL, CONTACT_BROKER_SECRET=BROKER_SECRET)
+    assert not app.config['CONTACT_ADMISSION_ENABLED']
+    admission = _set_contact_admission(app)
+    app.config['CONTACT_ADMISSION_ENABLED'] = mode != 'default_off'
+    client = app.test_client()
+    data, _ = _contact_form(client)
+    receipts = []
+    def broker_call(*args, **kwargs):
+        receipts.append(data['submission_id'])
+        return StubResponse({'submissionId': data['submission_id'], 'replayed': False})
+    monkeypatch.setattr('core.home.contact_delivery.httpx.post', broker_call)
+    headers = {'Accept': 'application/json'}
+    if mode != 'edge_missing':
+        headers['X-Appengine-User-IP'] = '192.0.2.40'
+    assert client.post('/contact', data=data, headers=headers).status_code == 200
+    assert receipts == [data['submission_id']]
+    assert admission.sources == (['192.0.2.40'] if mode == 'edge_valid' else [])
+
+
+@pytest.mark.parametrize(('allowed', 'error', 'expected'), [
+    (False, None, 429),
+    (True, ContactAdmissionError('unavailable'), 503),
+])
+def test_enabled_source_admission_rejection_never_reaches_broker(
+    contact_app, monkeypatch, allowed, error, expected,
+):
+    admission = _set_contact_admission(contact_app, allowed=allowed, error=error)
+    client = contact_app.test_client()
+    data, _ = _contact_form(client)
+    def broker_must_not_be_called(*args, **kwargs):
+        pytest.fail('Broker called despite the admission result')
+    monkeypatch.setattr('core.home.contact_delivery.httpx.post', broker_must_not_be_called)
+    response = _post_contact(client, data)
+    assert response.status_code == expected
+    assert response.json['ok'] is False
+    assert len(admission.sources) == 1

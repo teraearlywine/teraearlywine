@@ -112,6 +112,21 @@ def register_error_handlers(app):
         return render_template('home/500.html', analytics_page_path='/500'), 500
 
 
+def register_security_headers(app):
+    """Prevent application responses from being embedded in browser frames."""
+
+    @app.after_request
+    def prevent_framing(response):
+        # A separate policy preserves stricter route-specific CSP directives;
+        # browsers enforce every Content-Security-Policy response header.
+        response.headers.add(
+            'Content-Security-Policy',
+            "frame-ancestors 'none'",
+        )
+        response.headers['X-Frame-Options'] = 'DENY'
+        return response
+
+
 def register_canonical_redirect(app, env):
     """Consolidate public domain variants without redirecting local previews."""
     site = urlsplit(app.config['SITE_URL'])
@@ -169,6 +184,9 @@ def create_app(env=''):
     )
     app.config['NEWSLETTER_FROM'] = os.environ.get('NEWSLETTER_FROM', '').strip()
     app.config['NEWSLETTER_PROJECT'] = os.environ.get('GOOGLE_CLOUD_PROJECT', '').strip()
+    app.config['CONTACT_ADMISSION_ENABLED'] = (
+        os.environ.get('CONTACT_ADMISSION_ENABLED', '').strip() == '1'
+    )
     app.config['CONTACT_ADMISSION_PROJECT'] = os.environ.get(
         'CONTACT_ADMISSION_PROJECT',
         os.environ.get('GOOGLE_CLOUD_PROJECT', ''),
@@ -231,5 +249,6 @@ def create_app(env=''):
     register_blueprints(app)
     register_static_assets(app)
     register_error_handlers(app)
+    register_security_headers(app)
 
     return app

@@ -582,10 +582,11 @@ for (const [from, to, type] of [
   ['/for-professionals/', '/blog/a-dashboard-needs-a-decision/', 'dashboard_example'],
   ['/for-professionals/', '/?ignore=private#sample', 'net_sales_demo'],
   ['/for-professionals/', '/blog/a-note-to-my-future-self/', 'decision_note'],
-  ['/for-teams/', '/blog/#blog-offer-heading', 'diagnostic'],
+  ['/for-teams/', '/services/warehouse-cost-diagnostic', 'diagnostic'],
   ['/for-teams/', '/services/production-ai-systems', 'ai_workflow_review'],
   ['/for-teams/', '/services/data-migration-rescue', 'migration_cutover'],
-  ['/blog/', '/#contact', 'section'],
+  ['/services/warehouse-cost-diagnostic', '/?topic=warehouse-cost-diagnostic#contact', 'section'],
+  ['/blog/', '/#services', 'section'],
 ]) {
   const clicks = followTrackedLink(from, to, type);
   assert.equal(clicks.source.length, 0);

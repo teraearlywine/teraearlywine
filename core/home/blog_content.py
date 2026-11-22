@@ -12,50 +12,6 @@ BLOG_DESCRIPTION = (
     'and the engineering decisions behind both.'
 )
 
-OFFERS = {
-    'diagnostic': {
-        'name': 'Data Waste & Efficiency Diagnostic',
-        'description': (
-            'If your warehouse bill keeps climbing, bring the billing history, '
-            'a set of queries, and someone who knows what they support. In this '
-            'paid diagnostic I review one warehouse and rank the changes worth '
-            'testing. You get a cost baseline, the assumptions behind each estimate, '
-            'and a plan to measure the result. We scope implementation separately.'
-        ),
-        'cta': 'Discuss your warehouse bill',
-    },
-    'blueprint': {
-        'name': 'AI-Ready Data Foundation Blueprint',
-        'description': (
-            'If competing definitions or unreliable inputs are holding up a '
-            'project, I map the sources, owners, and checks with your platform '
-            'team. You get a plan for one build or migration phase, including '
-            'what it takes to deliver and how to tell when it is ready.'
-        ),
-        'cta': 'Plan a data platform change',
-    },
-    'lighthouse': {
-        'name': 'Production AI Lighthouse',
-        'description': (
-            'I work with the people funding and running one AI workflow to agree '
-            'what it may do, when a person should step in, and how much each run '
-            'can cost. We test those decisions before release and document what '
-            'the operating team needs to monitor.'
-        ),
-        'cta': 'Discuss your AI pilot',
-    },
-    'reliability': {
-        'name': 'Data & AI Reliability Office',
-        'description': (
-            'When incidents keep stealing time from planned work, I help your '
-            'team trace the recurring failures and choose what to fix first. We '
-            'agree on support capacity and escalation up front, then review cost, '
-            'data quality, and incident history together each month.'
-        ),
-        'cta': 'Discuss ongoing support',
-    },
-}
-
 BIGQUERY_COMPUTE = {
     'title': 'Google Cloud: optimizing BigQuery computation',
     'url': 'https://docs.cloud.google.com/bigquery/docs/best-practices-performance-compute',
@@ -70,7 +26,7 @@ FINOPS_SUSTAINABILITY = {
 }
 
 
-def _article(identifier, slug, title, category, dek, sections, *, offer):
+def _article(identifier, slug, title, category, dek, sections, *, next_step):
     word_count = sum(
         len(paragraph.split())
         for section in sections
@@ -84,7 +40,7 @@ def _article(identifier, slug, title, category, dek, sections, *, offer):
         'dek': dek,
         'read_minutes': max(1, round(word_count / 200)),
         'sections': sections,
-        'offer': OFFERS[offer],
+        'next_step': next_step,
     }
 
 
@@ -110,9 +66,9 @@ ARTICLES = [
             ),
             _section(
                 'Turn the findings into an investment decision',
-                'The first step is a small workload inventory with an owner, business output, schedule, and available operating evidence for each item. A Data Waste & Efficiency Diagnostic develops that inventory into ranked improvements, effort assumptions, and a measurement plan. The sponsor can then authorize a bounded implementation, request more evidence, or leave a workload unchanged.',
+                'The first step is a small workload inventory with an owner, business output, schedule, and available operating evidence for each item. A Warehouse Cost Diagnostic develops that inventory into ranked improvements, effort assumptions, and a measurement plan. The sponsor can then authorize a bounded implementation, request more evidence, or leave a workload unchanged.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('service', 'warehouse-cost-diagnostic'),
     ),
     _article(
         2, 'the-work-after-the-demo', 'Before AI scales, examine what the platform repeats.',
@@ -137,10 +93,10 @@ ARTICLES = [
             ),
             _section(
                 'Choose the next stage from the evidence',
-                'The practical first step is a map of one AI workflow showing every data preparation step, its owner, and how often it runs. Unnecessary warehouse work points toward a Data Waste & Efficiency Diagnostic. Unclear definitions, dependencies, or access boundaries point toward an AI-Ready Data Foundation Blueprint.',
-                'Once the foundation and business owner are established, a Production AI Lighthouse can test one integrated workflow against agreed acceptance criteria. The resulting evidence supports a decision to scale, revise, or stop. A successful demonstration alone leaves those production questions open.',
+                'The practical first step is a map of one AI workflow showing every data preparation step, its owner, and how often it runs. Unnecessary warehouse work points toward a Warehouse Cost Diagnostic. Unclear definitions, dependencies, or access boundaries point toward a review of your data sources and their owners.',
+                'Once the foundation and business owner are established, a production pilot can test one integrated workflow against agreed acceptance criteria. The resulting evidence supports a decision to scale, revise, or stop. A successful demonstration alone leaves those production questions open.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'ai-workflow-production-evidence'),
     ),
     _article(
         3, 'designing-for-the-long-run', 'An efficient platform needs an operating plan.',
@@ -155,9 +111,9 @@ ARTICLES = [
             _section(
                 'Review value alongside reliability',
                 'A recurring review can compare workload demand, cost, resource use, quality exceptions, and incidents with the accepted baseline. New data products and repeated rework deserve attention because they may change both the service promise and its operating cost.',
-                'The first step is to assign a review owner and select one previously implemented change for a follow-up check. A Data & AI Reliability Office gives that practice a defined capacity and cadence, linking the monthly service review to an improvement backlog and quarterly roadmap.',
+                'The first step is to assign a review owner and select one previously implemented change for a follow-up check. A recurring service review gives that practice a defined capacity and cadence, linking the monthly service review to an improvement backlog and quarterly roadmap.',
             ),
-        ], offer='reliability',
+        ], next_step=('article', 'the-value-of-a-quiet-default'),
     ),
     _article(
         4, 'a-dashboard-needs-a-decision', 'Does a dashboard need to refresh every five minutes?',
@@ -187,9 +143,9 @@ ARTICLES = [
             ),
             _section(
                 'A useful first step',
-                'A data leader can begin with one dashboard and a short inventory of its consumers, source update times, upstream jobs, and freshness requirements. A Data Waste & Efficiency Diagnostic turns that evidence into a prioritized change and measurement plan. Any expected savings remain qualified until the operating comparison is complete.',
+                'A data leader can begin with one dashboard and a short inventory of its consumers, source update times, upstream jobs, and freshness requirements. A Warehouse Cost Diagnostic turns that evidence into a prioritized change and measurement plan. Any expected savings remain qualified until the operating comparison is complete.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('article', 'sql-techniques-and-the-bottom-line'),
     ),
     _article(
         5, 'the-shape-of-a-handoff', 'A delivery handoff needs an acceptance owner.',
@@ -203,9 +159,9 @@ ARTICLES = [
             ),
             _section(
                 'Start with one reviewable milestone',
-                'A practical first step is to write the acceptance conditions for one delivery milestone and walk through them with the receiving team. Fractional architecture and program leadership can support that coordination within a defined engagement. A recurring Reliability Office can then connect operational ownership to service reviews and the next improvement priorities.',
+                'A practical first step is to write the acceptance conditions for one delivery milestone and walk through them with the receiving team. Assign someone to coordinate the handoff and carry unresolved issues into the next service review.',
             ),
-        ], offer='reliability',
+        ], next_step=('service', 'fractional-data-leadership'),
     ),
     _article(
         6, 'an-agent-needs-an-edge', 'An AI agent needs an operating boundary.',
@@ -219,9 +175,9 @@ ARTICLES = [
             ),
             _section(
                 'Evaluate the boundary as part of acceptance',
-                'A Production AI Lighthouse should exercise denied access, missing evidence, partial completion, and requests outside the agreed scope. Acceptance includes whether the workflow stops or escalates appropriately. Successful task execution and appropriate restraint both matter to the operating team.',
+                'A production pilot should exercise denied access, missing evidence, partial completion, and requests outside the agreed scope. Acceptance includes whether the workflow stops or escalates appropriately. Successful task execution and appropriate restraint both matter to the operating team.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'ai-workflow-production-evidence'),
     ),
     _article(
         7, 'make-the-exception-visible', 'Data exceptions need an owner and a queue.',
@@ -237,7 +193,7 @@ ARTICLES = [
                 'Choose one recurring exception',
                 'The first investigation can follow one recurring exception through its processing attempts and manual handoffs. That evidence helps distinguish a source-quality issue from a missing business rule or recovery design. A Reliability Office can use the pattern to prioritize an improvement and verify whether rework falls after the change.',
             ),
-        ], offer='reliability',
+        ], next_step=('article', 'designing-a-calm-workflow'),
     ),
     _article(
         8, 'a-smaller-first-release', 'The first release needs one complete outcome.',
@@ -251,9 +207,9 @@ ARTICLES = [
             ),
             _section(
                 'Use acceptance to choose the next scope',
-                'The practical first step is a short release brief stating the output, dependencies, acceptance checks, and decision the evidence will support. An AI-Ready Data Foundation Blueprint can place that milestone within a migration sequence. Expansion follows demonstrated value and available delivery capacity.',
+                'The practical first step is a short release brief stating the output, dependencies, acceptance checks, and decision the evidence will support. A migration plan can place that milestone within a migration sequence. Expansion follows demonstrated value and available delivery capacity.',
             ),
-        ], offer='blueprint',
+        ], next_step=('article', 'the-shape-of-a-handoff'),
     ),
     _article(
         9, 'data-with-a-definition', 'A shared metric needs a shared definition.',
@@ -267,9 +223,9 @@ ARTICLES = [
             ),
             _section(
                 'Make the definition part of the foundation',
-                'An AI-Ready Data Foundation Blueprint connects those decisions to data contracts, quality checks, and ownership. A shared transformation becomes a credible efficiency opportunity only after the team establishes that its consumers require the same meaning and acceptable freshness.',
+                'A data foundation plan connects those decisions to data contracts, quality checks, and ownership. A shared transformation becomes a credible efficiency opportunity only after the team establishes that its consumers require the same meaning and acceptable freshness.',
             ),
-        ], offer='blueprint',
+        ], next_step=('demo', 'sample'),
     ),
     _article(
         10, 'show-the-work-that-matters', 'Production AI needs reviewable evidence.',
@@ -283,9 +239,9 @@ ARTICLES = [
             ),
             _section(
                 'Measure review effort as well as model behavior',
-                'A Production AI Lighthouse can include this evidence package in its acceptance criteria. Review time, correction effort, and successful outcomes belong alongside quality, latency, and operating cost. A faster draft only creates value when the complete review path produces a usable result.',
+                'A production pilot can include this evidence package in its acceptance criteria. Review time, correction effort, and successful outcomes belong alongside quality, latency, and operating cost. A faster draft only creates value when the complete review path produces a usable result.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'audit-agent-proof-of-concept'),
     ),
     _article(
         11, 'the-cost-of-a-hidden-rule', 'Hidden business rules create repeated warehouse work.',
@@ -301,7 +257,7 @@ ARTICLES = [
                 'Measure the full replacement',
                 'A diagnostic can rank the candidate by processing cost, maintenance effort, and business risk. Consolidation also introduces ownership and change-management requirements. The replacement should be evaluated with equivalent outputs and a plan for retiring obsolete jobs; duplicated work remains until those jobs actually stop.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('article', 'sql-techniques-and-the-bottom-line'),
     ),
     _article(
         12, 'a-note-to-my-future-self', 'Decision records that survive a handoff.',
@@ -315,9 +271,9 @@ ARTICLES = [
             ),
             _section(
                 'Make the record part of delivery',
-                'An AI-Ready Data Foundation Blueprint can establish the decision records needed for architecture, retention, ownership, and migration. Those records help a receiving team understand which assumptions remain valid and which require a new decision as the platform grows.',
+                'A data platform plan can establish the decision records needed for architecture, retention, ownership, and migration. Those records help a receiving team understand which assumptions remain valid and which require a new decision as the platform grows.',
             ),
-        ], offer='blueprint',
+        ], next_step=('article', 'the-shape-of-a-handoff'),
     ),
     _article(
         13, 'a-retry-is-a-design-choice', 'Retries need evidence before another attempt.',
@@ -331,9 +287,9 @@ ARTICLES = [
             ),
             _section(
                 'Include recovery in the production scope',
-                'A Production AI Lighthouse should test interrupted actions and duplicate attempts with agreed recovery behavior. The operating measures include unresolved outcomes and recovery effort as well as successful tasks. Repeated activity should not be mistaken for additional business value.',
+                'A production pilot should test interrupted actions and duplicate attempts with agreed recovery behavior. The operating measures include unresolved outcomes and recovery effort as well as successful tasks. Repeated activity should not be mistaken for additional business value.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'useful-automation-has-a-receipt'),
     ),
     _article(
         14, 'freshness-is-part-of-quality', 'Freshness is a service requirement.',
@@ -347,9 +303,9 @@ ARTICLES = [
             ),
             _section(
                 'Keep freshness in the comparison',
-                'A Data Waste & Efficiency Diagnostic can use that requirement to assess refresh frequency and unnecessary processing. A candidate change needs a visible stale-data state and a recovery plan if the requirement is missed. Lower resource use only supports acceptance when the output remains fit for its intended decision.',
+                'A Warehouse Cost Diagnostic can use that requirement to assess refresh frequency and unnecessary processing. A candidate change needs a visible stale-data state and a recovery plan if the requirement is missed. Lower resource use only supports acceptance when the output remains fit for its intended decision.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('article', 'a-dashboard-needs-a-decision'),
     ),
     _article(
         15, 'designing-a-calm-workflow', 'Operational alerts need a decision.',
@@ -365,7 +321,7 @@ ARTICLES = [
                 'Use the review to prioritize improvement',
                 'A Reliability Office can track recurring incidents, time to a usable output, and operator effort. The service review then connects alert quality to the improvement backlog. The relevant outcome is a team that can recognize and resolve consequential failures with clear evidence.',
             ),
-        ], offer='reliability',
+        ], next_step=('article', 'the-value-of-a-quiet-default'),
     ),
     _article(
         16, 'the-human-review-step', 'Human review needs an acceptance standard.',
@@ -379,9 +335,9 @@ ARTICLES = [
             ),
             _section(
                 'Evaluate the whole review path',
-                'A Production AI Lighthouse can measure accepted outcomes, correction rates, review time, and unresolved decisions on a representative task set. These measures help the sponsor understand whether the workflow creates useful capacity or shifts effort into a new review queue.',
+                'A production pilot can measure accepted outcomes, correction rates, review time, and unresolved decisions on a representative task set. These measures help the sponsor understand whether the workflow creates useful capacity or shifts effort into a new review queue.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('service', 'production-ai-systems'),
     ),
     _article(
         17, 'migration-as-a-sequence', 'Migration value depends on the cutover.',
@@ -395,9 +351,9 @@ ARTICLES = [
             ),
             _section(
                 'Make retirement an explicit milestone',
-                'An AI-Ready Data Foundation Blueprint can connect architecture and migration choices to these checkpoints. Cost comparisons should include temporary dual operation and identify when that period ends. A savings assumption becomes more credible when retirement is verified and the new output meets its service requirements.',
+                'A cutover plan can connect architecture and migration choices to these checkpoints. Cost comparisons should include temporary dual operation and identify when that period ends. A savings assumption becomes more credible when retirement is verified and the new output meets its service requirements.',
             ),
-        ], offer='blueprint',
+        ], next_step=('service', 'data-migration-rescue'),
     ),
     _article(
         18, 'leave-room-for-a-question', 'The scoping question behind a platform project.',
@@ -413,7 +369,7 @@ ARTICLES = [
                 'Turn uncertainty into a defined engagement',
                 'For a warehouse-efficiency problem, a paid diagnostic can assess a defined workload set and produce a baseline and prioritized plan. The proposal then states deliverables, exclusions, responsibilities, and acceptance. Broader implementation follows the findings and a separate scope decision.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('article', 'a-smaller-first-release'),
     ),
     _article(
         19, 'a-source-is-a-relationship', 'Source ownership belongs in the data contract.',
@@ -427,9 +383,9 @@ ARTICLES = [
             ),
             _section(
                 'Use the agreement to guide the foundation',
-                'An AI-Ready Data Foundation Blueprint turns those expectations into data contracts, lineage, quality checks, and migration requirements. Understanding when and why a source changes also gives the team a sounder basis for evaluating refresh frequency and repeated processing.',
+                'A data platform plan turns those expectations into data contracts, lineage, quality checks, and migration requirements. Understanding when and why a source changes also gives the team a sounder basis for evaluating refresh frequency and repeated processing.',
             ),
-        ], offer='blueprint',
+        ], next_step=('article', 'data-with-a-definition'),
     ),
     _article(
         20, 'useful-automation-has-a-receipt', 'Useful automation has a verifiable outcome.',
@@ -443,9 +399,9 @@ ARTICLES = [
             ),
             _section(
                 'Make evidence part of acceptance',
-                'A Production AI Lighthouse can test whether operators can verify results without reconstructing internal logs. Acceptance measures should separate attempts, confirmed outcomes, and unresolved actions. This distinction also makes cost per successful outcome more useful than cost per attempted request.',
+                'A production pilot can test whether operators can verify results without reconstructing internal logs. Acceptance measures should separate attempts, confirmed outcomes, and unresolved actions. This distinction also makes cost per successful outcome more useful than cost per attempted request.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'a-useful-stopping-point'),
     ),
     _article(
         21, 'the-value-of-a-quiet-default', 'An operating view should reveal the next decision.',
@@ -459,9 +415,9 @@ ARTICLES = [
             ),
             _section(
                 'Connect the view to recurring improvement',
-                'A Data & AI Reliability Office uses operating evidence to coordinate incidents, quality, cost, and resource use. The review should lead to an owned action or a clear decision to observe further. A status display becomes valuable when the receiving team can act on what it shows.',
+                'A service review uses operating evidence to coordinate incidents, quality, cost, and resource use. The review should lead to an owned action or a clear decision to observe further. A status display becomes valuable when the receiving team can act on what it shows.',
             ),
-        ], offer='reliability',
+        ], next_step=('article', 'build-a-place-to-return'),
     ),
     _article(
         22, 'testing-the-uncomfortable-path', 'A platform change needs a practiced recovery path.',
@@ -475,9 +431,9 @@ ARTICLES = [
             ),
             _section(
                 'Include recovery in the investment decision',
-                'An AI-Ready Data Foundation Blueprint can define these acceptance and rollback requirements before implementation. The resulting evidence helps the sponsor compare an efficiency opportunity with the operational effort and risk required to sustain it.',
+                'A release plan can define these acceptance and rollback requirements before implementation. The resulting evidence helps the sponsor compare an efficiency opportunity with the operational effort and risk required to sustain it.',
             ),
-        ], offer='blueprint',
+        ], next_step=('article', 'migration-as-a-sequence'),
     ),
     _article(
         23, 'context-is-a-working-material', 'AI context needs ownership and a refresh policy.',
@@ -491,9 +447,9 @@ ARTICLES = [
             ),
             _section(
                 'Evaluate changes against accepted outcomes',
-                'A Production AI Lighthouse can compare context choices on a representative task set while tracking quality, latency, cost, and resource use. Reducing input size is only useful when the workflow retains the evidence needed for accurate, reviewable outcomes.',
+                'A production pilot can compare context choices on a representative task set while tracking quality, latency, cost, and resource use. Reducing input size is only useful when the workflow retains the evidence needed for accurate, reviewable outcomes.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'the-work-after-the-demo'),
     ),
     _article(
         24, 'build-a-place-to-return', 'Delivery coordination needs a current decision record.',
@@ -507,9 +463,9 @@ ARTICLES = [
             ),
             _section(
                 'Tie coordination to an operating outcome',
-                'Fractional architecture and program leadership can establish this rhythm within a defined delivery scope. Recurring reliability work can maintain it through service reviews and an owned improvement backlog. The measure of useful coordination is whether decisions and accepted changes move forward with clear responsibility.',
+                'The delivery lead can establish this rhythm for a defined workstream and carry it into service reviews. The measure of useful coordination is whether decisions and accepted changes move forward with clear responsibility.',
             ),
-        ], offer='reliability',
+        ], next_step=('service', 'fractional-data-leadership'),
     ),
     _article(
         25, 'measure-the-whole-path', 'A cloud bill is a clue, not a carbon meter.',
@@ -540,10 +496,10 @@ ARTICLES = [
             ),
             _section(
                 'Turn evidence into a ranked decision',
-                'A useful first step is a baseline for one warehouse and a defined workload set, with a named owner and representative operating period. A Data Waste & Efficiency Diagnostic uses that baseline to rank changes, state effort and savings assumptions, and define how implementation would be measured.',
+                'A useful first step is a baseline for one warehouse and a defined workload set, with a named owner and representative operating period. A Warehouse Cost Diagnostic uses that baseline to rank changes, state effort and savings assumptions, and define how implementation would be measured.',
                 'The output is a decision about where to invest first. Implementation and formal carbon assurance require separate scope. Claims about environmental savings remain limited to what the available measurement can establish.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('article', 'sql-techniques-and-the-bottom-line'),
     ),
     _article(
         26, 'a-useful-stopping-point', 'An AI workflow needs a definition of completion.',
@@ -557,9 +513,9 @@ ARTICLES = [
             ),
             _section(
                 'Use completion to assess value',
-                'A Production AI Lighthouse can evaluate completed tasks, appropriate escalations, unresolved outcomes, and total operating effort. That gives the sponsor a clearer basis for deciding whether to scale, revise, or stop than an activity count alone.',
+                'A production pilot can evaluate completed tasks, appropriate escalations, unresolved outcomes, and total operating effort. That gives the sponsor a clearer basis for deciding whether to scale, revise, or stop than an activity count alone.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'ai-workflow-production-evidence'),
     ),
     _article(
         27, 'one-more-point-of-view', 'A shared baseline connects data, FinOps, and delivery.',
@@ -573,9 +529,9 @@ ARTICLES = [
             ),
             _section(
                 'Agree on the next decision',
-                'A Data Waste & Efficiency Diagnostic can turn that baseline into ranked changes and an agreed measurement plan. A delivery partner can contribute a defined implementation workstream once responsibilities and acceptance are established. The decision remains tied to a specific need, a plausible delivery path, and evidence the receiving team can assess.',
+                'A Warehouse Cost Diagnostic can turn that baseline into ranked changes and an agreed measurement plan. A delivery partner can contribute a defined implementation workstream once responsibilities and acceptance are established. The decision remains tied to a specific need, a plausible delivery path, and evidence the receiving team can assess.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('service', 'warehouse-cost-diagnostic'),
     ),
     _article(
         28, 'pomodoro-for-ai-agents', 'Pomodoro for AI agents: fire it off, then check it.',
@@ -611,7 +567,7 @@ ARTICLES = [
                 "That's what I'd want to find out. Did I get a useful stretch of focused work? Was the agent's output usable? How much time did I spend checking and fixing it? Those answers matter more to me than how many workflows were running at once.",
                 "It's a small experiment: hand off a clear task, set a timer, focus elsewhere, and come back with enough attention to review the result. Take a break, then decide what's next. The tomato now has a delegation job.",
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'a-useful-stopping-point'),
     ),
     _article(
         29, 'sql-techniques-and-the-bottom-line', 'SQL and the bottom line: when optimization pays.',
@@ -678,9 +634,9 @@ ARTICLES = [
                 'Choose the next change by business value',
                 'Rank candidates by avoidable recurring cost, execution frequency, implementation effort, and operational risk. Compare representative workloads, including peak periods and corrections, and keep output quality and freshness constant. Record retries, failed runs, and manual repair alongside compute and storage. Cost per successful reporting cycle is more useful than cost per query attempt.',
                 'Lower recurring expense can improve operating profit if other factors stay constant. A gross-margin improvement also depends on whether that expense is classified as cost of revenue. Faster reports may have business value, but a revenue claim needs evidence connecting the earlier answer to a changed decision or customer outcome.',
-                'Start with one recurring workload whose owner, bill, and required output are clear. A Data Waste & Efficiency Diagnostic can turn that evidence into ranked SQL improvements, a payback estimate, and a validation plan. The strongest proposal makes the financial benefit and the ongoing responsibility equally visible.',
+                'Start with one recurring workload whose owner, bill, and required output are clear. A Warehouse Cost Diagnostic can turn that evidence into ranked SQL improvements, a payback estimate, and a validation plan. The strongest proposal makes the financial benefit and the ongoing responsibility equally visible.',
             ),
-        ], offer='diagnostic',
+        ], next_step=('service', 'warehouse-cost-diagnostic'),
     ),
     _article(
         30, 'nothing-wasted', 'Nothing Wasted',
@@ -708,7 +664,7 @@ ARTICLES = [
                 "Cloud platforms like GCP, AWS, and Snowflake have made the compute behind data warehousing easier to access, and easier to overlook. The result is that companies can continue to absorb painfully high data-warehousing costs (& now painfully high AI “usage” costs), while growing demand puts pressure on energy infrastructure and drives calls for more data centers—a band-aid fix and a tragedy-of-the-commons approach, and our earth is suffering because of it.",
                 Markup("What gets me the most: we can reduce some of this unnecessary work by teaching people to write more efficient SQL! Selecting only the columns we need, avoiding repeated work, and examining query plans are places to start. The details depend on the platform and workload; <a href=\"https://docs.cloud.google.com/bigquery/docs/best-practices-performance-compute\">Google’s BigQuery guidance</a> offers examples but is only just the beginning."),
             ),
-        ], offer='diagnostic',
+        ], next_step=('article', 'measure-the-whole-path'),
     ),
     _article(
         31, 'audit-agent-proof-of-concept', 'Designing an audit agent for reviewable work',
@@ -729,7 +685,7 @@ ARTICLES = [
                 'What this work shows',
                 'This was a proof of concept, not a production deployment. It is an example of a hybrid agentic system and how I approach developing an AI workflow: start with the work a person needs to review, make the relevant context explicit, and identify what still needs to be resolved before an operating team takes responsibility.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('article', 'ai-workflow-production-evidence'),
     ),
     _article(
         32, 'ai-workflow-production-evidence', 'What evidence does an AI workflow need before production?',
@@ -761,11 +717,14 @@ ARTICLES = [
                 'Bring the business owner, engineering owner, and relevant risk or operations reviewers together around the evidence. For each gap, record the consequence, an owner, and the next action. Some gaps must be addressed before release; others need investigation or may be acceptable for a limited use. The decision and its conditions should be explicit.',
                 'The goal is not to make a checklist produce a universal readiness score. It is to make the remaining risks visible to the people who can decide what to do with them, and to leave the team with an operating responsibility after launch.',
             ),
-        ], offer='lighthouse',
+        ], next_step=('download', 'downloads/data-ai-production-readiness-scorecard.pdf'),
     ),
 ]
 
 ARTICLES_BY_SLUG = {article['slug']: article for article in ARTICLES}
-_ARTICLES_BY_ID = {article['id']: article for article in ARTICLES}
-# Feature the campaign reading path without changing publication order.
-FEATURED_ARTICLES = [_ARTICLES_BY_ID[identifier] for identifier in (30, 25, 4)]
+FEATURED_ARTICLES = [
+    ('When reporting takes too much work', ARTICLES_BY_SLUG['a-dashboard-needs-a-decision']),
+    ('Before you release an AI workflow', ARTICLES_BY_SLUG['ai-workflow-production-evidence']),
+    ('When your warehouse bill keeps rising', ARTICLES_BY_SLUG['sql-techniques-and-the-bottom-line']),
+    ('Why I care about the cost of compute', ARTICLES_BY_SLUG['nothing-wasted']),
+]

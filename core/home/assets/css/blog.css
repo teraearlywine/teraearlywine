@@ -234,7 +234,7 @@
 .essay-header h1 { font-size: clamp(45px, 5.9vw, 82px); margin: 12px 0 18px; }
 .essay-dek { font: 400 clamp(21px, 2.1vw, 30px)/1.43 var(--font-editorial, Georgia, serif); max-width: 740px; margin: 0; }
 .essay-byline { font-size: 14px; color: var(--color-text-secondary); margin: 20px 0 0; }
-.essay-prose, .essay-offer, .essay-next { max-width: 690px; margin-inline: auto; }
+.essay-prose, .essay-offer { max-width: 690px; margin-inline: auto; }
 .essay-prose { padding-block: clamp(26px, 4vw, 50px) 10px; }
 .essay-prose section { margin-bottom: 32px; }
 .essay-prose h2 {
@@ -248,11 +248,8 @@
 .essay-signoff { position: relative; width: min(100%, 350px); margin: 0 auto 44px; }
 .essay-signoff img, .essay-signoff video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 5; }
 .essay-signoff video { position: absolute; inset: 0; }
-.essay-offer { margin-bottom: 42px; }
-.essay-next { padding-top: 25px; border-top: 1px solid var(--color-border); }
-.essay-next .blog-text-link { display: inline-block; margin-top: 18px; }
-.essay-next .blog-text-link + .blog-text-link { margin-left: 16px; }
-.essay-next img { flex-shrink: 0; }
+.essay-offer { margin-bottom: 0; }
+.essay-next-link { margin-top: 14px; }
 .rss-setup, .rss-about { padding: 30px 0; }
 .rss-setup h2, .rss-about h2 { margin: 0 0 16px; }
 .rss-setup label { display: block; margin: 22px 0 8px; font-size: 15px; }
@@ -286,7 +283,6 @@
   .writing-intro h1 span { display: block; }
   .writing-links { display: grid; grid-template-columns: max-content max-content; gap: 3px 18px; justify-content: start; }
   .writing-links .writing-subscribe { justify-self: start; grid-column: 1 / -1; }
-  .essay-next .blog-text-link + .blog-text-link { display: block; margin-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .paper-layer, .sheet-marker { transition: none; }

@@ -9,8 +9,8 @@
         <header class="newsletter-intro">
             <p class="newsletter-kicker">Tera Earlywine’s email newsletter</p>
             <h1>The Business of Technology</h1>
-            <p class="newsletter-lede">When is an AI pilot worth repeating? Who benefits from a faster query? I write about the decisions behind the tools, with examples from my work as a data engineer and consultant.</p>
-            <a class="newsletter-link" href="{{ url_for('index.blog_article', slug='nothing-wasted') }}" data-analytics-event="navigation_click" data-placement="signup" data-destination-type="writing">Read a sample of my writing <span aria-hidden="true">↗</span></a>
+            <p class="newsletter-lede">I write about the decisions behind data and AI work. When does a faster query lower the bill? What should an AI pilot prove before you roll it out? I work through examples you can use with your team.</p>
+            <a class="newsletter-link" href="{{ url_for('index.blog_article', slug='sql-techniques-and-the-bottom-line') }}" data-analytics-event="navigation_click" data-placement="signup" data-destination-type="writing">Read a sample essay on when SQL optimization pays <span aria-hidden="true">↗</span></a>
         </header>
         <section class="newsletter-panel" aria-labelledby="signup-heading">
             <h2 id="signup-heading">Get the newsletter and a guide</h2>
@@ -31,7 +31,7 @@
                 <div class="newsletter-field">
                     <label for="{{ form.email.id }}">Email address</label>
                     {{ form.email(type='email', autocomplete='email', maxlength=254, required=true, aria_describedby='email-hint', aria_invalid='true' if form.email.errors else 'false') }}
-                    <p id="email-hint"{% if form.email.errors %} class="newsletter-error"{% endif %}>{{ form.email.errors|first or 'I’ll send a link to confirm your address.' }}</p>
+                    <p id="email-hint"{% if form.email.errors %} class="newsletter-error"{% endif %}>{{ form.email.errors|first or 'Confirm your email to get the guide you choose below.' }}</p>
                 </div>
                 <fieldset class="newsletter-guides" data-newsletter-guides aria-describedby="guide-error">
                     <legend>Which guide would you like?</legend>
@@ -41,10 +41,10 @@
                         <span>
                             {% if option.data == 'teams' %}
                             <strong>Choose Your Next AI Workflow</strong>
-                            <span>Compare candidate tasks and plan one small pilot.</span>
+                            <span>Pick one task to pilot, decide what a good result looks like, and name who can stop the trial.</span>
                             {% elif option.data == 'professionals' %}
                             <strong>From Technical Work to Business Impact</strong>
-                            <span>Turn an engineering change into a recommendation someone can act on.</span>
+                            <span>Write a three-sentence recommendation for a change you want someone to fund or adopt.</span>
                             {% else %}
                             <strong>Send me both guides</strong>
                             {% endif %}

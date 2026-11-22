@@ -1,13 +1,27 @@
 {% set booking_url = config.get('BOOKING_URL') %}
-<section id="contact" class="section contact" data-analytics-contact-view>
+<section id="contact" class="section contact" aria-labelledby="contact-heading" data-analytics-contact-view>
     <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-kicker">Get in touch</p>
-            <h2 class="section-title">What are you working on?</h2>
+        <div class="section-header contact-header fade-up">
+            <div>
+                <h2 class="section-title" id="contact-heading">Tell me what’s stuck</h2>
+            </div>
+            {% if booking_url %}
+            <a
+                class="contact-cta contact-cta--secondary"
+                href="{{ booking_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-analytics-event="contact_click"
+                data-contact-method="booking"
+                data-placement="contact"
+                data-destination-type="booking"
+            >Book a 30-minute call</a>
+            {% endif %}
         </div>
         <p class="contact-text fade-up fade-up-delay-1">
-            For consulting, tell me which decision your team needs to make. For a role, talk, or collaboration, choose “Help me scope it” and tell me who the work is for.
+            Bring one report people question, one task your team keeps repeating, or one decision that’s stuck. We’ll talk through what’s happening and whether I can help.
         </p>
+        {% include 'home/sections/faq.html' %}
         <form
             class="contact-form fade-up fade-up-delay-2"
             method="post"
@@ -53,8 +67,8 @@
                 >{{ contact_form.email.errors[0] if contact_form.email.errors else '' }}</p>
             </div>
             <fieldset class="contact-form__field contact-form__field--full contact-engagement">
-                <legend>Potential engagement</legend>
-                {% set engagement_notes = ['Weigh the cost and the opportunity.', 'Plan the next data platform change.', 'Evaluate a workflow for production.', 'Roles, talks, collaborations, or another question.'] %}
+                <legend>What would you like help with? (optional)</legend>
+                {% set engagement_notes = ['Clarify priorities, responsibilities, and next steps.', 'Improve reporting and the data behind it.', 'Reconcile the data and get the next cutover ready.', 'Put AI to use and reduce repetitive work.', 'Find out what is driving your warehouse bill.', 'Start with the problem you want to solve.'] %}
                 <div class="contact-engagement__choices">
                     {% for option in contact_form.engagement_type %}
                     <label class="contact-engagement__choice" for="{{ option.id }}">
@@ -78,6 +92,7 @@
                 {{ contact_form.message.label }}
                 {{ contact_form.message(
                     rows='6',
+                    placeholder='What is happening today, and what would you like to change?',
                     minlength='10',
                     maxlength='5000',
                     aria_describedby='contact-message-help contact-message-error',
@@ -101,7 +116,7 @@
                     class="contact-cta contact-cta--primary"
                     type="submit"
                     data-contact-submit
-                >Send message</button>
+                >Send inquiry</button>
             </div>
             {% set success_messages = get_flashed_messages(category_filter=['contact-success']) %}
             <p
@@ -114,26 +129,6 @@
             <div data-contact-challenge data-sitekey="{{ config['CONTACT_TURNSTILE_SITE_KEY'] }}"{% if not contact_challenge %} hidden{% endif %}></div>
             {% endif %}
         </form>
-        {% if booking_url %}
-        <div
-            class="contact-actions fade-up fade-up-delay-3"
-            aria-labelledby="direct-booking-title"
-        >
-            <h3 id="direct-booking-title" class="contact-actions__title">
-                Or book a call directly
-            </h3>
-            <a
-                class="contact-cta contact-cta--secondary"
-                href="{{ booking_url }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-analytics-event="contact_click"
-                data-contact-method="booking"
-                data-placement="contact"
-                data-destination-type="booking"
-            >Book a fit call</a>
-        </div>
-        {% endif %}
         <div class="contact-social fade-up fade-up-delay-4">
             <a href="https://github.com/teraearlywine" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-analytics-event="outbound_click" data-placement="contact" data-destination-type="github">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

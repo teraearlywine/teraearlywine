@@ -1,16 +1,27 @@
 <section id="services" class="section cs-services" aria-labelledby="services-heading">
     <div class="cs-frame">
-        <h2 class="cs-section-title" id="services-heading">Where do you want to start?</h2>
+        <h2 class="cs-section-title" id="services-heading">Where I can help</h2>
         <div class="cs-offer-list">
             <article>
-                <h3>For teams</h3>
-                <p>You’re weighing an AI pilot, a growing warehouse bill, or a migration. Start with one decision and work out what would make the investment worthwhile.</p>
-                <a class="cs-text-link" href="{{ url_for('index.for_teams') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="teams">Explore consulting <span aria-hidden="true">↗</span></a>
+                <h3>Do your reports disagree?</h3>
+                <p>Agree on what the numbers mean and put checks in place so your team can use the same report.</p>
+                <div class="cs-offer-links">
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug='data-platform-modernization') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['data-platform-modernization'].name }} <span aria-hidden="true">↗</span></a>
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug=warehouse_diagnostic_slug) }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="diagnostic"> {{ services[warehouse_diagnostic_slug].name }} <span aria-hidden="true">↗</span></a>
+                </div>
             </article>
             <article>
-                <h3 id="readiness-heading">For technical professionals</h3>
-                <p>You know how the system works. How do you explain the difference a change will make? Try it with a dashboard, a refund, and a short decision note. For a workflow nearing release, use the <a href="{{ url_for('index.for_professionals') }}#readiness-heading" data-analytics-event="navigation_click" data-placement="services" data-destination-type="readiness_scorecard">readiness scorecard</a>.</p>
-                <a class="cs-text-link" href="{{ url_for('index.for_professionals') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="professionals">Try the exercise <span aria-hidden="true">↗</span></a>
+                <h3>Does your team repeat the same tasks?</h3>
+                <p>Start with one task. Get a tested workflow and clear guidance on when a person should step in.</p>
+                <a class="cs-text-link" href="{{ url_for('index.service', slug='production-ai-systems') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['production-ai-systems'].name }} <span aria-hidden="true">↗</span></a>
+            </article>
+            <article>
+                <h3>Is a data or AI project stuck?</h3>
+                <p>Get business and technical teams to agree on the next decision, who owns it, and what happens after.</p>
+                <div class="cs-offer-links">
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug='fractional-data-leadership') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="service"> {{ services['fractional-data-leadership'].name }} <span aria-hidden="true">↗</span></a>
+                    <a class="cs-text-link" href="{{ url_for('index.service', slug='data-migration-rescue') }}" data-analytics-event="navigation_click" data-placement="services" data-destination-type="migration_cutover"> {{ services['data-migration-rescue'].name }} <span aria-hidden="true">↗</span></a>
+                </div>
             </article>
         </div>
     </div>
