@@ -10,6 +10,7 @@ import httpx
 import pytest
 
 from core import create_app
+from core.home.contact_admission import ContactAdmissionError
 from core.home.forms import (
     MIGRATION_RESCUE_ENGAGEMENT,
     PROJECT_DELIVERY_ENGAGEMENT,
@@ -51,6 +52,26 @@ class StubResponse:
         return self.payload
 
 
+class StubContactAdmission:
+    def __init__(self, *, allowed=True, error=None):
+        self.allowed = allowed
+        self.error = error
+        self.sources = []
+
+    def admit(self, source):
+        self.sources.append(source)
+        if self.error:
+            raise self.error
+        return self.allowed
+
+
+def _set_contact_admission(app, **kwargs):
+    app.config['CONTACT_ADMISSION_ENABLED'] = True
+    store = StubContactAdmission(**kwargs)
+    app.extensions['contact_admission_store'] = store
+    return store
+
+
 def _hidden_value(document, field_name):
     match = re.search(
         rf'<input[^>]+name="{re.escape(field_name)}"[^>]+value="([^"]+)"',
@@ -85,10 +106,12 @@ def _post_contact(client, form_data):
 
 @pytest.fixture
 def contact_app(app_factory):
-    return app_factory(
+    app = app_factory(
         CONTACT_BROKER_URL=BROKER_URL,
         CONTACT_BROKER_SECRET=BROKER_SECRET,
     )
+    _set_contact_admission(app)
+    return app
 
 
 def test_home_renders_accessible_progressively_enhanced_contact_form(
@@ -355,6 +378,9 @@ def test_retry_reuses_submission_id_and_broker_confirms_both_deliveries(
         (BROKER_URL, calls[0][1]),
     ]
     assert calls[0][1]['submissionId'] == submission_id
+    assert len(
+        contact_app.extensions['contact_admission_store'].sources
+    ) == 2
 
 
 def test_duplicate_success_reuses_receipt_without_duplicate_upstreams(
@@ -380,6 +406,9 @@ def test_duplicate_success_reuses_receipt_without_duplicate_upstreams(
     assert first_response.status_code == 200
     assert second_response.status_code == 200
     assert calls == [BROKER_URL]
+    assert len(
+        contact_app.extensions['contact_admission_store'].sources
+    ) == 1
 
 
 def test_duplicate_submission_id_rejects_changed_content(
@@ -411,6 +440,9 @@ def test_duplicate_submission_id_rejects_changed_content(
         'ok': False,
     }
     assert calls == [BROKER_URL]
+    assert len(
+        contact_app.extensions['contact_admission_store'].sources
+    ) == 1
 
 
 def test_timeout_returns_generic_error_without_secrets_or_submission_content(
@@ -533,6 +565,7 @@ def test_production_requires_stable_secret_key(monkeypatch):
 def test_deployment_config_references_secret_manager_without_secret_values():
     deployment_config = (PROJECT_ROOT / 'app.yaml').read_text()
 
+    assert 'CONTACT_ADMISSION_PROJECT: "teraearlywine"' in deployment_config
     assert 'CONTACT_BROKER_SECRET_SECRET_ID:' in deployment_config
     assert 'SECRET_KEY_SECRET_ID:' in deployment_config
     assert re.search(
@@ -564,6 +597,7 @@ def test_filtered_broker_response_never_claims_sent(contact_app, monkeypatch, st
 
 def test_challenge_html_has_widget_without_echoing_message(app_factory, monkeypatch):
     app = app_factory(CONTACT_BROKER_URL=BROKER_URL, CONTACT_BROKER_SECRET=BROKER_SECRET, CONTACT_TURNSTILE_SITE_KEY='test-site-key')
+    _set_contact_admission(app)
     client = app.test_client()
     form, _ = _contact_form(client)
     monkeypatch.setattr('core.home.contact_delivery.httpx.post', lambda *a, **k: StubResponse({'error': 'CHALLENGE_REQUIRED'}, 403))
@@ -572,3 +606,44 @@ def test_challenge_html_has_widget_without_echoing_message(app_factory, monkeypa
     document = response.get_data(as_text=True)
     assert 'data-contact-challenge data-sitekey="test-site-key">' in document
     assert TEST_MESSAGE not in document
+
+
+@pytest.mark.parametrize('mode', ['default_off', 'edge_missing', 'edge_valid'])
+def test_contact_admission_rollout_preserves_legitimate_delivery(app_factory, monkeypatch, mode):
+    monkeypatch.setenv('GAE_ENV', 'standard')
+    app = app_factory(CONTACT_BROKER_URL=BROKER_URL, CONTACT_BROKER_SECRET=BROKER_SECRET)
+    assert not app.config['CONTACT_ADMISSION_ENABLED']
+    admission = _set_contact_admission(app)
+    app.config['CONTACT_ADMISSION_ENABLED'] = mode != 'default_off'
+    client = app.test_client()
+    data, _ = _contact_form(client)
+    receipts = []
+    def broker_call(*args, **kwargs):
+        receipts.append(data['submission_id'])
+        return StubResponse({'submissionId': data['submission_id'], 'replayed': False})
+    monkeypatch.setattr('core.home.contact_delivery.httpx.post', broker_call)
+    headers = {'Accept': 'application/json'}
+    if mode != 'edge_missing':
+        headers['X-Appengine-User-IP'] = '192.0.2.40'
+    assert client.post('/contact', data=data, headers=headers).status_code == 200
+    assert receipts == [data['submission_id']]
+    assert admission.sources == (['192.0.2.40'] if mode == 'edge_valid' else [])
+
+
+@pytest.mark.parametrize(('allowed', 'error', 'expected'), [
+    (False, None, 429),
+    (True, ContactAdmissionError('unavailable'), 503),
+])
+def test_enabled_source_admission_rejection_never_reaches_broker(
+    contact_app, monkeypatch, allowed, error, expected,
+):
+    admission = _set_contact_admission(contact_app, allowed=allowed, error=error)
+    client = contact_app.test_client()
+    data, _ = _contact_form(client)
+    def broker_must_not_be_called(*args, **kwargs):
+        pytest.fail('Broker called despite the admission result')
+    monkeypatch.setattr('core.home.contact_delivery.httpx.post', broker_must_not_be_called)
+    response = _post_contact(client, data)
+    assert response.status_code == expected
+    assert response.json['ok'] is False
+    assert len(admission.sources) == 1
